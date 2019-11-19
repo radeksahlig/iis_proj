@@ -41,8 +41,8 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_SESSION['id
             if(isset($_GET['search'])){
                 $search = filter_input(INPUT_GET, "search", FILTER_SANITIZE_STRING);
                 $stranka = "./moje_jidelny.php?search=$search&";
-                $sql = "SELECT id, nazev, mesto, adresa, stav FROM jidelna WHERE nazev LIKE '%$search%' OR adresa LIKE '%$search%' AND operator = $moje_id LIMIT 10 OFFSET $offset";
-                $sql2 = "SELECT COUNT(*) FROM jidelna WHERE nazev LIKE '%$search%' OR adresa LIKE '%$search%' AND operator = $moje_id";
+                $sql = "SELECT id, nazev, mesto, adresa, stav FROM jidelna WHERE (nazev LIKE '%$search%' OR adresa LIKE '%$search%') AND operator = $moje_id LIMIT 10 OFFSET $offset";
+                $sql2 = "SELECT COUNT(*) FROM jidelna WHERE (nazev LIKE '%$search%' OR adresa LIKE '%$search%') AND operator = $moje_id";
             }else{
                 $sql = "SELECT id, nazev, mesto, adresa, stav FROM jidelna WHERE operator = $moje_id LIMIT 10 OFFSET $offset";
                 $sql2 = "SELECT COUNT(*) FROM jidelna WHERE operator = $moje_id";
