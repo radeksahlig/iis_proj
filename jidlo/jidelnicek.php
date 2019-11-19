@@ -103,13 +103,31 @@ else
             }else{
                 echo "Nepodařilo se načíst jídelníček";
             }
-            $db->close();
         ?>
     </main>
     <section>
         <?php
-            if($stav == "Otevřeno")
-                echo "<a href=\"./jidlo.php?jidelna=$jidelna&den=$den\">Objednat jídlo</a>"
+            $kontrola = true;
+            if(isset($_SESSION['id'])){
+                $id = $_SESSION['id'];
+                $sql = "SELECT * FROM objednavka WHERE user = $id AND den_dodani = '$den' AND jidelna = $jidelna";
+                $kon = $db->query($sql);
+                if($kon->num_rows > 0)
+                    $kontrola = false;
+                $kon->close();
+            }
+            if($stav == "Otevřeno" && $kontrola){
+                echo "<form action='./jidlo.php' method='post'>";
+                echo "<input type='hidden' name='jidelna' value='$jidelna' >";
+                echo "<input type='hidden' name='den' value='$den' >";
+                echo "<input type='submit' name='obj' value='Objednat si jídlo'>";
+                echo "</form>";
+            }else if($stav == "Uzavřeno"){
+                echo "Na tento den již nelze podávat objednávky";
+            }else{
+                echo "Na tento den již byla podána vaše objednávka";
+            }
+            $db->close();
         ?>
     </section>
 	</body>

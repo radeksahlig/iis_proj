@@ -22,7 +22,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava'])){
 	<body>
     <main>
         <a href="../index.php">Home</a>
-        <a href="./accounts.php">Zpět</a>
+        <a href="./accounts.php">Všechny účty</a>
         <form method="get" action="" enctype="multipart/form-data">
                 <input type="text" name="search" required="required">
                 <input type="submit" value="Hledat">

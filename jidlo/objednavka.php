@@ -76,7 +76,7 @@ if(!isset($_SESSION['id']))
                         echo "Stav - $stav";
                         echo "$ridic";
                         echo "Čas objednání $cas_objednani";
-                        echo "Den dodání $den_dodani";
+                        echo "Den dodání ".dateDTH($den_dodani)."";
                         echo "Adresa : $mesto $adresa";
                     }
                 }

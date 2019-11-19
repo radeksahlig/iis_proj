@@ -1,15 +1,15 @@
 <?php 
 session_start();
 include '../functions.php';
-if(isset($_GET['jidelna']))
-    if(filter_input(INPUT_GET, "jidelna", FILTER_VALIDATE_INT))
-        $jidelna = filter_input(INPUT_GET, "jidelna");
+if(isset($_POST['jidelna']))
+    if(filter_input(INPUT_POST, "jidelna", FILTER_VALIDATE_INT))
+        $jidelna = filter_input(INPUT_POST, "jidelna");
     else
         header("Location:../index.php");
 else
     header("Location:../index.php");
-if(isset($_GET['den']))
-    $den = filter_input(INPUT_GET, "den", FILTER_SANITIZE_STRING);
+if(isset($_POST['den']))
+    $den = filter_input(INPUT_POST, "den", FILTER_SANITIZE_STRING);
 else
     $den = date('Y-m-d');
 ?>

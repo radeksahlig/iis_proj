@@ -5,11 +5,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_SESSION['id
     if($_SESSION['prava'] > 2)
         header("Location:../index.php");
 }else{
-    var_dump($_SESSION['jmeno']);
-    var_dump($_SESSION['prava']);
-    var_dump($_SESSION['id']);
-    echo "???";
-    //header("Location:../index.php"); 
+    header("Location:../index.php"); 
 }
 ?>
 <!DOCTYPE html>
@@ -26,14 +22,14 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_SESSION['id
 	<body>
     <main>
         <a href="../index.php">Home</a>
-        <a href="./moje_jidelny.php">Zpět</a>
+        <a href="./moje_jidelny.php">Všechny jídelny</a>
         <form method="get" action="" enctype="multipart/form-data">
                 <input type="text" name="search" required="required">
                 <input type="submit" value="Hledat">
         </form>
         <?php
             $offset = 0;
-            $stranka = "./accounts.php?";
+            $stranka = "./moje_jidelny.php?";
             if(isset($_GET['page'])){
                 if($page = filter_input(INPUT_GET, "page", FILTER_VALIDATE_INT))
                     $offset = ($page * 10) - 10;
@@ -44,7 +40,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_SESSION['id
             $moje_id = $_SESSION['id'];            
             if(isset($_GET['search'])){
                 $search = filter_input(INPUT_GET, "search", FILTER_SANITIZE_STRING);
-                $stranka = "./accounts.php?search=$search&";
+                $stranka = "./moje_jidelny.php?search=$search&";
                 $sql = "SELECT id, nazev, mesto, adresa, stav FROM jidelna WHERE nazev LIKE '%$search%' OR adresa LIKE '%$search%' AND operator = $moje_id LIMIT 10 OFFSET $offset";
                 $sql2 = "SELECT COUNT(*) FROM jidelna WHERE nazev LIKE '%$search%' OR adresa LIKE '%$search%' AND operator = $moje_id";
             }else{

@@ -44,12 +44,20 @@ include './functions.php';
                 Nějak aby mohl sledovat objednávku ?? asi kód do db kterej musí zadat
                 Předělat registraci, aby se kontroloval email -> jestli pass prázdný jen doplnit informace jinak vytvořit nový účet
 
+
+
+            Stavy
+                - 1. Čekání
+                - 2. Potvrzeno
+                - 3. Na cestě
+                - 4. Dodáno
 		-->
     <main>
         <?php
             if(isset($_SESSION['jmeno'])){
                 echo "Přihlášen jako : <a href=\"./account/user?user=".$_SESSION['id']."\"><b>".$_SESSION['jmeno']."</b></a><br>";
                 echo "<a href='./account/login.php?action=off'>Odhlásit se</a><br>";
+                echo "<a href='./account/moje_objednavky.php'>Moje objednávky</a><br>";
                 if($_SESSION['prava'] == 2)
                     echo "<a href='./op/moje_jidelny.php'>Moje jídelny</a><br>";
                 if($_SESSION['prava'] <= 2){
