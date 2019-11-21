@@ -21,47 +21,55 @@ if(isset($_SESSION['jmeno']))
     <section>
         <div class="middle">
             <a href="../index.php">Home</a>
+            <?php 
+            if(isset($_POST['submit'])){
+                $jmeno = filter_input(INPUT_POST, "jmeno", FILTER_SANITIZE_STRING);
+                $prijmeni = filter_input(INPUT_POST, "prijmeni", FILTER_SANITIZE_STRING);
+                $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
+                $pass1 = filter_input(INPUT_POST, "pass1");
+                $pass2 = filter_input(INPUT_POST, "pass2");
+                $email_kon = emailExists($email);
+                $email = $email_kon > 0 ? "" : $email;
+            ?>    
+            <form method="post" action="" enctype="multipart/form-data">
+                <input type="text" placeholder="Jméno" name="jmeno" required="required" value="<?php echo $jmeno;?>">
+                <input type="text" placeholder="Příjmení" name="prijmeni" required="required" value="<?php echo $prijmeni;?>">
+                <input type="text" placeholder="E-mail" name="email" required="required" value="<?php echo $email;?>">
+                <input type="password" placeholder="Heslo" name="pass1" required="required">
+                <input type="password" placeholder="Potvrzení hesla" name="pass2" required="required">
+                <input type="submit" name="submit" value="Registrovat">
+            </form>
+            <?php }else{?>
             <form method="post" action="" enctype="multipart/form-data">
                 <input type="text" placeholder="Jméno" name="jmeno" required="required">
                 <input type="text" placeholder="Příjmení" name="prijmeni" required="required">
                 <input type="text" placeholder="E-mail" name="email" required="required">
                 <input type="password" placeholder="Heslo" name="pass1" required="required">
                 <input type="password" placeholder="Potvrzení hesla" name="pass2" required="required">
-                <input type="submit" name="submit" value="Register">
+                <input type="submit" name="submit" value="Registrovat">
             </form>
+            <?php } ?>
             <p>I already have account : <a href="login.php">LOG IN</a></p>
         </div>
     </section>
     <section class="alert2 al2">
 	<?php
+        
         if(isset($_POST['submit'])){
-            $jmeno = filter_input(INPUT_POST, "jmeno", FILTER_SANITIZE_STRING);
-            $prijmeni = filter_input(INPUT_POST, "prijmeni", FILTER_SANITIZE_STRING);
-            $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
-            $pass1 = filter_input(INPUT_POST, "pass1");
-            $pass2 = filter_input(INPUT_POST, "pass2");
             if($pass1!==$pass2){
                 echo "Hesla se neshodují";
             }else{
                 add($email, $pass1, $jmeno, $prijmeni);
             }
         }
-        
                 
         function add($email, $password, $jmeno, $prijmeni){           
             if(!($email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL))){
                 echo "Špatný formát emailu";
             }else{
-                $db = dbconnect();
-                $sql = "SELECT id, email, password FROM user WHERE email = '$email'";
-                $stat = $db->query($sql);
-                if($stat->num_rows > 0){
-                    if($password == null)
-                        //Znamená že je to pleb account, pomocný účet pro objednávky dodělat aby se jenom doplnili informace
-                        echo "doplnit jenom";
-                    echo "Tento e-mail se již používá !";                
-                    $stat->close();               
-                }else{  
+                $email_kon = emailExists($email);
+                $db = dbconnect();                                    
+                if($email_kon == 0){
                     $pass = password_hash($password, PASSWORD_DEFAULT);
                     $avatar = "/avatar/avatar1.jpg";
                     $sql1 = "INSERT INTO user(jmeno, prijmeni, email, password) VALUES (?, ?, ?, ?)";
@@ -76,8 +84,32 @@ if(isset($_SESSION['jmeno']))
                     }else{
                         echo "Registrace se nezdařila";
                     }
-                    $db->close();
+                }else{
+                    $sql = "SELECT jmeno FROM user WHERE id = $email_kon";
+                    if($ucheck = $db->prepare($sql)){
+                        $ucheck->execute();
+                        $ucheck->bind_result($jmeno_emp);
+                        if($ucheck->fetch()){
+                            $ucheck->close();
+                            if($jmeno_emp == ""){
+                                $sql_insrt = "UPDATE user SET jmeno = ?, prijmeni = ?, password = ?, prava = 4 WHERE id = $email_kon";
+                                if($insrt = $db->prepare($sql_insrt)){
+                                    $pass = password_hash($password, PASSWORD_DEFAULT);
+                                    $insrt->bind_param("sss", $jmeno, $prijmeni, $pass);
+                                    $insrt->execute();
+                                    $insrt->close();
+                                    echo "Registrace úspěšná";
+                                    ?><script>
+                                        var home = setTimeout(Home, 1000, "../index.php", home);
+                                    </script><?php
+                                }
+                            }else{
+                                echo "Tento email se již používá !";
+                            }
+                        }
+                    }
                 }
+                $db->close();                
             }
         }
         ?>

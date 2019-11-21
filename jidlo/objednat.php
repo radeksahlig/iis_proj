@@ -3,6 +3,7 @@ session_start();
 include '../functions.php';
 $jidelna = filter_input(INPUT_POST, "jidelna");
 $den = filter_input(INPUT_POST, "den", FILTER_SANITIZE_STRING);
+$podm = true;
 ?>
 <!DOCTYPE html>
 <html>
@@ -28,7 +29,8 @@ $den = filter_input(INPUT_POST, "den", FILTER_SANITIZE_STRING);
                     $telefon = filter_input(INPUT_POST, "telefon", FILTER_SANITIZE_STRING);
                     $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
                     if(filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL)){
-                        if(preg_match("/^[0-9]{9}$/", $telefon)){
+                        $email_kon = emailExists($email);
+                        if($email_kon == ""){
                             $sql_new_acc = "INSERT INTO user (email, telefon) VALUES (?, ?)";
                             if ($new_acc = $db->prepare($sql_new_acc)){
                                 $new_acc->bind_param("ss", $email, $telefon);
@@ -36,8 +38,6 @@ $den = filter_input(INPUT_POST, "den", FILTER_SANITIZE_STRING);
                                 $idUser = $new_acc->insert_id;
                                 $new_acc->close();
                             }
-                        }else{
-                            echo "Špatný formát telefonu (Korektní je - 777666555)";
                         }
                     }else{
                         echo "Špatně zadaný email";
@@ -46,34 +46,41 @@ $den = filter_input(INPUT_POST, "den", FILTER_SANITIZE_STRING);
                     $idUser = $_SESSION['id'];
                 }
 
-                $sql_obj = "INSERT INTO objednavka (user, cena, cas_objednani, den_dodani, mesto, adresa, jidelna) VALUES (?, ?, NOW(), ?, ?, ?, ?)";
-                if($obj = $db->prepare($sql_obj)){
-                    $celkem = filter_input(INPUT_POST, "celkem");
-                    var_dump($idUser, $celkem, $den, $mestoobj, $adresaobj, $jidelna);
-                    $obj->bind_param("iisssi", $idUser, $celkem, $den, $mestoobj, $adresaobj, $jidelna);
-                    $obj->execute();
-                    $id_obj = $obj->insert_id;
-                    $obj->close();
-                    if($id_obj != 0){
-                        echo "Objednávka úspěšně vložena můžete jí sledovat <a href=\"./objednavka.php?obj=$id_obj\">zde</a>";
-                        for ($i=0; $i < 4; $i++) { 
-                            if(isset($_POST["jidlo$i"])){
-                                $jidlo = filter_input(INPUT_POST, "jidlo$i");
-                                $num = filter_input(INPUT_POST, "num$i");
-                                $sql_jidla_v_obj = "INSERT INTO objednana_jidla (objednavka, jidlo, pocet) VALUES (?, ?, ?)";
-                                if($jidla_v_obj = $db->prepare($sql_jidla_v_obj)){
-                                    $jidla_v_obj->bind_param("iii", $id_obj, $jidlo, $num);
-                                    $jidla_v_obj->execute();
-                                    $jidla_v_obj->close();
+                if(isset($idUser)){
+                    $sql_obj = "INSERT INTO objednavka (user, cena, cas_objednani, den_dodani, mesto, adresa, jidelna, kod) VALUES (?, ?, NOW(), ?, ?, ?, ?, ?)";
+                    if($obj = $db->prepare($sql_obj)){
+                        $celkem = filter_input(INPUT_POST, "celkem");
+                        $kod = genNewKod();
+                        $obj->bind_param("iisssii", $idUser, $celkem, $den, $mestoobj, $adresaobj, $jidelna, $kod);
+                        $obj->execute();
+                        $id_obj = $obj->insert_id;
+                        $obj->close();
+                        if($id_obj != 0){
+                            if(isset($_SESSION['id']))
+                                echo "Objednávku můžete sledovat <a href=\"./objednavka.php?obj=$id_obj\">zde</a> nebo pomocí kódu <b>$kod</b>";
+                            else
+                                echo "Objednávku můžete sledovat pomocí kódu <b>$kod</b>";
+                            $podm = false;
+                            for ($i=1; $i < 5; $i++) { 
+                                if(isset($_POST["jidlo$i"])){
+                                    $jidlo = filter_input(INPUT_POST, "jidlo$i");
+                                    $num = filter_input(INPUT_POST, "num$i");
+                                    $sql_jidla_v_obj = "INSERT INTO objednana_jidla (objednavka, jidlo, pocet) VALUES (?, ?, ?)";
+                                    if($jidla_v_obj = $db->prepare($sql_jidla_v_obj)){
+                                        $jidla_v_obj->bind_param("iii", $id_obj, $jidlo, $num);
+                                        $jidla_v_obj->execute();
+                                        $jidla_v_obj->close();
+                                    }
                                 }
-                            }
-                              
-                        }                                        
-                    }else{
-                        echo "Nastala chyba zkuste znovu později";
+                                
+                            }                                        
+                        }else{
+                            echo "Nastala chyba";
+                        }
                     }
                 }
-            }else{
+            }
+            if($podm){
                 $sql = "SELECT nazev, adresa, mesto FROM jidelna WHERE id = $jidelna";
                 if($jidelny = $db->prepare($sql)){;
                     $jidelny->execute();
@@ -97,7 +104,7 @@ $den = filter_input(INPUT_POST, "den", FILTER_SANITIZE_STRING);
                 for ($i=1; $i <= 4; $i++) {
                     $num = filter_input(INPUT_POST, "num$i");
                     if($num != 0){
-                        $id = filter_input(INPUT_POST, "id$i");
+                        $id = filter_input(INPUT_POST, "jidlo$i");
                         $sql_info_jidlo = "SELECT nazev, popis, typ, ob, cena FROM jidlo WHERE id = $id";
                         if($jidlo_info = $db->prepare($sql_info_jidlo)){
                             $jidlo_info->execute();
@@ -121,15 +128,15 @@ $den = filter_input(INPUT_POST, "den", FILTER_SANITIZE_STRING);
                 }
                 if($celkem > 0)
                     echo "Celkem $celkem Kč";
-
                 echo "<form method=\"post\" onsubmit='return checkMesto()' name='obj'>";
                 echo "<input type='hidden' name='jidelna' value='$jidelna'>";
                 echo "<input type='hidden' name='den' value='$den'>";
                 echo "<input type='hidden' name='celkem' value='$celkem'>";
                 for ($i=0; $i < count($jidla)/2; $i++) { 
-                    echo "<input type='hidden' name='jidlo$i' value='".$jidla[$i*2]."'>";
-                    echo "<input type='hidden' name='num$i' value='".$jidla[$i*2+1]."'>";
+                    echo "<input type='hidden' name='jidlo".($i+1)."' value='".$jidla[$i*2]."'>";
+                    echo "<input type='hidden' name='num".($i+1)."' value='".$jidla[$i*2+1]."'>";
                 }
+
                 if(isset($_SESSION['id'])){
                     $sql_user = "SELECT email, mesto, adresa, telefon FROM user WHERE id = ".$_SESSION['id'];
                     if($user = $db->prepare($sql_user)){
@@ -158,31 +165,59 @@ $den = filter_input(INPUT_POST, "den", FILTER_SANITIZE_STRING);
                         }
                     }
                 }else{
-                    echo "<input type='text' name='email' required>";
-                    echo "<input type='text' name='telefon' required>";
-                    echo "<select name='mesto'>";
-                    echo "<option value=''>";
-                        $sql = "SELECT mesto FROM mesta_dovozu WHERE jidelna = $jidelna";
-                        $mesta = $db->query($sql);
-                        if($mesta->num_rows>0){
-                            while($row = $mesta->fetch_assoc()){
-                                    echo "<option value=\"".$row["mesto"]."\">".$row["mesto"];
+                    if(isset($email_kon)){
+                        echo "<input type='text' name='email' required placeholder='email'>";
+                        echo "<input type='text' name='telefon' required placeholder='telefon' value='$telefon'>";
+                        echo "<select name='mesto'>";
+                        echo "<option value=''>";
+                            $sql = "SELECT mesto FROM mesta_dovozu WHERE jidelna = $jidelna";
+                            $mesta = $db->query($sql);
+                            if($mesta->num_rows>0){
+                                while($row = $mesta->fetch_assoc()){
+                                    if($row['mesto'] == $mestoobj)
+                                        echo "<option value=\"".$row['mesto']."\" selected>".$row['mesto'];
+                                    else 
+                                        echo "<option value=\"".$row["mesto"]."\">".$row["mesto"];
+                                }
                             }
-                        }
-                        $mesta->close();
-                    echo "</select>";
-                    echo "<input type='text' name='adresa' required>";
+                            $mesta->close();
+                        echo "</select>";
+                        echo "<input type='text' name='adresa' required value='$adresaobj'>";
+                    }else{
+                        echo "<input type='text' name='email' required placeholder='email'>";
+                        echo "<input type='text' name='telefon' required placeholder='telefon'>";
+                        echo "<select name='mesto'>";
+                        echo "<option value=''>";
+                            $sql = "SELECT mesto FROM mesta_dovozu WHERE jidelna = $jidelna";
+                            $mesta = $db->query($sql);
+                            if($mesta->num_rows>0){
+                                while($row = $mesta->fetch_assoc()){
+                                        echo "<option value=\"".$row["mesto"]."\">".$row["mesto"];
+                                }
+                            }
+                            $mesta->close();
+                        echo "</select>";
+                        echo "<input type='text' name='adresa' required>";
+                    }
                 }
                 echo "<input type='submit' name='submitobj' value='Objednat'>";
                 echo "</form>";
             }
+            if(isset($email_kon))
+                if($email_kon != "")
+                    echo "Tento email se již používá";
             $db->close();
-    ?>
+?>
         <script>
             function checkMesto(){
                 var mesto = document.forms["obj"]["mesto"].value;
+                var telefon = Number(document.forms["obj"]["telefon"].value);
                 if(mesto == ""){
                     alert("Musíte vybrat město");
+                    return false;
+                }
+                if(telefon < 100000000 || telefon > 999999999){
+                    alert("Špatný formát telefonu, korektní - 777586996");
                     return false;
                 }
                 return true;

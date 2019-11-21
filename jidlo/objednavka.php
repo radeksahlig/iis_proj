@@ -1,15 +1,7 @@
 <?php 
 session_start();
 include '../functions.php';
-if(isset($_GET['obj']))
-    if(filter_input(INPUT_GET, "obj", FILTER_VALIDATE_INT))
-        $obj = filter_input(INPUT_GET, "obj");
-    else
-        header("Location:../index.php");
-else
-    header("Location:../index.php");
-
-if(!isset($_SESSION['id']))
+if(!isset($_SESSION['id']) && isset($_GET['obj']))
     header("Location:../index.php");
 
 ?>
@@ -28,16 +20,51 @@ if(!isset($_SESSION['id']))
     <main>
         <a href="../index.php">Home</a>
         <?php 
-            $db = dbconnect();
-            $userId = $_SESSION['id'];
-            $sql_kontrola = "SELECT id FROM objednavka WHERE id = $obj AND user = $userId";
-            $kontrola = $db->query($sql_kontrola);
-            if($kontrola->num_rows>0 || $_SESSION['prava'] == 1){
-                $kontrola->close();
-                $sql_obj = "SELECT user, stav, ridic, cena, cas_objednani, den_dodani, mesto, adresa, jidelna FROM objednavka WHERE id = $obj";
+            if(isset($_GET['obj'])){
+                if(filter_input(INPUT_GET, "obj", FILTER_VALIDATE_INT))
+                    $obj = filter_input(INPUT_GET, "obj", FILTER_SANITIZE_NUMBER_INT);
+                else
+                    echo "Špatné číslo objednávky";
+            }else if(isset($_GET['kod'])){
+                if(filter_input(INPUT_GET, "kod", FILTER_VALIDATE_INT))
+                    $kod = filter_input(INPUT_GET, "kod", FILTER_SANITIZE_NUMBER_INT);
+                else
+                    echo "Špatný kód objednávky";
+            }else{
+                echo "<form method='post' name='fkod' onsubmit=\"return checkKod()\">";
+                echo "<input type='text' name='kod' required>";
+                echo "<input type='submit' name='submitkod' value='Najít objednávku'>";
+                echo "</form>";
+            }
+                
+            if(isset($_POST['submitkod']))
+                header("Location:./objednavka.php?kod=".$_POST['kod']);
+
+            if(isset($obj)){
+                $db = dbconnect();            
+                $userId = $_SESSION['id'];
+                $sql_kontrola = "SELECT id FROM objednavka WHERE id = $obj AND user = $userId";
+                $kontrola = $db->query($sql_kontrola);
+                if($kontrola->num_rows>0 || $_SESSION['prava'] == 1){
+                    $kontrola->close();
+                    $db->close();             
+                    loadObj($obj, 0);
+                }else{
+                    echo "Nemáte právo zobrazovat tuto objednávku";
+                }
+            }else if(isset($kod)){
+                loadObj(0, $kod);
+            }
+
+            function loadObj($obj, $kod){
+                $db = dbconnect();
+                if($kod == 0)
+                    $sql_obj = "SELECT id, user, stav, ridic, cena, cas_objednani, den_dodani, mesto, adresa, jidelna FROM objednavka WHERE id = $obj";
+                else
+                    $sql_obj = "SELECT id, user, stav, ridic, cena, cas_objednani, den_dodani, mesto, adresa, jidelna FROM objednavka WHERE kod = $kod";
                 if($obje = $db->prepare($sql_obj)){
                     $obje->execute();
-                    $obje->bind_result($user, $stav, $ridic, $cena, $cas_objednani, $den_dodani, $mesto, $adresa, $jidelna);
+                    $obje->bind_result($obj, $user, $stav, $ridic, $cena, $cas_objednani, $den_dodani, $mesto, $adresa, $jidelna);
                     if($obje->fetch()){
                         $obje->close();
                         $sql = "SELECT nazev, adresa, mesto FROM jidelna WHERE id = $jidelna AND stav = 1";
@@ -78,14 +105,31 @@ if(!isset($_SESSION['id']))
                         echo "Čas objednání $cas_objednani";
                         echo "Den dodání ".dateDTH($den_dodani)."";
                         echo "Adresa : $mesto $adresa";
+                    }else{
+                        if($kod == 0)
+                            echo "Objednávka s tímto číslem neexistuje";
+                        else
+                            echo "Objednávka s tímto kódem neexistuje";                    
                     }
                 }
-            }else{
-                echo "Nemáte právo zobrazovat tuto objednávku";
+                $db->close();
             }
            
-            $db->close();
-            ?>       
+            ?>
+            <script>
+                function checkKod(){
+                    var kod = Number(document.forms['fkod']['kod'].value);
+                    if(Number.isInteger(kod)){
+                        if(kod < 100000000 || kod > 999999999){
+                            alert("Špatný formát kódu");
+                            return false;
+                        }
+                        return true;
+                    }
+                    alert("Musíte zadat číslo");
+                    return false;
+                }
+            </script>       
     </main>
 	</body>
 </html>

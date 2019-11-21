@@ -60,7 +60,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_SESSION['id
             $porad = $offset+1;
             if($load_my_jidelna->num_rows>0){
                 echo "<table>";
-                echo "<tr><td>Pořadí</td><td>Název</td><td>Města dovozu</td><td>Mesto</td><td>Adresa</td><td>Připravena</td><td>Upravit</td></tr>";
+                echo "<tr><td>Pořadí</td><td>Název</td><td>Města dovozu</td><td>Mesto</td><td>Adresa</td><td>Připravena</td><td>Upravit</td><td>Upravit jídelníček</td></tr>";
     			while($row = $load_my_jidelna->fetch_assoc()){
                     echo "<tr>";
                     echo "<td>".$porad++."</td>";
@@ -73,6 +73,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_SESSION['id
                     else
                         echo "<td>Ano</td>";
                     echo "<td><a href='./jidelna?jidelna=".$row['id']."'>Upravit</a></td>";
+                    echo "<td><a href='./manage_jidelnicek?jidelna=".$row['id']."'>Upravit jídelníček</a></td>";
                     echo "</tr>";
                 }
                 echo "</table>";                

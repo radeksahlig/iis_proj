@@ -3,10 +3,10 @@ session_start();
 include '../functions.php';
 if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user'])){
     if(!($_SESSION['prava'] == 1 || $_SESSION['id'] == $_GET['user']))
-        header("Location:../index.php");
+        ;//header("Location:../index.php");
     
 }else{
-    header("Location:../index.php"); 
+    ;//header("Location:../index.php"); 
 }
 ?>
 <!DOCTYPE html>
@@ -64,11 +64,15 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
                         echo "<input type=\"text\" value=\"$prava\" readonly>";
                     echo "<input type=\"submit\" name=\"submit\" value=\"Upravit uživatele\">";
                     echo "</form>";
+
+                    echo "<form onsubmit='return confirm(\"Opravdu chcete smazat účet?\")' action='manage_user.php?user=$user_id' method='post'>";
+                    echo "<input type=\"submit\" name=\"subdel\" value=\"Odstranit účet\">";
+                    echo "</form>";
                 }else{
                     echo "Uživatel s tímto id neexistuje";
                 }
             }else{
-                header("Location:../index.php"); 
+                //header("Location:../index.php"); 
             }
             if(isset($_POST['submit'])){
                 $jmeno = filter_input(INPUT_POST, "jmeno", FILTER_SANITIZE_STRING);
@@ -100,6 +104,28 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
 
                 }else{
                     echo "Špatný formát emailu";
+                }
+            }
+            if(isset($_POST['subdel'])){
+                $sql = "DELETE FROM user WHERE id = $user_id";
+                if($try_del = $db->prepare($sql)){
+                    $try_del->execute();
+                    if($try_del->affected_rows > 0){
+                        ?><script>
+                        var refresh = setTimeout(Home, 0, "../account/login.php?action=odhlasit", refresh);
+                        </script><?php
+                    }
+                    $try_del->close();
+                }
+                $sql = "UPDATE user SET jmeno = null, prijmeni = null, password = null, mesto = null, adresa = null, prava = 5 WHERE id = $user_id";
+                if($set_pleb = $db->prepare($sql)){
+                    $set_pleb->execute();
+                    if($set_pleb->affected_rows > 0){
+                        ?><script>
+                        var refresh = setTimeout(Home, 0, "../account/login.php?action=odhlasit", refresh);
+                        </script><?php
+                    }
+                    $set_pleb->close();
                 }
             }
             $db->close();

@@ -24,7 +24,7 @@ include './functions.php';
             Operátor -
             *_* Měnit nazev své jídelny, přidávat města dovozu ke své jídelně
             *_* Přidávat nová jídla
-                Měnit jídelníček své jídelny
+            *_* Měnit jídelníček své jídelny
                 Přidělovat zakázky řidičům
 
             Řidič -
@@ -36,13 +36,13 @@ include './functions.php';
             *_* Objednávat si jídla - z db se předvyplní adresa
             *_* Sledovat objednávku
             *_* Změnit svůj účet
-                Smazat svůj účet
+            *_* Smazat svůj účet
 
             Uživatel bez účtu -
             *_* Procházet jídelny a jejich jídelníčky
             *_* Objednat si jídlo - bude muset zadat adresu, email (v db se vytvoří provizorní účet bez hesla)
-                Nějak aby mohl sledovat objednávku ?? asi kód do db kterej musí zadat
-                Předělat registraci, aby se kontroloval email -> jestli pass prázdný jen doplnit informace jinak vytvořit nový účet
+            *_* Nějak aby mohl sledovat objednávku ?? asi kód do db kterej musí zadat
+            *_* Předělat registraci, aby se kontroloval email -> jestli pass prázdný jen doplnit informace jinak vytvořit nový účet
 
 
 
@@ -72,7 +72,7 @@ include './functions.php';
                 echo "<a href='./account/register.php'>Registrace</a><br>";
                 echo "<a href='./account/login.php'>Login</a><br>";
             }
-            //Přidat výpis jídelen co jsou připraveny (stav = 1)
+            echo "<a href='./jidlo/objednavka.php'>Najít objednávku</a>";
             $db = dbconnect();
             $sql = "SELECT id, nazev, adresa, mesto FROM jidelna WHERE stav = 1";
             $jidelny = $db->query($sql);
@@ -87,9 +87,11 @@ include './functions.php';
             }else{
                 echo "Nepodařilo se načíst žádné jídelny";
             }
+
         ?>
     </main>
     <p>Admin účet : email - admin@jidelna.cz, heslo - admin</p>
     <p>Oparátor účet : email - LadNov@jidelna.cz, heslo - heslo</p>
+
 	</body>
 </html>

@@ -70,7 +70,7 @@ else
                                     echo "<p>$popis</p>";
                                     echo "<p>$cena Kč (jeden kus)</p>";
                                     echo "<p>$ob</p>";
-                                    echo "<input type=\"hidden\" name=\"id$num\" value=\"".$row['jidlo']."\">";
+                                    echo "<input type=\"hidden\" name=\"jidlo$num\" value=\"".$row['jidlo']."\">";
                                     echo "<input type=\"number\" name=\"num$num\" min=\"0\" max=\"4\" value=\"0\">0-4ks";
                                     echo "</fieldset>";
                                     $num++;
@@ -80,7 +80,7 @@ else
                                 $jidlo_info->close();
                             }
                         }
-                        echo "<input type=\"submit\" name=\"submit\" value=\"Objednat\" onclick=\"checkNum\">";
+                        echo "<input type=\"submit\" name=\"submit\" value=\"Objednat\">";
                         echo "</form>";
                     }else{
                         echo "V nabídce nejsou žádná jídla";

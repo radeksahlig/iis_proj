@@ -12,6 +12,7 @@ if(isset($_GET['den']))
     $den = filter_input(INPUT_GET, "den", FILTER_SANITIZE_STRING);
 else
     $den = date('Y-m-d');
+$kontrola = true;
 
 ?>
 <!DOCTYPE html>
@@ -42,10 +43,12 @@ else
                     echo "</div></a>";
                 }else{
                     echo "Nepodařilo se načíst jídelníček jídelny s daným id";
+                    $kontrola = false;
                 }     
                 $jidelny->close();   
             }else{
                 echo "Nepodařilo se načíst jídelníček";
+                $kontrola = false;
             }
         ?>
             <a href="./jidelnicek.php?jidelna=<?php echo $jidelna;?>&den=<?php echo date('Y-m-d', strtotime($den . ' -1 day'));?>">Předchozí den</a>
@@ -95,20 +98,22 @@ else
                         }
                     }else{
                         echo "V nabídce nejsou žádná jídla";
+                        $kontrola = false;
                     }
                     $jidla_v_nabidce->close();
                 }else{
                     echo "Jídelna na tento den nemá sestavený jídelníček";
+                    $kontrola = false;
                 }     
             }else{
                 echo "Nepodařilo se načíst jídelníček";
+                $kontrola = false;
             }
         ?>
     </main>
     <section>
         <?php
-            $kontrola = true;
-            if(isset($_SESSION['id'])){
+            if(isset($_SESSION['id']) && $kontrola){
                 $id = $_SESSION['id'];
                 $sql = "SELECT * FROM objednavka WHERE user = $id AND den_dodani = '$den' AND jidelna = $jidelna";
                 $kon = $db->query($sql);
@@ -122,9 +127,9 @@ else
                 echo "<input type='hidden' name='den' value='$den' >";
                 echo "<input type='submit' name='obj' value='Objednat si jídlo'>";
                 echo "</form>";
-            }else if($stav == "Uzavřeno"){
+            }else if($stav == "Uzavřeno" && $kontrola){
                 echo "Na tento den již nelze podávat objednávky";
-            }else{
+            }else if($kontrola){
                 echo "Na tento den již byla podána vaše objednávka";
             }
             $db->close();

@@ -1,6 +1,6 @@
 <?php
 function dbconnect(){
-	$db = new mysqli("localhost","","","iis_jidelna");
+	$db = new mysqli("localhost","methack","heslo","iis_jidelna");
     $db->set_charset("UTF8");
     return $db;
 }
@@ -57,8 +57,37 @@ function dateHTD(string $a){
     return "$rok-$mes-$den";
 }
 
+//Generuje nový kód objednávky -> kód je číslo s 9ciframa
+function genNewKod(){
+    $db = dbconnect();
+    while(1){
+        $kod = random_int(100000000, 999999999);
+        $sql = "SELECT id FROM objednavka WHERE kod = $kod";
+        if($check_kod = $db->query($sql)){
+            if(!$check_kod->num_rows > 0){
+                return $kod;
+            }
+            $check_kod->close();
+        }   
+    }
+    $db->close();
+}
 
-
+function emailExists($email){
+    $db = dbconnect();
+    $sql = "SELECT id FROM user WHERE email = '$email'";
+    if($stat = $db->prepare($sql)){
+        $stat->execute();
+        $stat->bind_result($id);
+        if($stat->fetch()){
+            $stat->close();
+            $db->close();
+            return $id; 
+        }
+    }    
+    $db->close();
+    return 0; 
+}
 
 ?>
 <script>
