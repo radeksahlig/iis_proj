@@ -25,11 +25,11 @@ include './functions.php';
             *_* Měnit nazev své jídelny, přidávat města dovozu ke své jídelně
             *_* Přidávat nová jídla
             *_* Měnit jídelníček své jídelny
-                Přidělovat zakázky řidičům
+            *_* Přidělovat zakázky řidičům
 
             Řidič -
-                Procházet své zakázky
-                Měnit stav zakázek
+            *_* Procházet své zakázky
+            *_* Měnit stav zakázek
 
             Konzument -
             *_* Procházet jídelny a jejich jídelníčky
@@ -44,6 +44,8 @@ include './functions.php';
             *_* Nějak aby mohl sledovat objednávku ?? asi kód do db kterej musí zadat
             *_* Předělat registraci, aby se kontroloval email -> jestli pass prázdný jen doplnit informace jinak vytvořit nový účet
 
+                Projít isset($_POST['submity']) a dát je nad html pokud to pujde
+                Nepsát headry na index ale chybový hlášky (jen někde)
 
 
             Stavy
@@ -58,8 +60,10 @@ include './functions.php';
                 echo "Přihlášen jako : <a href=\"./account/user?user=".$_SESSION['id']."\"><b>".$_SESSION['jmeno']."</b></a><br>";
                 echo "<a href='./account/login.php?action=off'>Odhlásit se</a><br>";
                 echo "<a href='./account/moje_objednavky.php'>Moje objednávky</a><br>";
-                if($_SESSION['prava'] == 2)
+                if($_SESSION['prava'] == 2){
                     echo "<a href='./op/moje_jidelny.php'>Moje jídelny</a><br>";
+                    echo "<a href='./op/dat_zakazky.php'>Nové zakázky</a><br>";
+                }
                 if($_SESSION['prava'] <= 2){
                     echo "<a href='./op/add_jidlo.php'>Vložení jídla do DB</a><br>";
                     if($_SESSION['prava'] == 1){
@@ -68,6 +72,8 @@ include './functions.php';
                         echo "<a href='./admin/jidelny.php'>Jídelny</a><br>";
                     }
                 }
+                if($_SESSION['prava'] == 3)
+                    echo "<a href='./ridic/zakazky.php?search=&f_akt=akt'>Zakázky</a><br>";
             }else{
                 echo "<a href='./account/register.php'>Registrace</a><br>";
                 echo "<a href='./account/login.php'>Login</a><br>";
@@ -92,6 +98,7 @@ include './functions.php';
     </main>
     <p>Admin účet : email - admin@jidelna.cz, heslo - admin</p>
     <p>Oparátor účet : email - LadNov@jidelna.cz, heslo - heslo</p>
+    <p>Řidič účet : email - novak@jidelna.cz, heslo - heslo</p>
 
 	</body>
 </html>

@@ -3,7 +3,20 @@ session_start();
 include '../functions.php';
 if(!isset($_SESSION['id']) && isset($_GET['obj']))
     header("Location:../index.php");
-
+if(isset($_POST['subridic'])){
+    $db = dbconnect();
+    $ridic = filter_input(INPUT_POST, "ridic", FILTER_SANITIZE_NUMBER_INT);
+    $obj = filter_input(INPUT_POST, "obj", FILTER_SANITIZE_NUMBER_INT);
+    $sql_updt = "UPDATE objednavka SET ridic = ?, stav = 'Potvrzeno' WHERE id = $obj";
+    var_dump($sql_updt);
+    if($updt = $db->prepare($sql_updt)){
+        $updt->bind_param("i", $ridic);
+        $updt->execute();
+        $updt->close();
+    }
+    $db->close();
+    header("Location:../op/dat_zakazky.php");
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -45,7 +58,7 @@ if(!isset($_SESSION['id']) && isset($_GET['obj']))
                 $userId = $_SESSION['id'];
                 $sql_kontrola = "SELECT id FROM objednavka WHERE id = $obj AND user = $userId";
                 $kontrola = $db->query($sql_kontrola);
-                if($kontrola->num_rows>0 || $_SESSION['prava'] == 1){
+                if($kontrola->num_rows>0 || $_SESSION['prava'] <= 3){
                     $kontrola->close();
                     $db->close();             
                     loadObj($obj, 0);
@@ -64,7 +77,7 @@ if(!isset($_SESSION['id']) && isset($_GET['obj']))
                     $sql_obj = "SELECT id, user, stav, ridic, cena, cas_objednani, den_dodani, mesto, adresa, jidelna FROM objednavka WHERE kod = $kod";
                 if($obje = $db->prepare($sql_obj)){
                     $obje->execute();
-                    $obje->bind_result($obj, $user, $stav, $ridic, $cena, $cas_objednani, $den_dodani, $mesto, $adresa, $jidelna);
+                    $obje->bind_result($obj, $user, $stav, $ridic, $cena, $cas_objednani, $den_dodani, $mestoobj, $adresaobj, $jidelna);
                     if($obje->fetch()){
                         $obje->close();
                         $sql = "SELECT nazev, adresa, mesto FROM jidelna WHERE id = $jidelna AND stav = 1";
@@ -101,10 +114,17 @@ if(!isset($_SESSION['id']) && isset($_GET['obj']))
                         }
                         $obj_jidla->close();
                         echo "Stav - $stav";
-                        echo "$ridic";
+                        $sql_ridic = "SELECT jmeno, prijmeni FROM user WHERE id = $ridic";
+                        if($ridic = $db->prepare($sql_ridic)){
+                            $ridic->execute();
+                            $ridic->bind_result($jmeno, $prijmeni);
+                            if($ridic->fetch()){
+                                echo "Rozvoz : $jmeno $prijmeni";
+                            }
+                        }
                         echo "Čas objednání $cas_objednani";
                         echo "Den dodání ".dateDTH($den_dodani)."";
-                        echo "Adresa : $mesto $adresa";
+                        echo "Adresa : $mestoobj $adresaobj";
                     }else{
                         if($kod == 0)
                             echo "Objednávka s tímto číslem neexistuje";
@@ -113,6 +133,60 @@ if(!isset($_SESSION['id']) && isset($_GET['obj']))
                     }
                 }
                 $db->close();
+            }
+
+            if($_SESSION['prava'] <= 2){
+                $db = dbconnect();
+                $sql = "SELECT id FROM user WHERE prava = 3";                
+                echo "<form method='post' name='fridic' action='./objednavka.php' onsubmit='return checkRidic()'>";
+                echo "<input type='hidden' name='obj' value='$obj'>";
+                echo "<select name='ridic'>";
+                if($ridici = $db->query($sql)){
+                    if($ridici->num_rows > 0){
+                        $ridic = 0;
+                        while($row = $ridici->fetch_assoc()){
+                            $ridic = $row['id'];
+                            $sql2 = "SELECT mesto FROM objednavka WHERE stav = 'Potvrzeno' AND ridic = $ridic GROUP BY mesto";
+                            if($mesta = $db->query($sql2)){
+                                if($mesta->num_rows > 0){
+                                    $first = true;
+                                    while($grp = $mesta->fetch_assoc()){
+                                        if($first){
+                                            $first = false;
+                                            $sql_ridic = "SELECT jmeno, prijmeni FROM user WHERE id = $ridic";
+                                            if($ridicdb = $db->prepare($sql_ridic)){
+                                                $ridicdb->execute();
+                                                $ridicdb->bind_result($jmeno, $prijmeni);
+                                                if($ridicdb->fetch()){
+                                                    echo "<option value='$ridic'>$jmeno $prijmeni - ".$grp['mesto'];
+                                                }
+                                                $ridicdb->close();
+                                            }
+                                        }else{
+                                            echo ", ".$grp['mesto'];
+                                        }
+                                    }
+                                }else{
+                                    $sql_ridic = "SELECT jmeno, prijmeni FROM user WHERE id = $ridic";
+                                    if($ridicdb = $db->prepare($sql_ridic)){
+                                        $ridicdb->execute();
+                                        $ridicdb->bind_result($jmeno, $prijmeni);
+                                        if($ridicdb->fetch()){
+                                            echo "<option value='$ridic'>$jmeno $prijmeni";
+                                        }
+                                        $ridicdb->close();
+                                    }
+                                }
+                                $mesta->close();
+                            }
+                            
+                        }
+                    }
+                    $ridici->close();
+                }
+                echo "</select>";
+                echo "<input type='submit' name='subridic' value='Určit řidiče'>";
+                echo "</form>";
             }
            
             ?>
@@ -128,6 +202,15 @@ if(!isset($_SESSION['id']) && isset($_GET['obj']))
                     }
                     alert("Musíte zadat číslo");
                     return false;
+                }
+
+                function checkRidic(){
+                    var ridic = document.forms['fridic']['ridic'].value;
+                    if(ridic == ""){
+                        alert("Musíte vybrat řidiče");
+                        return false;
+                    }
+                    return true;
                 }
             </script>       
     </main>

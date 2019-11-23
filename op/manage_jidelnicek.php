@@ -12,7 +12,33 @@ if(isset($_GET['den']))
     $den = filter_input(INPUT_GET, "den", FILTER_SANITIZE_STRING);
 else
     $den = date('Y-m-d');
-
+    
+if(isset($_POST['submitjidlo'])){
+    $db = dbconnect();
+    $sql_sel = "SELECT id FROM nabidka WHERE jidelna = $jidelna AND den = '$den'";
+    if($sel = $db->prepare($sql_sel)){
+        $sel->execute();
+        $sel->bind_result($id);
+        $sel->fetch();
+        $sel->close();
+    }
+    $jidla = array(filter_input(INPUT_POST, "jidlo1"), filter_input(INPUT_POST, "jidlo2"), filter_input(INPUT_POST, "jidlo3"), filter_input(INPUT_POST, "jidlo4"));
+    $sql = "INSERT INTO jidla_v_nabidce (nabidka, jidlo) VALUES (?, ?)";
+    $sql_del = "DELETE FROM jidla_v_nabidce WHERE nabidka = $id";
+    if($del = $db->prepare($sql_del)){
+        $del->execute();
+        $del->close();
+        for ($i=0; $i < 4 ; $i++) {
+            if($insrt_jidlo = $db->prepare($sql)){
+                $insrt_jidlo->bind_param("ii", $id, $jidla[$i]);
+                $insrt_jidlo->execute();
+                $insrt_jidlo->close();
+            }
+        }
+    }
+    $db->close();
+    header("Location:./manage_jidelnicek?jidelna=$jidelna&den=$den&message=succ");
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -80,9 +106,10 @@ else
                                         echo "Toto jídlo neexistuje";
                                     $jidlo_info->close();
                                     echo "<select name='jidlo$i'>";
-                                    $i++;
                                     echo "<option value=''>";
-                                        $sql = "SELECT id, nazev FROM jidlo";
+                                        $sql = "SELECT id, nazev FROM jidlo WHERE typ LIKE 'hlavni'";
+                                        if($i == 4)
+                                            $sql = "SELECT id, nazev FROM jidlo WHERE typ LIKE 'polevka'";
                                         $jidla = $db->query($sql);
                                         if($jidla->num_rows>0){
                                             while($row = $jidla->fetch_assoc()){
@@ -94,6 +121,7 @@ else
                                         }
                                         $jidla->close();
                                     echo "</select>";
+                                    $i++;                                    
                                 }
                             }
                         }else{
@@ -130,22 +158,6 @@ else
                 echo "</form>"; 
             }
 
-            if(isset($_POST['submitjidlo'])){
-                $jidla = array(filter_input(INPUT_POST, "jidlo1"), filter_input(INPUT_POST, "jidlo2"), filter_input(INPUT_POST, "jidlo3"), filter_input(INPUT_POST, "jidlo4"));
-                $sql = "INSERT INTO jidla_v_nabidce (nabidka, jidlo) VALUES (?, ?)";
-                for ($i=0; $i < 4 ; $i++) {
-                    if($insrt_jidlo = $db->prepare($sql)){
-                        $insrt_jidlo->bind_param("ii", $id, $jidla[$i]);
-                        $insrt_jidlo->execute();
-                        $insrt_jidlo->close();
-                    }else{
-                        echo "asd";
-                    }
-                }
-                ?><script>
-                    var reload = setTimeout(Home, 0, "./manage_jidelnicek?jidelna=<?php echo $jidelna; ?>&den=<?php echo $den; ?>", reload);
-                </script><?php
-            }
 
             $db->close();
         ?>
@@ -167,5 +179,12 @@ else
             }
         </script>
     </main>
+    <section>
+            <?php
+            if(isset($_GET['message'])){
+                echo "Jídla byla úspěšně přidána do jídelníčku";
+            }
+            ?>
+    </section>
 	</body>
 </html>

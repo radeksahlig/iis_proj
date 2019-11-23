@@ -22,14 +22,14 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava'])){
 	<body>
     <main>
         <a href="../index.php">Home</a>
-        <a href="./accounts.php">Zpět</a>
+        <a href="./jidelny.php">Zpět</a>
         <form method="get" action="" enctype="multipart/form-data">
                 <input type="text" name="search" required="required">
                 <input type="submit" value="Hledat">
         </form>
         <?php
             $offset = 0;
-            $stranka = "./accounts.php?";
+            $stranka = "./jidelny.php?";
             if(isset($_GET['page'])){
                 if($page = filter_input(INPUT_GET, "page", FILTER_VALIDATE_INT))
                     $offset = ($page * 10) - 10;
@@ -39,7 +39,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava'])){
             echo "Výpis jídelen $offset - ".($offset+10);
             if(isset($_GET['search'])){
                 $search = filter_input(INPUT_GET, "search", FILTER_SANITIZE_STRING);
-                $stranka = "./accounts.php?search=$search&";
+                $stranka = "./jidelny.php?search=$search&";
                 $sql = "SELECT id, nazev, mesto, adresa, operator, stav FROM jidelna WHERE nazev LIKE '%$search%' OR adresa LIKE '%$search%' LIMIT 10 OFFSET $offset";
                 $sql2 = "SELECT COUNT(*) FROM jidelna WHERE nazev LIKE '%$search%' OR adresa LIKE '%$search%'";
             }else{
@@ -81,30 +81,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava'])){
             }
             $load_accounts->close();
             $db->close();
-
-            //Stránkování
-            if(ceil($number/10) > 1){
-                if($offset == 0){
-                    $podm = ceil($number/10) < 3 ? ceil($number/10) : 3;
-                    echo "<a href=\"".$stranka."page=1\"><b>1</b></a>";
-                    for ($i=2; $i <= $podm; $i++)
-                        echo "<a href=\"".$stranka."page=$i\">$i</a>";
-                    if(1 < $podm)
-                        echo "<a href=\"".$stranka."page=2\">&gt</a>";
-                }else{
-                    $cur_page = $offset/10;
-                    echo "<a href=\"".$stranka."page=$cur_page\">&lt</a>";               
-                    $podm = $cur_page > 3 ? $cur_page-2 : 1;
-                    for ($i=$podm; $i < $cur_page+1; $i++)
-                        echo "<a href=\"".$stranka."page=$i\">$i</a>";
-                    echo "<a href=\"".$stranka."page=".($cur_page+1)."\"><b>".($cur_page+1)."</b></a>";
-                    $podm = ceil($number/10) < $cur_page+3 ? ceil($number/10) : $cur_page+4;
-                    for ($i=$cur_page+2; $i <= $podm; $i++)
-                        echo "<a href=\"".$stranka."page=$i\">$i</a>";
-                    if($cur_page+1 < $podm)
-                        echo "<a href=\"".$stranka."page=".($cur_page+2)."\">&gt</a>";
-                }
-            }
+            strankovani($number, $offset, $stranka);
         ?>
     </main>
 	</body>

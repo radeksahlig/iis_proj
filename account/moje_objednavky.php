@@ -83,34 +83,12 @@ if(!(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_SESSION['
                     }
                     echo "</table>";                
                 }else{
-                    echo "Nepodařilo se načíst žádné objednávky";
+                    echo "Nemáte žádné objednávky";
                 }
                 $load_my_objednavka->close();
                 $db->close();
             }
-            //Stránkování
-            if(ceil($number/10) > 1){
-                if($offset == 0){
-                    $podm = ceil($number/10) < 3 ? ceil($number/10) : 3;
-                    echo "<a href=\"".$stranka."page=1\"><b>1</b></a>";
-                    for ($i=2; $i <= $podm; $i++)
-                        echo "<a href=\"".$stranka."page=$i\">$i</a>";
-                    if(1 < $podm)
-                        echo "<a href=\"".$stranka."page=2\">&gt</a>";
-                }else{
-                    $cur_page = $offset/10;
-                    echo "<a href=\"".$stranka."page=$cur_page\">&lt</a>";               
-                    $podm = $cur_page > 3 ? $cur_page-2 : 1;
-                    for ($i=$podm; $i < $cur_page+1; $i++)
-                        echo "<a href=\"".$stranka."page=$i\">$i</a>";
-                    echo "<a href=\"".$stranka."page=".($cur_page+1)."\"><b>".($cur_page+1)."</b></a>";
-                    $podm = ceil($number/10) < $cur_page+3 ? ceil($number/10) : $cur_page+4;
-                    for ($i=$cur_page+2; $i <= $podm; $i++)
-                        echo "<a href=\"".$stranka."page=$i\">$i</a>";
-                    if($cur_page+1 < $podm)
-                        echo "<a href=\"".$stranka."page=".($cur_page+2)."\">&gt</a>";
-                }
-            }
+            strankovani($number, $offset, $stranka);
         ?>
     </main>
 	</body>
