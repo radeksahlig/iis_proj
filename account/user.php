@@ -44,7 +44,8 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
                     echo "<p>$mesto</p>";
                     echo "<p>$adresa</p>";
                     echo "<p>$telefon</p>";
-                    echo "<p>$prava</p>";
+                    if($_SESSION['id'] == 1)
+                        echo "<p>$prava</p>";
                     echo "<a href=\"./manage_user.php?user=$user_id\">Upravit</a>";
                 }else{
                     echo "Uživatel s tímto id neexistuje";

@@ -44,7 +44,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
                         $mesto = NULL;
                     if($adresa == "")
                         $adresa = NULL;
-                    if($telefon == "");
+                    if($telefon == "")
                         $telefon = NULL;
                     if($_SESSION['prava'] == 1)
                         $sql_update = "UPDATE user SET jmeno = ?, prijmeni = ?, email = ?, mesto = ?, adresa = ?, telefon = ?, prava = ? WHERE id = $user_id";
@@ -52,9 +52,9 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
                         $sql_update = "UPDATE user SET jmeno = ?, prijmeni = ?, email = ?, mesto = ?, adresa = ?, telefon = ? WHERE id = $user_id";
                     if($updt = $db->prepare($sql_update)){
                         if($_SESSION['prava'] == 1)
-                            $updt->bind_param("ssssssi", $jmeno, $prijmeni, $email, $mesto, $adresa, $telefon, $prava);
+                            $updt->bind_param("sssssii", $jmeno, $prijmeni, $email, $mesto, $adresa, $telefon, $prava);
                         else
-                            $updt->bind_param("ssssss", $jmeno, $prijmeni, $email, $mesto, $adresa, $telefon);
+                            $updt->bind_param("sssssi", $jmeno, $prijmeni, $email, $mesto, $adresa, $telefon);
                         $updt->execute();
                         $updt->close();
                         if($_SESSION['prava'] == 1){
@@ -63,9 +63,9 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
                             <script>
                                 var refresh = setTimeout(Home, 1000, "../admin/accounts.php", refresh);
                             </script>
-                            <?php 
+                            <?php
                         }else{
-                        ?>
+                           ?>
                         <script>
                             var refresh = setTimeout(Home, 0, "./user.php?user=<?php echo $user_id; ?>&message=success", refresh);
                         </script>
@@ -108,7 +108,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
                 $user->close();
             }
             if($jmeno != NULL){
-                echo "<form method=\"post\" action=\"\" enctype=\"multipart/form-data\" id=\"userform\">";
+                echo "<form method=\"post\" action=\"\" enctype=\"multipart/form-data\" name=\"userform\" onsubmit=\"return checkInput()\">";
                 echo "<input type=\"text\" value=\"$jmeno\" name=\"jmeno\" required=\"required\">";
                 echo "<input type=\"text\" value=\"$prijmeni\" name=\"prijmeni\" required=\"required\">";
                 echo "<input type=\"text\" value=\"$email\" name=\"email\" required=\"required\">";
@@ -127,11 +127,9 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
                     $mesta->close();
                 echo "</select>";
                 echo "<input type=\"text\" value=\"$adresa\" name=\"adresa\">";
-                echo "<input type=\"text\" value=\"$telefon\" name=\"telefon\">";
+                echo "<input type=\"text\" value=\"$telefon\" name=\"telefon\" placeholder='Formát - 666555444'>";
                 if($_SESSION['prava'] == 1)
                     echo "<input type=\"number\" min='1' max='4' value=\"$prava\" name=\"prava\" required=\"required\">";
-                else
-                    echo "<input type=\"text\" value=\"$prava\" readonly>";
                 echo "<input type=\"submit\" name=\"submit\" value=\"Upravit uživatele\">";
                 echo "</form>";
 
@@ -151,6 +149,19 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
                 echo "Upravení uživatele bylo úspěšné";
             }
         ?>
+        <script>
+            function checkInput(){
+                var tel = document.forms["userform"]["telefon"].value;
+                if(tel == "")
+                    return true;
+                var telefon = Number(document.forms["userform"]["telefon"].value);
+                if(telefon < 100000000 || telefon > 999999999){
+                    alert("Špatný formát telefonu, korektní - 777586996");
+                    return false;
+                }
+                return true;
+            }
+        </script>
     </section>
 	</body>
 </html>
