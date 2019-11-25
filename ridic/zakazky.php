@@ -46,7 +46,7 @@ if(isset($_GET['obj']) && isset($_GET['stav'])){
         <a href="./zakazky.php">Všechny Zakázky</a>
         <form method="get" action="./zakazky.php" enctype="multipart/form-data">
                 <input type="text" name="search">
-                <input type="checkbox" name="f_akt" value="akt">Pouze aktuální objednávky
+                <input type="checkbox" name="f_akt" value="akt" <?php if(isset($_GET['f_akt'])) echo "checked";?>>Pouze aktuální objednávky
                 <input type="submit" value="Hledat">
         </form>
         <?php
@@ -66,11 +66,11 @@ if(isset($_GET['obj']) && isset($_GET['stav'])){
                 if(isset($_GET['f_akt'])){
                     $den = date('Y-m-d');
                     if($search == ""){
-                        $sql = "SELECT id, stav, cena, den_dodani, mesto, adresa FROM objednavka WHERE ridic = $moje_id AND den_dodani >= '$den' ORDER BY den_dodani LIMIT 10 OFFSET $offset";
+                        $sql = "SELECT id, stav, cena, den_dodani, mesto, adresa FROM objednavka WHERE ridic = $moje_id AND (den_dodani > '$den' OR stav LIKE 'Potvrzeno' OR stav LIKE 'Na Cestě') ORDER BY den_dodani LIMIT 10 OFFSET $offset";
                         $sql2 = "SELECT COUNT(*) FROM objednavka WHERE ridic = $moje_id AND den_dodani >= '$den' ";
                     }else{
-                        $sql = "SELECT id, stav, cena, den_dodani, mesto, adresa FROM objednavka WHERE ridic = $moje_id AND (den_dodani = '$search' OR adresa LIKE '%$search%' OR mesto LIKE '%$search%') AND den_dodani > '$den' ORDER BY den_dodani LIMIT 10 OFFSET $offset";
-                        $sql2 = "SELECT COUNT(*) FROM objednavka WHERE ridic = $moje_id AND (den_dodani = '$search' OR adresa LIKE '%$search%' OR mesto LIKE '%$search%') AND  den_dodani > '$den' ";
+                        $sql = "SELECT id, stav, cena, den_dodani, mesto, adresa FROM objednavka WHERE ridic = $moje_id AND (den_dodani = '$search' OR adresa LIKE '%$search%' OR mesto LIKE '%$search%') AND (den_dodani > '$den' OR stav LIKE 'Potvrzeno' OR stav LIKE 'Na Cestě') ORDER BY den_dodani LIMIT 10 OFFSET $offset";
+                        $sql2 = "SELECT COUNT(*) FROM objednavka WHERE ridic = $moje_id AND (den_dodani = '$search' OR adresa LIKE '%$search%' OR mesto LIKE '%$search%') AND (den_dodani > '$den' OR stav LIKE 'Potvrzeno' OR stav LIKE 'Na Cestě')";
                     }
                 }else{
                     $sql = "SELECT id, stav, cena, den_dodani, mesto, adresa FROM objednavka WHERE (den_dodani = '$search' OR adresa LIKE '%$search%' OR mesto LIKE '%$search%') AND ridic = $moje_id ORDER BY den_dodani LIMIT 10 OFFSET $offset";
