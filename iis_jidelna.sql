@@ -326,10 +326,6 @@ INSERT INTO `jidla_v_nabidce` (`id`, `nabidka`, `jidlo`) VALUES
 (198,	53,	1),
 (199,	53,	3),
 (200,	53,	7),
-(201,	54,	2),
-(202,	54,	5),
-(203,	54,	3),
-(204,	54,	4),
 (205,	55,	1),
 (206,	55,	3),
 (207,	55,	19),
@@ -510,14 +506,22 @@ INSERT INTO `jidla_v_nabidce` (`id`, `nabidka`, `jidlo`) VALUES
 (382,	99,	5),
 (383,	99,	20),
 (384,	99,	8),
-(386,	103,	1),
-(387,	103,	2),
-(388,	103,	3),
-(389,	103,	4),
-(390,	104,	4),
-(391,	104,	7),
-(392,	104,	2),
-(393,	104,	6);
+(418,	54,	2),
+(419,	54,	5),
+(420,	54,	3),
+(421,	54,	4),
+(422,	101,	1),
+(423,	101,	2),
+(424,	101,	3),
+(425,	101,	4),
+(426,	102,	5),
+(427,	102,	3),
+(428,	102,	19),
+(429,	102,	7),
+(430,	103,	3),
+(431,	103,	19),
+(432,	103,	20),
+(433,	103,	8);
 
 DROP TABLE IF EXISTS `jidlo`;
 CREATE TABLE `jidlo` (
@@ -610,10 +614,10 @@ INSERT INTO `nabidka` (`id`, `jidelna`, `den`, `stav`) VALUES
 (17,	2,	'2019-11-20',	'Uzavřeno'),
 (18,	2,	'2019-11-21',	'Uzavřeno'),
 (19,	2,	'2019-11-22',	'Uzavřeno'),
-(20,	2,	'2019-11-23',	'Otevřeno'),
+(20,	2,	'2019-11-23',	'Uzavřeno'),
 (21,	2,	'2019-11-24',	'Otevřeno'),
-(22,	2,	'2019-11-25',	'Otevřeno'),
-(23,	2,	'2019-11-26',	'Otevřeno'),
+(22,	2,	'2019-11-25',	'Uzavřeno'),
+(23,	2,	'2019-11-26',	'Uzavřeno'),
 (24,	2,	'2019-11-27',	'Otevřeno'),
 (25,	2,	'2019-11-28',	'Otevřeno'),
 (26,	2,	'2019-11-29',	'Otevřeno'),
@@ -690,12 +694,14 @@ INSERT INTO `nabidka` (`id`, `jidelna`, `den`, `stav`) VALUES
 (97,	2,	'2020-02-08',	'Otevřeno'),
 (98,	2,	'2020-02-09',	'Otevřeno'),
 (99,	2,	'2020-02-10',	'Otevřeno'),
-(100,	1,	'2019-11-23',	'Otevřeno'),
+(100,	1,	'2019-11-23',	'Uzavřeno'),
 (101,	1,	'2019-11-24',	'Otevřeno'),
 (102,	1,	'2019-11-25',	'Otevřeno'),
 (103,	1,	'2019-11-26',	'Otevřeno'),
 (104,	1,	'2019-11-27',	'Otevřeno'),
-(105,	1,	'2019-11-28',	'Otevřeno');
+(105,	1,	'2019-11-28',	'Otevřeno'),
+(106,	1,	'2019-11-29',	'Otevřeno'),
+(107,	1,	'2019-11-30',	'Otevřeno');
 
 DROP TABLE IF EXISTS `objednana_jidla`;
 CREATE TABLE `objednana_jidla` (
@@ -728,7 +734,24 @@ INSERT INTO `objednana_jidla` (`id`, `objednavka`, `jidlo`, `pocet`) VALUES
 (15,	8,	20,	3),
 (16,	8,	5,	3),
 (17,	8,	3,	3),
-(18,	8,	4,	3);
+(18,	8,	4,	3),
+(19,	9,	8,	2),
+(20,	10,	1,	3),
+(21,	10,	3,	2),
+(22,	11,	5,	3),
+(23,	11,	3,	2),
+(24,	11,	19,	4),
+(25,	11,	7,	2),
+(26,	12,	3,	4),
+(27,	12,	19,	4),
+(28,	12,	8,	4),
+(29,	13,	6,	2),
+(30,	13,	5,	2),
+(31,	13,	20,	2),
+(32,	13,	8,	2),
+(33,	14,	1,	1),
+(34,	15,	6,	1),
+(35,	15,	4,	1);
 
 DROP TABLE IF EXISTS `objednavka`;
 CREATE TABLE `objednavka` (
@@ -755,14 +778,21 @@ CREATE TABLE `objednavka` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `objednavka` (`id`, `user`, `stav`, `ridic`, `cena`, `cas_objednani`, `den_dodani`, `mesto`, `adresa`, `jidelna`, `kod`) VALUES
-(1,	3,	'Čekání',	NULL,	845,	'2019-11-21 14:10:15',	'2019-11-19',	'Hnátnice',	'1221',	2,	482768480),
-(2,	2,	'Čekání',	NULL,	2340,	'2019-11-21 14:10:30',	'2019-11-22',	'Hnátnice',	'158',	2,	926682909),
-(3,	2,	'Čekání',	NULL,	90,	'2019-11-21 14:10:41',	'2019-11-24',	'Hnátnice',	'158',	2,	148310062),
-(4,	2,	'Čekání',	NULL,	430,	'2019-11-21 14:10:56',	'2019-11-25',	'Hnátnice',	'158',	2,	947290478),
-(5,	2,	'Čekání',	NULL,	185,	'2019-11-21 14:11:08',	'2019-11-23',	'Hnátnice',	'158',	2,	874704004),
-(6,	22,	'Čekání',	NULL,	445,	'2019-11-21 15:09:07',	'2019-11-23',	'Dolní Dobrouč',	'1',	2,	639432070),
-(7,	24,	'Čekání',	NULL,	85,	'2019-11-21 15:28:50',	'2019-11-23',	'Písečná',	'123',	2,	157556244),
-(8,	25,	'Čekání',	NULL,	1350,	'2019-11-21 16:24:46',	'2019-11-23',	'Hnátnice',	'123',	2,	382226546);
+(1,	3,	'Dodáno',	2,	845,	'2019-11-22 09:34:17',	'2019-11-19',	'Hnátnice',	'1221',	2,	482768480),
+(2,	2,	'Dodáno',	2,	2340,	'2019-11-22 09:36:09',	'2019-11-22',	'Hnátnice',	'158',	2,	926682909),
+(3,	2,	'Dodáno',	2,	90,	'2019-11-25 21:17:55',	'2019-11-24',	'Hnátnice',	'158',	2,	148310062),
+(4,	2,	'Dodáno',	2,	430,	'2019-11-25 21:17:43',	'2019-11-25',	'Hnátnice',	'158',	2,	947290478),
+(5,	2,	'Dodáno',	2,	185,	'2019-11-25 21:17:41',	'2019-11-23',	'Hnátnice',	'158',	2,	874704004),
+(6,	22,	'Dodáno',	2,	445,	'2019-11-25 21:17:49',	'2019-11-23',	'Dolní Dobrouč',	'1',	2,	639432070),
+(7,	24,	'Dodáno',	2,	85,	'2019-11-25 21:17:51',	'2019-11-23',	'Písečná',	'123',	2,	157556244),
+(8,	25,	'Dodáno',	2,	1350,	'2019-11-25 22:40:15',	'2019-11-23',	'Hnátnice',	'123',	2,	382226546),
+(9,	26,	'Dodáno',	2,	170,	'2019-11-25 21:17:44',	'2019-11-25',	'Hnátnice',	'12',	2,	419216821),
+(10,	24,	'Dodáno',	24,	935,	'2019-11-25 21:19:49',	'2019-11-24',	'Brno',	'15',	1,	982823801),
+(11,	24,	'Dodáno',	2,	1630,	'2019-11-25 21:19:15',	'2019-11-25',	'Brno',	'12',	1,	583874956),
+(12,	24,	'Dodáno',	2,	1720,	'2019-11-25 21:19:15',	'2019-11-26',	'Brno',	'Jelení 1985',	1,	483805143),
+(13,	25,	'Čekání',	NULL,	910,	'2019-11-25 21:21:30',	'2020-02-10',	'Hnátnice',	'15',	2,	345485491),
+(14,	25,	'Čekání',	NULL,	215,	'2019-11-25 21:22:38',	'2020-02-09',	'Hnátnice',	'15',	2,	755723353),
+(15,	25,	'Potvrzeno',	2,	235,	'2019-11-25 21:46:25',	'2020-02-04',	'Hnátnice',	'15',	2,	119535559);
 
 DROP TABLE IF EXISTS `prava`;
 CREATE TABLE `prava` (
@@ -776,8 +806,8 @@ INSERT INTO `prava` (`id`, `nazev`, `popis`) VALUES
 (1,	'Administrátor',	'Může vše'),
 (2,	'Operátor',	'Spravuje jídelny a jejich nabídky, přiřazuje řidičům objednávky.'),
 (3,	'Řidič',	'Dostává objednávky, vyzvedává objednaná jídla a rozváží je.'),
-(4,	'Strávník',	'Může objednávat více jídel.'),
-(5,	'Pleb',	'Nemůže nic');
+(4,	'Strávník',	'Spravovat svůj účet.'),
+(5,	'Pleb',	'Objednávat jídlo, procházet jídelníčky.');
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -788,7 +818,7 @@ CREATE TABLE `user` (
   `password` varchar(200) COLLATE utf8_czech_ci DEFAULT NULL,
   `mesto` varchar(100) COLLATE utf8_czech_ci DEFAULT NULL,
   `adresa` varchar(200) COLLATE utf8_czech_ci DEFAULT NULL,
-  `telefon` varchar(12) COLLATE utf8_czech_ci DEFAULT NULL,
+  `telefon` int(11) DEFAULT NULL,
   `prava` int(11) NOT NULL DEFAULT '5',
   PRIMARY KEY (`id`),
   KEY `prava` (`prava`),
@@ -799,28 +829,29 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `jmeno`, `prijmeni`, `email`, `password`, `mesto`, `adresa`, `telefon`, `prava`) VALUES
 (1,	'Admin',	'Admin',	'admin@jidelna.cz',	'$2y$10$Aklkl1KEk4tFEqX9apIWbuCq2SrPrCd5Qqe0yodi5.eX5WjBruuLy',	NULL,	NULL,	NULL,	1),
-(2,	'Jan',	'Novák',	'novak@jidelna.cz',	'$2y$10$1aVc/0Us2dJ0XgiOz8jdMewFvCaJpV0ywwpKEQFPqW8bErm3GnoKK',	'Hnátnice',	'158',	NULL,	4),
+(2,	'Jan',	'Novák',	'novak@jidelna.cz',	'$2y$10$1aVc/0Us2dJ0XgiOz8jdMewFvCaJpV0ywwpKEQFPqW8bErm3GnoKK',	'Hnátnice',	'158',	NULL,	3),
 (3,	'Ladislav',	'Novák',	'LadNov@jidelna.cz',	'$2y$10$WXIRJZz0kTHqwOEYkE4U9Ocy/Rd0cp3SYDMBiGxMTBif7.7L9czX2',	'Brno',	'Letohradská 5',	NULL,	2),
-(4,	'Michal',	'Jansa',	'Mich@seznam.cz',	'$2y$10$ozjtWuZcxX.liIsuMAW0xenUdcviSZWpmf.Y3g2bck6DM5OOuI2Pu',	NULL,	NULL,	NULL,	5),
-(5,	'Radek',	'Pospíšil',	'pos@seznam.cz',	'$2y$10$.48n3E/4ydIUsKMbgULhqegl2UNLycsQ9Ltoal/toWmXVgcLfaeEi',	NULL,	NULL,	NULL,	5),
-(6,	'Jaroslav',	'Jareš',	'jares@gmail.cz',	'$2y$10$UExpnYpmVQ/E8IkQyxFQ1OotJBHaaV3VeUfuDNmEfTavOcAsPOFci',	NULL,	NULL,	NULL,	5),
-(7,	'Antonína',	'Nováková',	'Annov@seznam.cz',	'$2y$10$mbBbkos8uGWoAhcUW9AdSO1I9TznGeJul6Z99ax1Y9FxlX6532H1u',	NULL,	NULL,	NULL,	5),
-(8,	'Adam',	'Jíl',	'jil@gmail.com',	'$2y$10$oEjtsPZBjOV.0q.DeecEJ.YAdKbnUrqEbFtuuuyMgtwaCo6UcqTbe',	NULL,	NULL,	NULL,	5),
-(9,	'Tereza',	'Mandlová',	'Tereza@email.cz',	'$2y$10$dYI1uvX1iHVVjke8hK9uqug8v//aOhGy0rrXb8S.8O4hGGRMIDYKC',	NULL,	NULL,	NULL,	5),
-(10,	'Karina',	'Jedlá',	'kari@seznam.cz',	'$2y$10$rHB3Cb5vEaq1/.QC4J7SHukDsifF9juL.wVg3j2dN705KlYeQSQxC',	NULL,	NULL,	NULL,	5),
-(11,	'Diana',	'Jelínková',	'Dijel@gmail.com',	'$2y$10$MumZEVqIIaFpqgW9yVRq3.L7vgLJdaN3jG0YUpCP8ovv4DcZKYkKS',	NULL,	NULL,	NULL,	5),
-(12,	'Melichar',	'Pošeptný',	'Meli@centrum.cz',	'$2y$10$aiwIlqJmhRQeiVG1MFsdu.6lTsj2pIQ.DB3rZrqApuVCwLirXQmx.',	NULL,	NULL,	NULL,	5),
-(13,	'Vilma',	'Špatná',	'Vili@centrum.cz',	'$2y$10$zRx4vPZNIiNLqsHwYESvuu1s6WiVqqY3lUCbeVed2SFal.IA3QRYi',	NULL,	NULL,	NULL,	5),
-(14,	'Čestmír',	'Nový',	'cest@gmail.com',	'$2y$10$dBTYfqZwgf.S.YVK5gVQgO3KmcZLqb.tzXrZuvySdE2BGfgb2JKmu',	NULL,	NULL,	NULL,	5),
-(15,	'Ctirad',	'Hruška',	'hrus@gmail.com',	'$2y$10$Zm4qqBtnLSJ4uJkeu37DnesrTc392byqTelWb5ZyTNEzm0R9c2kUK',	NULL,	NULL,	NULL,	5),
-(16,	'Edita',	'Pražná',	'EditPra@gmail.com',	'$2y$10$FXn.lQChgnU/jO8YtpRYje2GjVKzw2yLlfTCFLfBBPfaG.DUY/qfa',	NULL,	NULL,	NULL,	5),
-(17,	'Apolína',	'Poštolová',	'appos@gmail.com',	'$2y$10$bsmAGcqXbZDDHDdoakgjKuVKolxm8RKqXpHMWiG3vktHsd3Vu.MnK',	NULL,	NULL,	NULL,	5),
-(18,	'Ladislav',	'Jmelí',	'ladi@gmail.com',	'$2y$10$BPoUSaayw70jVso0YKt5sOY7t5uvf5LCk30UOQObFbzgq513U6cCy',	NULL,	NULL,	NULL,	5),
-(19,	'Jan',	'Perník',	'prna@seznam.cz',	'$2y$10$PH4kIBTwbS9PTnv/QKRgU.jifZZ3l43Y8yyD59cZhP9RURYnt6Mxq',	NULL,	NULL,	NULL,	5),
-(20,	'Michal',	'Adam',	'mic@gmail.com',	'$2y$10$ilmDfjHyd6qXVy0xgUcglec6ujaKfyDQORcGKsV8io9gyS9MAcG1C',	NULL,	NULL,	NULL,	5),
-(21,	'Melichar',	'Jansa',	'Milichar@jidelna.cz',	'$2y$10$YqUY4xzCV5Is4JyKPhHssunbHnHrcqg.VDDmL.RKvDP.fa3/YZxla',	NULL,	NULL,	NULL,	5),
-(22,	NULL,	NULL,	'nevim@jidelna.cz',	NULL,	NULL,	NULL,	'123456789',	5),
-(24,	'Ran',	'Dom',	'random@jidelna.cz',	'$2y$10$3gFeEzhn9CeHn3ounC3DCO/rliEABhXaEXkBAegGFthR1/rWXxHCO',	NULL,	NULL,	'456123789',	4),
-(25,	NULL,	NULL,	'novy@jidelna.cz',	NULL,	NULL,	NULL,	'159753268',	5);
+(4,	'Michal',	'Jansa',	'Mich@seznam.cz',	'$2y$10$ozjtWuZcxX.liIsuMAW0xenUdcviSZWpmf.Y3g2bck6DM5OOuI2Pu',	NULL,	NULL,	NULL,	3),
+(5,	'Radek',	'Pospíšil',	'pos@seznam.cz',	'$2y$10$.48n3E/4ydIUsKMbgULhqegl2UNLycsQ9Ltoal/toWmXVgcLfaeEi',	NULL,	NULL,	NULL,	3),
+(6,	'Jaroslav',	'Jareš',	'jares@gmail.cz',	'$2y$10$UExpnYpmVQ/E8IkQyxFQ1OotJBHaaV3VeUfuDNmEfTavOcAsPOFci',	NULL,	NULL,	NULL,	3),
+(7,	'Antonína',	'Nováková',	'Annov@seznam.cz',	'$2y$10$mbBbkos8uGWoAhcUW9AdSO1I9TznGeJul6Z99ax1Y9FxlX6532H1u',	NULL,	NULL,	NULL,	4),
+(8,	'Adam',	'Jíl',	'jil@gmail.com',	'$2y$10$oEjtsPZBjOV.0q.DeecEJ.YAdKbnUrqEbFtuuuyMgtwaCo6UcqTbe',	NULL,	NULL,	NULL,	4),
+(9,	'Tereza',	'Mandlová',	'Tereza@email.cz',	'$2y$10$dYI1uvX1iHVVjke8hK9uqug8v//aOhGy0rrXb8S.8O4hGGRMIDYKC',	NULL,	NULL,	NULL,	4),
+(10,	'Karina',	'Jedlá',	'kari@seznam.cz',	'$2y$10$rHB3Cb5vEaq1/.QC4J7SHukDsifF9juL.wVg3j2dN705KlYeQSQxC',	NULL,	NULL,	NULL,	4),
+(11,	'Diana',	'Jelínková',	'Dijel@gmail.com',	'$2y$10$MumZEVqIIaFpqgW9yVRq3.L7vgLJdaN3jG0YUpCP8ovv4DcZKYkKS',	NULL,	NULL,	NULL,	4),
+(12,	'Melichar',	'Pošeptný',	'Meli@centrum.cz',	'$2y$10$aiwIlqJmhRQeiVG1MFsdu.6lTsj2pIQ.DB3rZrqApuVCwLirXQmx.',	NULL,	NULL,	NULL,	4),
+(13,	'Vilma',	'Špatná',	'Vili@centrum.cz',	'$2y$10$zRx4vPZNIiNLqsHwYESvuu1s6WiVqqY3lUCbeVed2SFal.IA3QRYi',	NULL,	NULL,	NULL,	4),
+(14,	'Čestmír',	'Nový',	'cest@gmail.com',	'$2y$10$dBTYfqZwgf.S.YVK5gVQgO3KmcZLqb.tzXrZuvySdE2BGfgb2JKmu',	NULL,	NULL,	NULL,	4),
+(15,	'Ctirad',	'Hruška',	'hrus@gmail.com',	'$2y$10$Zm4qqBtnLSJ4uJkeu37DnesrTc392byqTelWb5ZyTNEzm0R9c2kUK',	NULL,	NULL,	NULL,	4),
+(16,	'Edita',	'Pražná',	'EditPra@gmail.com',	'$2y$10$FXn.lQChgnU/jO8YtpRYje2GjVKzw2yLlfTCFLfBBPfaG.DUY/qfa',	NULL,	NULL,	NULL,	4),
+(17,	'Apolína',	'Poštolová',	'appos@gmail.com',	'$2y$10$bsmAGcqXbZDDHDdoakgjKuVKolxm8RKqXpHMWiG3vktHsd3Vu.MnK',	NULL,	NULL,	NULL,	4),
+(18,	'Ladislav',	'Jmelí',	'ladi@gmail.com',	'$2y$10$BPoUSaayw70jVso0YKt5sOY7t5uvf5LCk30UOQObFbzgq513U6cCy',	NULL,	NULL,	NULL,	4),
+(19,	'Jan',	'Perník',	'prna@seznam.cz',	'$2y$10$PH4kIBTwbS9PTnv/QKRgU.jifZZ3l43Y8yyD59cZhP9RURYnt6Mxq',	NULL,	NULL,	NULL,	4),
+(20,	'Michal',	'Adam',	'mic@gmail.com',	'$2y$10$ilmDfjHyd6qXVy0xgUcglec6ujaKfyDQORcGKsV8io9gyS9MAcG1C',	NULL,	NULL,	NULL,	4),
+(21,	'Melichar',	'Jansa',	'Milichar@jidelna.cz',	'$2y$10$YqUY4xzCV5Is4JyKPhHssunbHnHrcqg.VDDmL.RKvDP.fa3/YZxla',	NULL,	NULL,	NULL,	4),
+(22,	NULL,	NULL,	'nevim@jidelna.cz',	NULL,	NULL,	NULL,	123456789,	5),
+(24,	'Ran',	'Dom',	'random@jidelna.cz',	'$2y$10$3gFeEzhn9CeHn3ounC3DCO/rliEABhXaEXkBAegGFthR1/rWXxHCO',	'Brno',	'Jelení 1985',	NULL,	3),
+(25,	'Novy',	'acc',	'novy@jidelna.cz',	'$2y$10$0jsA1afMP/Plz9Pq81go9eNEhWGwzw5jDgIav3Lk9jovJQcoZ2Wkq',	'Hnátnice',	'15',	666555667,	4),
+(26,	NULL,	NULL,	'asd@asd.asd',	NULL,	NULL,	NULL,	159753268,	5);
 
--- 2019-11-21 18:13:50
+-- 2019-11-25 22:43:37
