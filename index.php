@@ -99,7 +99,7 @@ include './functions.php';
     <p>Admin účet : email - admin@jidelna.cz, heslo - admin</p>
     <p>Oparátor účet : email - LadNov@jidelna.cz, heslo - heslo</p>
     <p>Řidič účet : email - novak@jidelna.cz, heslo - heslo</p>
-    <p>Konzument : email - novy@jidelna.ct, heslo - heslo</p>
+    <p>Konzument : email - novy@jidelna.cz, heslo - heslo</p>
 
 	</body>
 </html>
