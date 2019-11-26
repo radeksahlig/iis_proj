@@ -535,16 +535,16 @@ CREATE TABLE `jidlo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `jidlo` (`id`, `nazev`, `popis`, `typ`, `ob`, `cena`) VALUES
-(1,	'Kotleta steak v orientálním koření s jasmínovou rýží',	'Krkovice vepřová 150g, olej, sůl, steak 7 pepřů-koření, máslo, kari koření, Solamyl-bramborový škrob, cibule, rýže jasmínová',	'hlavni',	NULL,	215),
-(2,	'Kuřecí steak s hranolkami',	'Kuřecí řízky, olej, grilovací koření, máslo, Solamyl-bramborový škrob, vejce, hranolky, sůl',	'hlavni',	NULL,	150),
-(3,	'Těstoviny s krůtím masem a sýrem',	'Krůtí řízky, těstoviny, cibule, eidam sýr, kečup, rajčatový protlak, olej, mouka hladká, anglická slanina, sůl, vývar slepičí, sušený česnek-plátky, bazalka-koření',	'hlavni',	NULL,	145),
-(4,	'Sýrová polévka',	'Mouka hladká, poesie sýrová, mr. žampiony, anglická slanina, sůl, vývar zeleninový, muškátový květ',	'polevka',	NULL,	85),
-(5,	'Kuřecí chilli medové paličky 4ks',	'Kuřecí štylka, st. rajčata krájená, rajčatový protlak, olej, sojová omáčka, česneková pasta, med, paprika mletá, petržel nať, chilli papričky čerstvé',	'hlavni',	NULL,	120),
-(6,	'Kuřecí nudličky na pivě',	'Kuřecí řízky, cibule, mr. francouzská směs zelenina, cuketa, slanina, olej, solamyl-bramborový škrob, paprika mletá, sůl, ocet krém balsamico/pyré/, pepř mletý, pilsner 0,33',	'hlavni',	NULL,	150),
-(7,	'Fazolová polévka s uzeninou',	'Fazole, párky, mouka hladká, olej, mrkev, cibule, česneková pasta, celer, petržel, sůl, šunka, polévkové koření, vývar zeleninový, gothaj salám, majoránka, pepř mletý',	'polevka',	NULL,	90),
-(8,	'Kapustová polévka',	'Mr. kapusta, brambory, mouka hladká, cibule tuk, česneková pasta, polévkové koření, sůl, vývar zeleninový',	'polevka',	NULL,	85),
-(19,	'Hovězí steak s americkým kořením a hranolky ',	'Hovězí roštěná, olej, sůl, country koření, grilovací koření, hranolky',	'hlavni',	NULL,	200),
-(20,	'Koláč mřížkový jablkový',	'Kompot jablečné řezy, mouka hladká, mléko, smetol tuk, cukr moučka, vejce, cukr vanilkový, prášek do pečiva',	'hlavni',	NULL,	100);
+(1,	'Kotleta steak v orientálním koření s jasmínovou rýží',	'Krkovice vepřová 150g, olej, sůl, steak 7 pepřů-koření, máslo, kari koření, Solamyl-bramborový škrob, cibule, rýže jasmínová',	'hlavni',	'temp.png',	215),
+(2,	'Kuřecí steak s hranolkami',	'Kuřecí řízky, olej, grilovací koření, máslo, Solamyl-bramborový škrob, vejce, hranolky, sůl',	'hlavni',	'temp.png',	150),
+(3,	'Těstoviny s krůtím masem a sýrem',	'Krůtí řízky, těstoviny, cibule, eidam sýr, kečup, rajčatový protlak, olej, mouka hladká, anglická slanina, sůl, vývar slepičí, sušený česnek-plátky, bazalka-koření',	'hlavni',	'temp.png',	145),
+(4,	'Sýrová polévka',	'Mouka hladká, poesie sýrová, mr. žampiony, anglická slanina, sůl, vývar zeleninový, muškátový květ',	'polevka',	'temp.png',	85),
+(5,	'Kuřecí chilli medové paličky 4ks',	'Kuřecí štylka, st. rajčata krájená, rajčatový protlak, olej, sojová omáčka, česneková pasta, med, paprika mletá, petržel nať, chilli papričky čerstvé',	'hlavni',	'temp.png',	120),
+(6,	'Kuřecí nudličky na pivě',	'Kuřecí řízky, cibule, mr. francouzská směs zelenina, cuketa, slanina, olej, solamyl-bramborový škrob, paprika mletá, sůl, ocet krém balsamico/pyré/, pepř mletý, pilsner 0,33',	'hlavni',	'temp.png',	150),
+(7,	'Fazolová polévka s uzeninou',	'Fazole, párky, mouka hladká, olej, mrkev, cibule, česneková pasta, celer, petržel, sůl, šunka, polévkové koření, vývar zeleninový, gothaj salám, majoránka, pepř mletý',	'polevka',	'temp.png',	90),
+(8,	'Kapustová polévka',	'Mr. kapusta, brambory, mouka hladká, cibule tuk, česneková pasta, polévkové koření, sůl, vývar zeleninový',	'polevka',	'temp.png',	85),
+(19,	'Hovězí steak s americkým kořením a hranolky ',	'Hovězí roštěná, olej, sůl, country koření, grilovací koření, hranolky',	'hlavni',	'temp.png',	200),
+(20,	'Koláč mřížkový jablkový',	'Kompot jablečné řezy, mouka hladká, mléko, smetol tuk, cukr moučka, vejce, cukr vanilkový, prášek do pečiva',	'hlavni',	'temp.png',	100);
 
 DROP TABLE IF EXISTS `mesta`;
 CREATE TABLE `mesta` (
