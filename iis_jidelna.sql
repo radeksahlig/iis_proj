@@ -5,6 +5,118 @@ SET time_zone = '+00:00';
 SET foreign_key_checks = 0;
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
+DROP TABLE IF EXISTS `objednana_jidla`;
+DROP TABLE IF EXISTS `objednavka`;
+DROP TABLE IF EXISTS `mesta_dovozu`;
+DROP TABLE IF EXISTS `jidla_v_nabidce`;
+DROP TABLE IF EXISTS `nabidka`;
+DROP TABLE IF EXISTS `jidelna`;
+DROP TABLE IF EXISTS `alergeny_v_jidle`;
+DROP TABLE IF EXISTS `alergeny`;
+DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `prava`;
+DROP TABLE IF EXISTS `mesta`;
+DROP TABLE IF EXISTS `jidlo`;
+
+DROP TABLE IF EXISTS `jidlo`;
+CREATE TABLE `jidlo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nazev` varchar(200) COLLATE utf8_czech_ci NOT NULL,
+  `popis` text COLLATE utf8_czech_ci NOT NULL,
+  `typ` varchar(100) COLLATE utf8_czech_ci NOT NULL,
+  `ob` varchar(200) COLLATE utf8_czech_ci DEFAULT NULL,
+  `cena` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+
+INSERT INTO `jidlo` (`id`, `nazev`, `popis`, `typ`, `ob`, `cena`) VALUES
+(1,	'Kotleta steak v orientálním koření s jasmínovou rýží',	'Krkovice vepřová 150g, olej, sůl, steak 7 pepřů-koření, máslo, kari koření, Solamyl-bramborový škrob, cibule, rýže jasmínová',	'hlavni',	'temp.png',	215),
+(2,	'Kuřecí steak s hranolkami',	'Kuřecí řízky, olej, grilovací koření, máslo, Solamyl-bramborový škrob, vejce, hranolky, sůl',	'hlavni',	'temp.png',	150),
+(3,	'Těstoviny s krůtím masem a sýrem',	'Krůtí řízky, těstoviny, cibule, eidam sýr, kečup, rajčatový protlak, olej, mouka hladká, anglická slanina, sůl, vývar slepičí, sušený česnek-plátky, bazalka-koření',	'hlavni',	'temp.png',	145),
+(4,	'Sýrová polévka',	'Mouka hladká, poesie sýrová, mr. žampiony, anglická slanina, sůl, vývar zeleninový, muškátový květ',	'polevka',	'temp.png',	85),
+(5,	'Kuřecí chilli medové paličky 4ks',	'Kuřecí štylka, st. rajčata krájená, rajčatový protlak, olej, sojová omáčka, česneková pasta, med, paprika mletá, petržel nať, chilli papričky čerstvé',	'hlavni',	'temp.png',	120),
+(6,	'Kuřecí nudličky na pivě',	'Kuřecí řízky, cibule, mr. francouzská směs zelenina, cuketa, slanina, olej, solamyl-bramborový škrob, paprika mletá, sůl, ocet krém balsamico/pyré/, pepř mletý, pilsner 0,33',	'hlavni',	'temp.png',	150),
+(7,	'Fazolová polévka s uzeninou',	'Fazole, párky, mouka hladká, olej, mrkev, cibule, česneková pasta, celer, petržel, sůl, šunka, polévkové koření, vývar zeleninový, gothaj salám, majoránka, pepř mletý',	'polevka',	'temp.png',	90),
+(8,	'Kapustová polévka',	'Mr. kapusta, brambory, mouka hladká, cibule tuk, česneková pasta, polévkové koření, sůl, vývar zeleninový',	'polevka',	'temp.png',	85),
+(19,	'Hovězí steak s americkým kořením a hranolky ',	'Hovězí roštěná, olej, sůl, country koření, grilovací koření, hranolky',	'hlavni',	'temp.png',	200),
+(20,	'Koláč mřížkový jablkový',	'Kompot jablečné řezy, mouka hladká, mléko, smetol tuk, cukr moučka, vejce, cukr vanilkový, prášek do pečiva',	'hlavni',	'temp.png',	100);
+
+DROP TABLE IF EXISTS `mesta`;
+CREATE TABLE `mesta` (
+  `Nazev` varchar(100) COLLATE utf8_czech_ci NOT NULL,
+  PRIMARY KEY (`Nazev`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+
+INSERT INTO `mesta` (`Nazev`) VALUES
+('Brno'),
+('Černá hora'),
+('Dolní Dobrouč'),
+('Hnátnice'),
+('Letohrad'),
+('Lipůvka'),
+('Písečná'),
+('Sebranice');
+
+DROP TABLE IF EXISTS `prava`;
+CREATE TABLE `prava` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nazev` varchar(100) COLLATE utf8_czech_ci NOT NULL,
+  `popis` text COLLATE utf8_czech_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+
+INSERT INTO `prava` (`id`, `nazev`, `popis`) VALUES
+(1,	'Administrátor',	'Může vše'),
+(2,	'Operátor',	'Spravuje jídelny a jejich nabídky, přiřazuje řidičům objednávky.'),
+(3,	'Řidič',	'Dostává objednávky, vyzvedává objednaná jídla a rozváží je.'),
+(4,	'Strávník',	'Spravovat svůj účet.'),
+(5,	'Pleb',	'Objednávat jídlo, procházet jídelníčky.');
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `jmeno` varchar(150) COLLATE utf8_czech_ci DEFAULT NULL,
+  `prijmeni` varchar(150) COLLATE utf8_czech_ci DEFAULT NULL,
+  `email` varchar(200) COLLATE utf8_czech_ci NOT NULL,
+  `password` varchar(200) COLLATE utf8_czech_ci DEFAULT NULL,
+  `mesto` varchar(100) COLLATE utf8_czech_ci DEFAULT NULL,
+  `adresa` varchar(200) COLLATE utf8_czech_ci DEFAULT NULL,
+  `telefon` int(11) DEFAULT NULL,
+  `prava` int(11) NOT NULL DEFAULT '5',
+  PRIMARY KEY (`id`),
+  KEY `prava` (`prava`),
+  KEY `mesto` (`mesto`),
+  CONSTRAINT `user_ibfk_4` FOREIGN KEY (`prava`) REFERENCES `prava` (`id`),
+  CONSTRAINT `user_ibfk_5` FOREIGN KEY (`mesto`) REFERENCES `mesta` (`Nazev`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+
+INSERT INTO `user` (`id`, `jmeno`, `prijmeni`, `email`, `password`, `mesto`, `adresa`, `telefon`, `prava`) VALUES
+(1,	'Admin',	'Admin',	'admin@jidelna.cz',	'$2y$10$Aklkl1KEk4tFEqX9apIWbuCq2SrPrCd5Qqe0yodi5.eX5WjBruuLy',	NULL,	NULL,	NULL,	1),
+(2,	'Jan',	'Novák',	'novak@jidelna.cz',	'$2y$10$1aVc/0Us2dJ0XgiOz8jdMewFvCaJpV0ywwpKEQFPqW8bErm3GnoKK',	'Hnátnice',	'158',	NULL,	3),
+(3,	'Ladislav',	'Novák',	'LadNov@jidelna.cz',	'$2y$10$WXIRJZz0kTHqwOEYkE4U9Ocy/Rd0cp3SYDMBiGxMTBif7.7L9czX2',	'Brno',	'Letohradská 5',	NULL,	2),
+(4,	'Michal',	'Jansa',	'Mich@seznam.cz',	'$2y$10$ozjtWuZcxX.liIsuMAW0xenUdcviSZWpmf.Y3g2bck6DM5OOuI2Pu',	NULL,	NULL,	NULL,	3),
+(5,	'Radek',	'Pospíšil',	'pos@seznam.cz',	'$2y$10$.48n3E/4ydIUsKMbgULhqegl2UNLycsQ9Ltoal/toWmXVgcLfaeEi',	NULL,	NULL,	NULL,	3),
+(6,	'Jaroslav',	'Jareš',	'jares@gmail.cz',	'$2y$10$UExpnYpmVQ/E8IkQyxFQ1OotJBHaaV3VeUfuDNmEfTavOcAsPOFci',	NULL,	NULL,	NULL,	3),
+(7,	'Antonína',	'Nováková',	'Annov@seznam.cz',	'$2y$10$mbBbkos8uGWoAhcUW9AdSO1I9TznGeJul6Z99ax1Y9FxlX6532H1u',	NULL,	NULL,	NULL,	4),
+(8,	'Adam',	'Jíl',	'jil@gmail.com',	'$2y$10$oEjtsPZBjOV.0q.DeecEJ.YAdKbnUrqEbFtuuuyMgtwaCo6UcqTbe',	NULL,	NULL,	NULL,	4),
+(9,	'Tereza',	'Mandlová',	'Tereza@email.cz',	'$2y$10$dYI1uvX1iHVVjke8hK9uqug8v//aOhGy0rrXb8S.8O4hGGRMIDYKC',	NULL,	NULL,	NULL,	4),
+(10,	'Karina',	'Jedlá',	'kari@seznam.cz',	'$2y$10$rHB3Cb5vEaq1/.QC4J7SHukDsifF9juL.wVg3j2dN705KlYeQSQxC',	NULL,	NULL,	NULL,	4),
+(11,	'Diana',	'Jelínková',	'Dijel@gmail.com',	'$2y$10$MumZEVqIIaFpqgW9yVRq3.L7vgLJdaN3jG0YUpCP8ovv4DcZKYkKS',	NULL,	NULL,	NULL,	4),
+(12,	'Melichar',	'Pošeptný',	'Meli@centrum.cz',	'$2y$10$aiwIlqJmhRQeiVG1MFsdu.6lTsj2pIQ.DB3rZrqApuVCwLirXQmx.',	NULL,	NULL,	NULL,	4),
+(13,	'Vilma',	'Špatná',	'Vili@centrum.cz',	'$2y$10$zRx4vPZNIiNLqsHwYESvuu1s6WiVqqY3lUCbeVed2SFal.IA3QRYi',	NULL,	NULL,	NULL,	4),
+(14,	'Čestmír',	'Nový',	'cest@gmail.com',	'$2y$10$dBTYfqZwgf.S.YVK5gVQgO3KmcZLqb.tzXrZuvySdE2BGfgb2JKmu',	NULL,	NULL,	NULL,	4),
+(15,	'Ctirad',	'Hruška',	'hrus@gmail.com',	'$2y$10$Zm4qqBtnLSJ4uJkeu37DnesrTc392byqTelWb5ZyTNEzm0R9c2kUK',	NULL,	NULL,	NULL,	4),
+(16,	'Edita',	'Pražná',	'EditPra@gmail.com',	'$2y$10$FXn.lQChgnU/jO8YtpRYje2GjVKzw2yLlfTCFLfBBPfaG.DUY/qfa',	NULL,	NULL,	NULL,	4),
+(17,	'Apolína',	'Poštolová',	'appos@gmail.com',	'$2y$10$bsmAGcqXbZDDHDdoakgjKuVKolxm8RKqXpHMWiG3vktHsd3Vu.MnK',	NULL,	NULL,	NULL,	4),
+(18,	'Ladislav',	'Jmelí',	'ladi@gmail.com',	'$2y$10$BPoUSaayw70jVso0YKt5sOY7t5uvf5LCk30UOQObFbzgq513U6cCy',	NULL,	NULL,	NULL,	4),
+(19,	'Jan',	'Perník',	'prna@seznam.cz',	'$2y$10$PH4kIBTwbS9PTnv/QKRgU.jifZZ3l43Y8yyD59cZhP9RURYnt6Mxq',	NULL,	NULL,	NULL,	4),
+(20,	'Michal',	'Adam',	'mic@gmail.com',	'$2y$10$ilmDfjHyd6qXVy0xgUcglec6ujaKfyDQORcGKsV8io9gyS9MAcG1C',	NULL,	NULL,	NULL,	4),
+(21,	'Melichar',	'Jansa',	'Milichar@jidelna.cz',	'$2y$10$YqUY4xzCV5Is4JyKPhHssunbHnHrcqg.VDDmL.RKvDP.fa3/YZxla',	NULL,	NULL,	NULL,	4),
+(22,	NULL,	NULL,	'nevim@jidelna.cz',	NULL,	NULL,	NULL,	123456789,	5),
+(24,	'Ran',	'Dom',	'random@jidelna.cz',	'$2y$10$3gFeEzhn9CeHn3ounC3DCO/rliEABhXaEXkBAegGFthR1/rWXxHCO',	'Brno',	'Jelení 1985',	NULL,	3),
+(25,	'Novy',	'acc',	'novy@jidelna.cz',	'$2y$10$0jsA1afMP/Plz9Pq81go9eNEhWGwzw5jDgIav3Lk9jovJQcoZ2Wkq',	'Hnátnice',	'15',	666555667,	4),
+(26,	NULL,	NULL,	'asd@asd.asd',	NULL,	NULL,	NULL,	159753268,	5);
+
 DROP TABLE IF EXISTS `alergeny`;
 CREATE TABLE `alergeny` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -112,6 +224,125 @@ CREATE TABLE `jidelna` (
 INSERT INTO `jidelna` (`id`, `nazev`, `mesto`, `adresa`, `operator`, `stav`) VALUES
 (1,	'Netu',	'Brno',	'Jelení 1',	3,	CONV('1', 2, 10) + 0),
 (2,	'Jídelna Písečná',	'Písečná',	'100',	3,	CONV('1', 2, 10) + 0);
+
+DROP TABLE IF EXISTS `nabidka`;
+CREATE TABLE `nabidka` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `jidelna` int(11) NOT NULL,
+  `den` date NOT NULL,
+  `stav` varchar(100) COLLATE utf8_czech_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `jidelna` (`jidelna`),
+  CONSTRAINT `nabidka_ibfk_2` FOREIGN KEY (`jidelna`) REFERENCES `jidelna` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+
+INSERT INTO `nabidka` (`id`, `jidelna`, `den`, `stav`) VALUES
+(2,	1,	'2019-11-07',	'Uzavřeno'),
+(3,	1,	'2019-10-10',	'Otevřeno'),
+(4,	2,	'2019-11-08',	'Uzavřeno'),
+(5,	2,	'2019-11-08',	'Uzavřeno'),
+(6,	2,	'2019-11-09',	'Otevřeno'),
+(7,	2,	'2019-11-10',	'Otevřeno'),
+(8,	2,	'2019-11-11',	'Otevřeno'),
+(9,	2,	'2019-11-12',	'Otevřeno'),
+(10,	2,	'2019-11-13',	'Otevřeno'),
+(11,	2,	'2019-11-14',	'Otevřeno'),
+(12,	2,	'2019-11-15',	'Otevřeno'),
+(13,	2,	'2019-11-16',	'Uzavřeno'),
+(14,	2,	'2019-11-17',	'Uzavřeno'),
+(15,	2,	'2019-11-18',	'Uzavřeno'),
+(16,	2,	'2019-11-19',	'Uzavřeno'),
+(17,	2,	'2019-11-20',	'Uzavřeno'),
+(18,	2,	'2019-11-21',	'Uzavřeno'),
+(19,	2,	'2019-11-22',	'Uzavřeno'),
+(20,	2,	'2019-11-23',	'Uzavřeno'),
+(21,	2,	'2019-11-24',	'Otevřeno'),
+(22,	2,	'2019-11-25',	'Uzavřeno'),
+(23,	2,	'2019-11-26',	'Uzavřeno'),
+(24,	2,	'2019-11-27',	'Otevřeno'),
+(25,	2,	'2019-11-28',	'Otevřeno'),
+(26,	2,	'2019-11-29',	'Otevřeno'),
+(27,	2,	'2019-11-30',	'Otevřeno'),
+(28,	2,	'2019-12-01',	'Otevřeno'),
+(29,	2,	'2019-12-02',	'Otevřeno'),
+(30,	2,	'2019-12-03',	'Otevřeno'),
+(31,	2,	'2019-12-04',	'Otevřeno'),
+(32,	2,	'2019-12-05',	'Otevřeno'),
+(33,	2,	'2019-12-06',	'Otevřeno'),
+(34,	2,	'2019-12-07',	'Otevřeno'),
+(35,	2,	'2019-12-08',	'Otevřeno'),
+(36,	2,	'2019-12-09',	'Otevřeno'),
+(37,	2,	'2019-12-10',	'Otevřeno'),
+(38,	2,	'2019-12-11',	'Otevřeno'),
+(39,	2,	'2019-12-12',	'Otevřeno'),
+(40,	2,	'2019-12-13',	'Otevřeno'),
+(41,	2,	'2019-12-14',	'Otevřeno'),
+(42,	2,	'2019-12-15',	'Otevřeno'),
+(43,	2,	'2019-12-16',	'Otevřeno'),
+(44,	2,	'2019-12-17',	'Otevřeno'),
+(45,	2,	'2019-12-18',	'Otevřeno'),
+(46,	2,	'2019-12-19',	'Otevřeno'),
+(47,	2,	'2019-12-20',	'Otevřeno'),
+(48,	2,	'2019-12-21',	'Otevřeno'),
+(49,	2,	'2019-12-22',	'Otevřeno'),
+(50,	2,	'2019-12-23',	'Otevřeno'),
+(51,	2,	'2019-12-24',	'Otevřeno'),
+(52,	2,	'2019-12-25',	'Otevřeno'),
+(53,	2,	'2019-12-26',	'Otevřeno'),
+(54,	2,	'2019-12-27',	'Otevřeno'),
+(55,	2,	'2019-12-28',	'Otevřeno'),
+(56,	2,	'2019-12-29',	'Otevřeno'),
+(57,	2,	'2019-12-30',	'Otevřeno'),
+(58,	2,	'2019-12-31',	'Otevřeno'),
+(59,	2,	'2020-01-01',	'Otevřeno'),
+(60,	2,	'2020-01-02',	'Otevřeno'),
+(61,	2,	'2020-01-03',	'Otevřeno'),
+(62,	2,	'2020-01-04',	'Otevřeno'),
+(63,	2,	'2020-01-05',	'Otevřeno'),
+(64,	2,	'2020-01-06',	'Otevřeno'),
+(65,	2,	'2020-01-07',	'Otevřeno'),
+(66,	2,	'2020-01-08',	'Otevřeno'),
+(67,	2,	'2020-01-09',	'Otevřeno'),
+(68,	2,	'2020-01-10',	'Otevřeno'),
+(69,	2,	'2020-01-11',	'Otevřeno'),
+(70,	2,	'2020-01-12',	'Otevřeno'),
+(71,	2,	'2020-01-13',	'Otevřeno'),
+(72,	2,	'2020-01-14',	'Otevřeno'),
+(73,	2,	'2020-01-15',	'Otevřeno'),
+(74,	2,	'2020-01-16',	'Otevřeno'),
+(75,	2,	'2020-01-17',	'Otevřeno'),
+(76,	2,	'2020-01-18',	'Otevřeno'),
+(77,	2,	'2020-01-19',	'Otevřeno'),
+(78,	2,	'2020-01-20',	'Otevřeno'),
+(79,	2,	'2020-01-21',	'Otevřeno'),
+(80,	2,	'2020-01-22',	'Otevřeno'),
+(81,	2,	'2020-01-23',	'Otevřeno'),
+(82,	2,	'2020-01-24',	'Otevřeno'),
+(83,	2,	'2020-01-25',	'Otevřeno'),
+(84,	2,	'2020-01-26',	'Otevřeno'),
+(85,	2,	'2020-01-27',	'Otevřeno'),
+(86,	2,	'2020-01-28',	'Otevřeno'),
+(87,	2,	'2020-01-29',	'Otevřeno'),
+(88,	2,	'2020-01-30',	'Otevřeno'),
+(89,	2,	'2020-01-31',	'Otevřeno'),
+(90,	2,	'2020-02-01',	'Otevřeno'),
+(91,	2,	'2020-02-02',	'Otevřeno'),
+(92,	2,	'2020-02-03',	'Otevřeno'),
+(93,	2,	'2020-02-04',	'Otevřeno'),
+(94,	2,	'2020-02-05',	'Otevřeno'),
+(95,	2,	'2020-02-06',	'Otevřeno'),
+(96,	2,	'2020-02-07',	'Otevřeno'),
+(97,	2,	'2020-02-08',	'Otevřeno'),
+(98,	2,	'2020-02-09',	'Otevřeno'),
+(99,	2,	'2020-02-10',	'Otevřeno'),
+(100,	1,	'2019-11-23',	'Uzavřeno'),
+(101,	1,	'2019-11-24',	'Otevřeno'),
+(102,	1,	'2019-11-25',	'Otevřeno'),
+(103,	1,	'2019-11-26',	'Otevřeno'),
+(104,	1,	'2019-11-27',	'Otevřeno'),
+(105,	1,	'2019-11-28',	'Otevřeno'),
+(106,	1,	'2019-11-29',	'Otevřeno'),
+(107,	1,	'2019-11-30',	'Otevřeno');
 
 DROP TABLE IF EXISTS `jidla_v_nabidce`;
 CREATE TABLE `jidla_v_nabidce` (
@@ -523,45 +754,6 @@ INSERT INTO `jidla_v_nabidce` (`id`, `nabidka`, `jidlo`) VALUES
 (432,	103,	20),
 (433,	103,	8);
 
-DROP TABLE IF EXISTS `jidlo`;
-CREATE TABLE `jidlo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nazev` varchar(200) COLLATE utf8_czech_ci NOT NULL,
-  `popis` text COLLATE utf8_czech_ci NOT NULL,
-  `typ` varchar(100) COLLATE utf8_czech_ci NOT NULL,
-  `ob` varchar(200) COLLATE utf8_czech_ci DEFAULT NULL,
-  `cena` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
-INSERT INTO `jidlo` (`id`, `nazev`, `popis`, `typ`, `ob`, `cena`) VALUES
-(1,	'Kotleta steak v orientálním koření s jasmínovou rýží',	'Krkovice vepřová 150g, olej, sůl, steak 7 pepřů-koření, máslo, kari koření, Solamyl-bramborový škrob, cibule, rýže jasmínová',	'hlavni',	'temp.png',	215),
-(2,	'Kuřecí steak s hranolkami',	'Kuřecí řízky, olej, grilovací koření, máslo, Solamyl-bramborový škrob, vejce, hranolky, sůl',	'hlavni',	'temp.png',	150),
-(3,	'Těstoviny s krůtím masem a sýrem',	'Krůtí řízky, těstoviny, cibule, eidam sýr, kečup, rajčatový protlak, olej, mouka hladká, anglická slanina, sůl, vývar slepičí, sušený česnek-plátky, bazalka-koření',	'hlavni',	'temp.png',	145),
-(4,	'Sýrová polévka',	'Mouka hladká, poesie sýrová, mr. žampiony, anglická slanina, sůl, vývar zeleninový, muškátový květ',	'polevka',	'temp.png',	85),
-(5,	'Kuřecí chilli medové paličky 4ks',	'Kuřecí štylka, st. rajčata krájená, rajčatový protlak, olej, sojová omáčka, česneková pasta, med, paprika mletá, petržel nať, chilli papričky čerstvé',	'hlavni',	'temp.png',	120),
-(6,	'Kuřecí nudličky na pivě',	'Kuřecí řízky, cibule, mr. francouzská směs zelenina, cuketa, slanina, olej, solamyl-bramborový škrob, paprika mletá, sůl, ocet krém balsamico/pyré/, pepř mletý, pilsner 0,33',	'hlavni',	'temp.png',	150),
-(7,	'Fazolová polévka s uzeninou',	'Fazole, párky, mouka hladká, olej, mrkev, cibule, česneková pasta, celer, petržel, sůl, šunka, polévkové koření, vývar zeleninový, gothaj salám, majoránka, pepř mletý',	'polevka',	'temp.png',	90),
-(8,	'Kapustová polévka',	'Mr. kapusta, brambory, mouka hladká, cibule tuk, česneková pasta, polévkové koření, sůl, vývar zeleninový',	'polevka',	'temp.png',	85),
-(19,	'Hovězí steak s americkým kořením a hranolky ',	'Hovězí roštěná, olej, sůl, country koření, grilovací koření, hranolky',	'hlavni',	'temp.png',	200),
-(20,	'Koláč mřížkový jablkový',	'Kompot jablečné řezy, mouka hladká, mléko, smetol tuk, cukr moučka, vejce, cukr vanilkový, prášek do pečiva',	'hlavni',	'temp.png',	100);
-
-DROP TABLE IF EXISTS `mesta`;
-CREATE TABLE `mesta` (
-  `Nazev` varchar(100) COLLATE utf8_czech_ci NOT NULL,
-  PRIMARY KEY (`Nazev`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
-INSERT INTO `mesta` (`Nazev`) VALUES
-('Brno'),
-('Černá hora'),
-('Dolní Dobrouč'),
-('Hnátnice'),
-('Letohrad'),
-('Lipůvka'),
-('Písečná'),
-('Sebranice');
-
 DROP TABLE IF EXISTS `mesta_dovozu`;
 CREATE TABLE `mesta_dovozu` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -584,124 +776,46 @@ INSERT INTO `mesta_dovozu` (`id`, `mesto`, `jidelna`) VALUES
 (7,	'Dolní Dobrouč',	2),
 (8,	'Letohrad',	2);
 
-DROP TABLE IF EXISTS `nabidka`;
-CREATE TABLE `nabidka` (
+DROP TABLE IF EXISTS `objednavka`;
+CREATE TABLE `objednavka` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user` int(11) NOT NULL,
+  `stav` varchar(150) COLLATE utf8_czech_ci NOT NULL DEFAULT 'Čekání',
+  `ridic` int(11) DEFAULT NULL,
+  `cena` int(11) NOT NULL,
+  `cas_objednani` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `den_dodani` date NOT NULL,
+  `mesto` varchar(100) COLLATE utf8_czech_ci NOT NULL,
+  `adresa` varchar(200) COLLATE utf8_czech_ci NOT NULL,
   `jidelna` int(11) NOT NULL,
-  `den` date NOT NULL,
-  `stav` varchar(100) COLLATE utf8_czech_ci NOT NULL,
+  `kod` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  KEY `user` (`user`),
+  KEY `ridic` (`ridic`),
+  KEY `mesto` (`mesto`),
   KEY `jidelna` (`jidelna`),
-  CONSTRAINT `nabidka_ibfk_2` FOREIGN KEY (`jidelna`) REFERENCES `jidelna` (`id`) ON DELETE CASCADE
+  CONSTRAINT `objednavka_ibfk_1` FOREIGN KEY (`user`) REFERENCES `user` (`id`),
+  CONSTRAINT `objednavka_ibfk_2` FOREIGN KEY (`ridic`) REFERENCES `user` (`id`),
+  CONSTRAINT `objednavka_ibfk_3` FOREIGN KEY (`mesto`) REFERENCES `mesta` (`Nazev`),
+  CONSTRAINT `objednavka_ibfk_4` FOREIGN KEY (`jidelna`) REFERENCES `jidelna` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-INSERT INTO `nabidka` (`id`, `jidelna`, `den`, `stav`) VALUES
-(2,	1,	'2019-11-07',	'Uzavřeno'),
-(3,	1,	'2019-10-10',	'Otevřeno'),
-(4,	2,	'2019-11-08',	'Uzavřeno'),
-(5,	2,	'2019-11-08',	'Uzavřeno'),
-(6,	2,	'2019-11-09',	'Otevřeno'),
-(7,	2,	'2019-11-10',	'Otevřeno'),
-(8,	2,	'2019-11-11',	'Otevřeno'),
-(9,	2,	'2019-11-12',	'Otevřeno'),
-(10,	2,	'2019-11-13',	'Otevřeno'),
-(11,	2,	'2019-11-14',	'Otevřeno'),
-(12,	2,	'2019-11-15',	'Otevřeno'),
-(13,	2,	'2019-11-16',	'Uzavřeno'),
-(14,	2,	'2019-11-17',	'Uzavřeno'),
-(15,	2,	'2019-11-18',	'Uzavřeno'),
-(16,	2,	'2019-11-19',	'Uzavřeno'),
-(17,	2,	'2019-11-20',	'Uzavřeno'),
-(18,	2,	'2019-11-21',	'Uzavřeno'),
-(19,	2,	'2019-11-22',	'Uzavřeno'),
-(20,	2,	'2019-11-23',	'Uzavřeno'),
-(21,	2,	'2019-11-24',	'Otevřeno'),
-(22,	2,	'2019-11-25',	'Uzavřeno'),
-(23,	2,	'2019-11-26',	'Uzavřeno'),
-(24,	2,	'2019-11-27',	'Otevřeno'),
-(25,	2,	'2019-11-28',	'Otevřeno'),
-(26,	2,	'2019-11-29',	'Otevřeno'),
-(27,	2,	'2019-11-30',	'Otevřeno'),
-(28,	2,	'2019-12-01',	'Otevřeno'),
-(29,	2,	'2019-12-02',	'Otevřeno'),
-(30,	2,	'2019-12-03',	'Otevřeno'),
-(31,	2,	'2019-12-04',	'Otevřeno'),
-(32,	2,	'2019-12-05',	'Otevřeno'),
-(33,	2,	'2019-12-06',	'Otevřeno'),
-(34,	2,	'2019-12-07',	'Otevřeno'),
-(35,	2,	'2019-12-08',	'Otevřeno'),
-(36,	2,	'2019-12-09',	'Otevřeno'),
-(37,	2,	'2019-12-10',	'Otevřeno'),
-(38,	2,	'2019-12-11',	'Otevřeno'),
-(39,	2,	'2019-12-12',	'Otevřeno'),
-(40,	2,	'2019-12-13',	'Otevřeno'),
-(41,	2,	'2019-12-14',	'Otevřeno'),
-(42,	2,	'2019-12-15',	'Otevřeno'),
-(43,	2,	'2019-12-16',	'Otevřeno'),
-(44,	2,	'2019-12-17',	'Otevřeno'),
-(45,	2,	'2019-12-18',	'Otevřeno'),
-(46,	2,	'2019-12-19',	'Otevřeno'),
-(47,	2,	'2019-12-20',	'Otevřeno'),
-(48,	2,	'2019-12-21',	'Otevřeno'),
-(49,	2,	'2019-12-22',	'Otevřeno'),
-(50,	2,	'2019-12-23',	'Otevřeno'),
-(51,	2,	'2019-12-24',	'Otevřeno'),
-(52,	2,	'2019-12-25',	'Otevřeno'),
-(53,	2,	'2019-12-26',	'Otevřeno'),
-(54,	2,	'2019-12-27',	'Otevřeno'),
-(55,	2,	'2019-12-28',	'Otevřeno'),
-(56,	2,	'2019-12-29',	'Otevřeno'),
-(57,	2,	'2019-12-30',	'Otevřeno'),
-(58,	2,	'2019-12-31',	'Otevřeno'),
-(59,	2,	'2020-01-01',	'Otevřeno'),
-(60,	2,	'2020-01-02',	'Otevřeno'),
-(61,	2,	'2020-01-03',	'Otevřeno'),
-(62,	2,	'2020-01-04',	'Otevřeno'),
-(63,	2,	'2020-01-05',	'Otevřeno'),
-(64,	2,	'2020-01-06',	'Otevřeno'),
-(65,	2,	'2020-01-07',	'Otevřeno'),
-(66,	2,	'2020-01-08',	'Otevřeno'),
-(67,	2,	'2020-01-09',	'Otevřeno'),
-(68,	2,	'2020-01-10',	'Otevřeno'),
-(69,	2,	'2020-01-11',	'Otevřeno'),
-(70,	2,	'2020-01-12',	'Otevřeno'),
-(71,	2,	'2020-01-13',	'Otevřeno'),
-(72,	2,	'2020-01-14',	'Otevřeno'),
-(73,	2,	'2020-01-15',	'Otevřeno'),
-(74,	2,	'2020-01-16',	'Otevřeno'),
-(75,	2,	'2020-01-17',	'Otevřeno'),
-(76,	2,	'2020-01-18',	'Otevřeno'),
-(77,	2,	'2020-01-19',	'Otevřeno'),
-(78,	2,	'2020-01-20',	'Otevřeno'),
-(79,	2,	'2020-01-21',	'Otevřeno'),
-(80,	2,	'2020-01-22',	'Otevřeno'),
-(81,	2,	'2020-01-23',	'Otevřeno'),
-(82,	2,	'2020-01-24',	'Otevřeno'),
-(83,	2,	'2020-01-25',	'Otevřeno'),
-(84,	2,	'2020-01-26',	'Otevřeno'),
-(85,	2,	'2020-01-27',	'Otevřeno'),
-(86,	2,	'2020-01-28',	'Otevřeno'),
-(87,	2,	'2020-01-29',	'Otevřeno'),
-(88,	2,	'2020-01-30',	'Otevřeno'),
-(89,	2,	'2020-01-31',	'Otevřeno'),
-(90,	2,	'2020-02-01',	'Otevřeno'),
-(91,	2,	'2020-02-02',	'Otevřeno'),
-(92,	2,	'2020-02-03',	'Otevřeno'),
-(93,	2,	'2020-02-04',	'Otevřeno'),
-(94,	2,	'2020-02-05',	'Otevřeno'),
-(95,	2,	'2020-02-06',	'Otevřeno'),
-(96,	2,	'2020-02-07',	'Otevřeno'),
-(97,	2,	'2020-02-08',	'Otevřeno'),
-(98,	2,	'2020-02-09',	'Otevřeno'),
-(99,	2,	'2020-02-10',	'Otevřeno'),
-(100,	1,	'2019-11-23',	'Uzavřeno'),
-(101,	1,	'2019-11-24',	'Otevřeno'),
-(102,	1,	'2019-11-25',	'Otevřeno'),
-(103,	1,	'2019-11-26',	'Otevřeno'),
-(104,	1,	'2019-11-27',	'Otevřeno'),
-(105,	1,	'2019-11-28',	'Otevřeno'),
-(106,	1,	'2019-11-29',	'Otevřeno'),
-(107,	1,	'2019-11-30',	'Otevřeno');
+INSERT INTO `objednavka` (`id`, `user`, `stav`, `ridic`, `cena`, `cas_objednani`, `den_dodani`, `mesto`, `adresa`, `jidelna`, `kod`) VALUES
+(1,	3,	'Dodáno',	2,	845,	'2019-11-22 09:34:17',	'2019-11-19',	'Hnátnice',	'1221',	2,	482768480),
+(2,	2,	'Dodáno',	2,	2340,	'2019-11-22 09:36:09',	'2019-11-22',	'Hnátnice',	'158',	2,	926682909),
+(3,	2,	'Dodáno',	2,	90,	'2019-11-25 21:17:55',	'2019-11-24',	'Hnátnice',	'158',	2,	148310062),
+(4,	2,	'Dodáno',	2,	430,	'2019-11-25 21:17:43',	'2019-11-25',	'Hnátnice',	'158',	2,	947290478),
+(5,	2,	'Dodáno',	2,	185,	'2019-11-25 21:17:41',	'2019-11-23',	'Hnátnice',	'158',	2,	874704004),
+(6,	22,	'Dodáno',	2,	445,	'2019-11-25 21:17:49',	'2019-11-23',	'Dolní Dobrouč',	'1',	2,	639432070),
+(7,	24,	'Dodáno',	2,	85,	'2019-11-25 21:17:51',	'2019-11-23',	'Písečná',	'123',	2,	157556244),
+(8,	25,	'Dodáno',	2,	1350,	'2019-11-25 22:40:15',	'2019-11-23',	'Hnátnice',	'123',	2,	382226546),
+(9,	26,	'Dodáno',	2,	170,	'2019-11-25 21:17:44',	'2019-11-25',	'Hnátnice',	'12',	2,	419216821),
+(10,	24,	'Dodáno',	24,	935,	'2019-11-25 21:19:49',	'2019-11-24',	'Brno',	'15',	1,	982823801),
+(11,	24,	'Dodáno',	2,	1630,	'2019-11-25 21:19:15',	'2019-11-25',	'Brno',	'12',	1,	583874956),
+(12,	24,	'Dodáno',	2,	1720,	'2019-11-25 21:19:15',	'2019-11-26',	'Brno',	'Jelení 1985',	1,	483805143),
+(13,	25,	'Čekání',	NULL,	910,	'2019-11-25 21:21:30',	'2020-02-10',	'Hnátnice',	'15',	2,	345485491),
+(14,	25,	'Čekání',	NULL,	215,	'2019-11-25 21:22:38',	'2020-02-09',	'Hnátnice',	'15',	2,	755723353),
+(15,	25,	'Potvrzeno',	2,	235,	'2019-11-25 21:46:25',	'2020-02-04',	'Hnátnice',	'15',	2,	119535559);
 
 DROP TABLE IF EXISTS `objednana_jidla`;
 CREATE TABLE `objednana_jidla` (
@@ -752,106 +866,5 @@ INSERT INTO `objednana_jidla` (`id`, `objednavka`, `jidlo`, `pocet`) VALUES
 (33,	14,	1,	1),
 (34,	15,	6,	1),
 (35,	15,	4,	1);
-
-DROP TABLE IF EXISTS `objednavka`;
-CREATE TABLE `objednavka` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user` int(11) NOT NULL,
-  `stav` varchar(150) COLLATE utf8_czech_ci NOT NULL DEFAULT 'Čekání',
-  `ridic` int(11) DEFAULT NULL,
-  `cena` int(11) NOT NULL,
-  `cas_objednani` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `den_dodani` date NOT NULL,
-  `mesto` varchar(100) COLLATE utf8_czech_ci NOT NULL,
-  `adresa` varchar(200) COLLATE utf8_czech_ci NOT NULL,
-  `jidelna` int(11) NOT NULL,
-  `kod` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user` (`user`),
-  KEY `ridic` (`ridic`),
-  KEY `mesto` (`mesto`),
-  KEY `jidelna` (`jidelna`),
-  CONSTRAINT `objednavka_ibfk_1` FOREIGN KEY (`user`) REFERENCES `user` (`id`),
-  CONSTRAINT `objednavka_ibfk_2` FOREIGN KEY (`ridic`) REFERENCES `user` (`id`),
-  CONSTRAINT `objednavka_ibfk_3` FOREIGN KEY (`mesto`) REFERENCES `mesta` (`Nazev`),
-  CONSTRAINT `objednavka_ibfk_4` FOREIGN KEY (`jidelna`) REFERENCES `jidelna` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
-INSERT INTO `objednavka` (`id`, `user`, `stav`, `ridic`, `cena`, `cas_objednani`, `den_dodani`, `mesto`, `adresa`, `jidelna`, `kod`) VALUES
-(1,	3,	'Dodáno',	2,	845,	'2019-11-22 09:34:17',	'2019-11-19',	'Hnátnice',	'1221',	2,	482768480),
-(2,	2,	'Dodáno',	2,	2340,	'2019-11-22 09:36:09',	'2019-11-22',	'Hnátnice',	'158',	2,	926682909),
-(3,	2,	'Dodáno',	2,	90,	'2019-11-25 21:17:55',	'2019-11-24',	'Hnátnice',	'158',	2,	148310062),
-(4,	2,	'Dodáno',	2,	430,	'2019-11-25 21:17:43',	'2019-11-25',	'Hnátnice',	'158',	2,	947290478),
-(5,	2,	'Dodáno',	2,	185,	'2019-11-25 21:17:41',	'2019-11-23',	'Hnátnice',	'158',	2,	874704004),
-(6,	22,	'Dodáno',	2,	445,	'2019-11-25 21:17:49',	'2019-11-23',	'Dolní Dobrouč',	'1',	2,	639432070),
-(7,	24,	'Dodáno',	2,	85,	'2019-11-25 21:17:51',	'2019-11-23',	'Písečná',	'123',	2,	157556244),
-(8,	25,	'Dodáno',	2,	1350,	'2019-11-25 22:40:15',	'2019-11-23',	'Hnátnice',	'123',	2,	382226546),
-(9,	26,	'Dodáno',	2,	170,	'2019-11-25 21:17:44',	'2019-11-25',	'Hnátnice',	'12',	2,	419216821),
-(10,	24,	'Dodáno',	24,	935,	'2019-11-25 21:19:49',	'2019-11-24',	'Brno',	'15',	1,	982823801),
-(11,	24,	'Dodáno',	2,	1630,	'2019-11-25 21:19:15',	'2019-11-25',	'Brno',	'12',	1,	583874956),
-(12,	24,	'Dodáno',	2,	1720,	'2019-11-25 21:19:15',	'2019-11-26',	'Brno',	'Jelení 1985',	1,	483805143),
-(13,	25,	'Čekání',	NULL,	910,	'2019-11-25 21:21:30',	'2020-02-10',	'Hnátnice',	'15',	2,	345485491),
-(14,	25,	'Čekání',	NULL,	215,	'2019-11-25 21:22:38',	'2020-02-09',	'Hnátnice',	'15',	2,	755723353),
-(15,	25,	'Potvrzeno',	2,	235,	'2019-11-25 21:46:25',	'2020-02-04',	'Hnátnice',	'15',	2,	119535559);
-
-DROP TABLE IF EXISTS `prava`;
-CREATE TABLE `prava` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nazev` varchar(100) COLLATE utf8_czech_ci NOT NULL,
-  `popis` text COLLATE utf8_czech_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
-INSERT INTO `prava` (`id`, `nazev`, `popis`) VALUES
-(1,	'Administrátor',	'Může vše'),
-(2,	'Operátor',	'Spravuje jídelny a jejich nabídky, přiřazuje řidičům objednávky.'),
-(3,	'Řidič',	'Dostává objednávky, vyzvedává objednaná jídla a rozváží je.'),
-(4,	'Strávník',	'Spravovat svůj účet.'),
-(5,	'Pleb',	'Objednávat jídlo, procházet jídelníčky.');
-
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `jmeno` varchar(150) COLLATE utf8_czech_ci DEFAULT NULL,
-  `prijmeni` varchar(150) COLLATE utf8_czech_ci DEFAULT NULL,
-  `email` varchar(200) COLLATE utf8_czech_ci NOT NULL,
-  `password` varchar(200) COLLATE utf8_czech_ci DEFAULT NULL,
-  `mesto` varchar(100) COLLATE utf8_czech_ci DEFAULT NULL,
-  `adresa` varchar(200) COLLATE utf8_czech_ci DEFAULT NULL,
-  `telefon` int(11) DEFAULT NULL,
-  `prava` int(11) NOT NULL DEFAULT '5',
-  PRIMARY KEY (`id`),
-  KEY `prava` (`prava`),
-  KEY `mesto` (`mesto`),
-  CONSTRAINT `user_ibfk_4` FOREIGN KEY (`prava`) REFERENCES `prava` (`id`),
-  CONSTRAINT `user_ibfk_5` FOREIGN KEY (`mesto`) REFERENCES `mesta` (`Nazev`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
-INSERT INTO `user` (`id`, `jmeno`, `prijmeni`, `email`, `password`, `mesto`, `adresa`, `telefon`, `prava`) VALUES
-(1,	'Admin',	'Admin',	'admin@jidelna.cz',	'$2y$10$Aklkl1KEk4tFEqX9apIWbuCq2SrPrCd5Qqe0yodi5.eX5WjBruuLy',	NULL,	NULL,	NULL,	1),
-(2,	'Jan',	'Novák',	'novak@jidelna.cz',	'$2y$10$1aVc/0Us2dJ0XgiOz8jdMewFvCaJpV0ywwpKEQFPqW8bErm3GnoKK',	'Hnátnice',	'158',	NULL,	3),
-(3,	'Ladislav',	'Novák',	'LadNov@jidelna.cz',	'$2y$10$WXIRJZz0kTHqwOEYkE4U9Ocy/Rd0cp3SYDMBiGxMTBif7.7L9czX2',	'Brno',	'Letohradská 5',	NULL,	2),
-(4,	'Michal',	'Jansa',	'Mich@seznam.cz',	'$2y$10$ozjtWuZcxX.liIsuMAW0xenUdcviSZWpmf.Y3g2bck6DM5OOuI2Pu',	NULL,	NULL,	NULL,	3),
-(5,	'Radek',	'Pospíšil',	'pos@seznam.cz',	'$2y$10$.48n3E/4ydIUsKMbgULhqegl2UNLycsQ9Ltoal/toWmXVgcLfaeEi',	NULL,	NULL,	NULL,	3),
-(6,	'Jaroslav',	'Jareš',	'jares@gmail.cz',	'$2y$10$UExpnYpmVQ/E8IkQyxFQ1OotJBHaaV3VeUfuDNmEfTavOcAsPOFci',	NULL,	NULL,	NULL,	3),
-(7,	'Antonína',	'Nováková',	'Annov@seznam.cz',	'$2y$10$mbBbkos8uGWoAhcUW9AdSO1I9TznGeJul6Z99ax1Y9FxlX6532H1u',	NULL,	NULL,	NULL,	4),
-(8,	'Adam',	'Jíl',	'jil@gmail.com',	'$2y$10$oEjtsPZBjOV.0q.DeecEJ.YAdKbnUrqEbFtuuuyMgtwaCo6UcqTbe',	NULL,	NULL,	NULL,	4),
-(9,	'Tereza',	'Mandlová',	'Tereza@email.cz',	'$2y$10$dYI1uvX1iHVVjke8hK9uqug8v//aOhGy0rrXb8S.8O4hGGRMIDYKC',	NULL,	NULL,	NULL,	4),
-(10,	'Karina',	'Jedlá',	'kari@seznam.cz',	'$2y$10$rHB3Cb5vEaq1/.QC4J7SHukDsifF9juL.wVg3j2dN705KlYeQSQxC',	NULL,	NULL,	NULL,	4),
-(11,	'Diana',	'Jelínková',	'Dijel@gmail.com',	'$2y$10$MumZEVqIIaFpqgW9yVRq3.L7vgLJdaN3jG0YUpCP8ovv4DcZKYkKS',	NULL,	NULL,	NULL,	4),
-(12,	'Melichar',	'Pošeptný',	'Meli@centrum.cz',	'$2y$10$aiwIlqJmhRQeiVG1MFsdu.6lTsj2pIQ.DB3rZrqApuVCwLirXQmx.',	NULL,	NULL,	NULL,	4),
-(13,	'Vilma',	'Špatná',	'Vili@centrum.cz',	'$2y$10$zRx4vPZNIiNLqsHwYESvuu1s6WiVqqY3lUCbeVed2SFal.IA3QRYi',	NULL,	NULL,	NULL,	4),
-(14,	'Čestmír',	'Nový',	'cest@gmail.com',	'$2y$10$dBTYfqZwgf.S.YVK5gVQgO3KmcZLqb.tzXrZuvySdE2BGfgb2JKmu',	NULL,	NULL,	NULL,	4),
-(15,	'Ctirad',	'Hruška',	'hrus@gmail.com',	'$2y$10$Zm4qqBtnLSJ4uJkeu37DnesrTc392byqTelWb5ZyTNEzm0R9c2kUK',	NULL,	NULL,	NULL,	4),
-(16,	'Edita',	'Pražná',	'EditPra@gmail.com',	'$2y$10$FXn.lQChgnU/jO8YtpRYje2GjVKzw2yLlfTCFLfBBPfaG.DUY/qfa',	NULL,	NULL,	NULL,	4),
-(17,	'Apolína',	'Poštolová',	'appos@gmail.com',	'$2y$10$bsmAGcqXbZDDHDdoakgjKuVKolxm8RKqXpHMWiG3vktHsd3Vu.MnK',	NULL,	NULL,	NULL,	4),
-(18,	'Ladislav',	'Jmelí',	'ladi@gmail.com',	'$2y$10$BPoUSaayw70jVso0YKt5sOY7t5uvf5LCk30UOQObFbzgq513U6cCy',	NULL,	NULL,	NULL,	4),
-(19,	'Jan',	'Perník',	'prna@seznam.cz',	'$2y$10$PH4kIBTwbS9PTnv/QKRgU.jifZZ3l43Y8yyD59cZhP9RURYnt6Mxq',	NULL,	NULL,	NULL,	4),
-(20,	'Michal',	'Adam',	'mic@gmail.com',	'$2y$10$ilmDfjHyd6qXVy0xgUcglec6ujaKfyDQORcGKsV8io9gyS9MAcG1C',	NULL,	NULL,	NULL,	4),
-(21,	'Melichar',	'Jansa',	'Milichar@jidelna.cz',	'$2y$10$YqUY4xzCV5Is4JyKPhHssunbHnHrcqg.VDDmL.RKvDP.fa3/YZxla',	NULL,	NULL,	NULL,	4),
-(22,	NULL,	NULL,	'nevim@jidelna.cz',	NULL,	NULL,	NULL,	123456789,	5),
-(24,	'Ran',	'Dom',	'random@jidelna.cz',	'$2y$10$3gFeEzhn9CeHn3ounC3DCO/rliEABhXaEXkBAegGFthR1/rWXxHCO',	'Brno',	'Jelení 1985',	NULL,	3),
-(25,	'Novy',	'acc',	'novy@jidelna.cz',	'$2y$10$0jsA1afMP/Plz9Pq81go9eNEhWGwzw5jDgIav3Lk9jovJQcoZ2Wkq',	'Hnátnice',	'15',	666555667,	4),
-(26,	NULL,	NULL,	'asd@asd.asd',	NULL,	NULL,	NULL,	159753268,	5);
 
 -- 2019-11-25 22:43:37
