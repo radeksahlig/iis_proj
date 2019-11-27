@@ -16,15 +16,23 @@ else
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Jidelna</title>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="Jidelna" content="IIS Project Jidelna">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="./styles/styles.css">
-        <link rel="icon" href="./pic/ico.ico" type="image/x-icon">
+        <!-- META TAGS -->
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	    <meta name="Jidelna" content="IIS Project Jidelna">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
+        <link rel="stylesheet" href="../styles/styles.css">
+
+        <!-- FAVICON -->
+		<link rel="icon" href="./pic/ico.ico" type="image/x-icon">
+        
+        <!-- TITLE -->
+        <title>Jídlo | Jidelna IS</title>
     </head>
-    <body>
+    <body class="container">
     <main>
         <a href="../index.php">Home</a>
         <?php 

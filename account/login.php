@@ -11,22 +11,46 @@ if(isset($_SESSION['jmeno']))
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Jidelna</title>
+		<!-- META TAGS -->
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	    <meta name="Jidelna" content="IIS Project Jidelna">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="../styles/styles.css">
-		<link rel="icon" href="../pic/ico.ico" type="image/x-icon">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
+        <link rel="stylesheet" href="../styles/styles.css">
+
+        <!-- FAVICON -->
+		<link rel="icon" href="./pic/ico.ico" type="image/x-icon">
+        
+        <!-- TITLE -->
+        <title>Login | Jidelna IS</title>
 	</head>
-	<body>
-    <main>
-        <form method="post" action="" enctype="multipart/form-data">
-            <input type="text" placeholder="Email" name="email" required="required">
-            <input type="password" placeholder="Heslo" name="pass" required="required">
-            <input type="submit" name="submit" value="Login">
-        </form>
-    </main>
+	<body class="container">
+        <main class="row justify-content-md-center">
+            <div class="col col-md-4 mt-sm-3">
+                <div class="card">
+                    <h5 class="card-header">Prihlášení do účtu</h5>
+                    <div class="card-body">
+                        <form method="post" action="" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="inputEmail">Login</label>
+                                <input type="email" class="form-control" id="inputEmail" placeholder="Zadajte email" name="email" required="required" />
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword">Heslo</label>
+                                <input type="password" class="form-control" id="inputPassword" placeholder="Zadajte heslo" name="pass" required="required" />
+                            </div>
+                            <input type="submit" class="btn btn-primary float-right" name="submit" value="Prihlásit">
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+            
+        </main>
     <?php
         function login($email, $pass){
             $db = dbconnect();
