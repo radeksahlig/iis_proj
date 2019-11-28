@@ -169,7 +169,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava'])){
                     else
                         echo "<td>-</td>";
                     echo "<td>".$row['prava']."</td>";
-                    echo "<td><a class='badge badge-light' href='../account/manage_user?user=".$row['id']."'>Upravit</a></td>";
+                    echo "<td><a class='badge badge-light' href='../account/manage_user.php?user=".$row['id']."'>Upravit</a></td>";
                     echo "</tr>";
                 }
                 echo "</tbody>";

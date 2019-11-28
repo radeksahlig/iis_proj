@@ -160,7 +160,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava'])){
                         echo "<td>Ne</td>";
                     else
                         echo "<td>Ano</td>";
-                    echo "<td><a href='../op/jidelna?jidelna=".$row['id']."'>Upravit</a></td>";
+                    echo "<td><a href='../op/jidelna.php?jidelna=".$row['id']."'>Upravit</a></td>";
                     echo "</tr>";
                 }
                 echo "</tbody></table><br>";
