@@ -27,29 +27,46 @@ if(isset($_SESSION['jmeno']))
         <!-- TITLE -->
         <title>Login | Jidelna IS</title>
 	</head>
-	<body class="container">
-        <main class="row justify-content-md-center">
-            <div class="col col-md-4 mt-sm-3">
-                <div class="card">
-                    <h5 class="card-header">Prihlášení do účtu</h5>
-                    <div class="card-body">
-                        <form method="post" action="" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label for="inputEmail">Login</label>
-                                <input type="email" class="form-control" id="inputEmail" placeholder="Zadajte email" name="email" required="required" />
-                            </div>
-                            <div class="form-group">
-                                <label for="inputPassword">Heslo</label>
-                                <input type="password" class="form-control" id="inputPassword" placeholder="Zadajte heslo" name="pass" required="required" />
-                            </div>
-                            <input type="submit" class="btn btn-primary float-right" name="submit" value="Prihlásit">
-                        </form>
+	<body>
+        <nav class='mb-4 navbar navbar-expand-lg navbar-dark bg-dark'>
+            <div class='container'>
+                <a class='navbar-brand' href='../index.php'><img src='../pic/logo/logo.png' /></a>
+                    <button class='navbar-toggler' type='button' data-togle='collapse' data-target='#navbarSupportedContent-4' aria-controls='navbarSupportedContent-4' aria-expanded='false' aria-label='Toggle navigation'>
+                        <span class='navbar-toggler-icon'></span>
+                    </button>
+                <div class='collapse navbar-collapse' id='navbarSupportedContent-4'>
+                        <ul class='navbar-nav ml-auto'>
+                            <li class='nav-item'>
+                                <a class='nav-link' href='../account/register.php'><button class='btn btn-outline-info'>Registrace</button></a>
+                            </li>
+                            <li class='nav-item'>
+                                <a class='nav-link' href='../account/login.php'><button class='btn btn-outline-warning'>Login</button></a>
+                            </li>
+                        </ul>
+                </div>
+            <div>
+        </nav>
+        <main class="container">
+            <section class="row justify-content-md-center">
+                <div class="col col-md-4 mt-sm-3">
+                    <div class="card shadow-lg border-dark">
+                        <h5 class="card-header">Prihlášení do účtu</h5>
+                        <div class="card-body">
+                            <form method="post" action="" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="inputEmail">Login</label>
+                                    <input type="email" class="form-control" id="inputEmail" placeholder="Zadajte email" name="email" required="required" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPassword">Heslo</label>
+                                    <input type="password" class="form-control" id="inputPassword" placeholder="Zadajte heslo" name="pass" required="required" />
+                                </div>
+                                <input type="submit" class="btn btn-primary float-right" name="submit" value="Prihlásit">
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-
-            
+            </section>
         </main>
     <?php
         function login($email, $pass){
@@ -91,5 +108,11 @@ if(isset($_SESSION['jmeno']))
             }
         }
         ?>
+
+    <footer class="mt-4 bg-info">
+        <div class="bg-dark p-2 text-center text-white footer">
+            Zer.to IIS Projekt | 2019 
+        </div>
+    </footer>
 	</body>
 </html>

@@ -13,6 +13,11 @@ include './functions.php';
 
 		<!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
+
+        <!-- FONT AWESOME -->
+        <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css" />
+
+        <!-- REGULAR CSS -->
         <link rel="stylesheet" href="../styles/styles.css">
 
         <!-- FAVICON -->
@@ -62,100 +67,129 @@ include './functions.php';
                 - 3. Na cestě
                 - 4. Dodáno
 		-->
-    <main>
+        <nav class='mb-4 navbar navbar-expand-lg navbar-dark bg-dark'>
+                    <div class='container'>
+                        <a class='navbar-brand' href='index.php'><img src='./pic/logo/logo.png' /></a>
+                        <button class='navbar-toggler' type='button' data-togle='collapse' data-target='#navbarSupportedContent-4' aria-controls='navbarSupportedContent-4' aria-expanded='false' aria-label='Toggle navigation'>
+                            <span class='navbar-toggler-icon'></span>
+                        </button>
+                        <div class='collapse navbar-collapse' id='navbarSupportedContent-4'>
+                            <ul class='navbar-nav ml-auto'>
         <?php
             if(isset($_SESSION['jmeno'])){
-                echo "Přihlášen jako : <a href=\"./account/user?user=".$_SESSION['id']."\"><b>".$_SESSION['jmeno']."</b></a><br>";
-                echo "<a href='./account/login.php?action=off'>Odhlásit se</a><br>";
-                echo "<a href='./account/moje_objednavky.php'>Moje objednávky</a><br>";
+                echo "
+                <li class='nav-link dropdown'>
+                    
+                    <span class='nav-link dropdown-toggle' id='navbarDropdownMenuLink-4' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fa fa-user'></i> Přihlášen jako: 
+                    <a href=\"./account/user?user=".$_SESSION['id']."\"><b>".$_SESSION['jmeno']."</b></a>
+                    </span>
+                    
+                    <div class='dropdown-menu dropdown-menu-right' aria-labelledby='navbarDropdownMenuLink-4'>
+                    
+                    ";
+                echo "<a class='dropdown-item' href='./account/login.php?action=off'>Odhlásit se</a><br>";
+                echo "<a class='dropdown-item' href='./account/moje_objednavky.php'>Moje objednávky</a><br>";
                 if($_SESSION['prava'] == 2){
-                    echo "<a href='./op/moje_jidelny.php'>Moje jídelny</a><br>";
-                    echo "<a href='./op/dat_zakazky.php'>Nové zakázky</a><br>";
+                    echo "<a class='dropdown-item' href='./op/moje_jidelny.php'>Moje jídelny</a><br>";
+                    echo "<a class='dropdown-item' href='./op/dat_zakazky.php'>Nové zakázky</a><br>";
                 }
                 if($_SESSION['prava'] <= 2){
-                    echo "<a href='./op/add_jidlo.php'>Vložení jídla do DB</a><br>";
+                    echo "<a class='dropdown-item' href='./op/add_jidlo.php'>Vložení jídla do DB</a><br>";
                     if($_SESSION['prava'] == 1){
-                        echo "<a href='./admin/accounts.php'>Účty</a><br>";
-                        echo "<a href='./admin/add_jidelna.php'>Vložení jídelny do DB</a><br>";
-                        echo "<a href='./admin/jidelny.php'>Jídelny</a><br>";
+                        echo "<a class='dropdown-item' href='./admin/accounts.php'>Účty</a><br>";
+                        echo "<a class='dropdown-item' href='./admin/add_jidelna.php'>Vložení jídelny do DB</a><br>";
+                        echo "<a class='dropdown-item' href='./admin/jidelny.php'>Jídelny</a><br>";
                     }
                 }
-                if($_SESSION['prava'] == 3)
-                    echo "<a href='./ridic/zakazky.php?search=&f_akt=akt'>Zakázky</a><br>";
-            }else{
-                echo "<nav class=' navbar-dark bg-dark'>";
-                echo "<div class='container'>";
-                echo "<ul class='nav justify-content-end'>";
-                echo "<li class='nav-item py-2'>";
-                echo "  <a class='nav-link btn btn-outline-info' href='./account/register.php'>Registrace</a>";
-                echo "</li>";
-                echo " <li class='nav-item py-2 mx-2'>";
-                echo "  <a class='nav-link btn btn-outline-warning' href='./account/login.php'>Login</a>";
-                echo "</li>";
-                echo "</ul>";
-              
-                
-           
+                if($_SESSION['prava'] == 3) {
+                    echo "<a class='dropdown-item' href='./ridic/zakazky.php?search=&f_akt=akt'>Zakázky</a><br>";
+                }
                 echo "</div></nav>";
+            }else{
+                echo "
+
+                                <li class='nav-item'>
+                                    <a class='nav-link' href='./account/register.php'><button class='btn btn-outline-info'>Registrace</button></a>
+                                </li>
+                                <li class='nav-item'>
+                                    <a class='nav-link' href='./account/login.php'><button class='btn btn-outline-warning'>Login</button></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                ";
             }
+            echo "<main>";
             echo "<section class='container'>";
-            echo "<a href='./jidlo/objednavka.php'>Najít objednávku</a>";
+            echo "<div class='d-flex justify-content-center mb-4'>";
+            echo "<a href='./jidlo/objednavka.php'><button class='btn btn-primary shadow'>Najít objednávku</button></a></div>";
             $db = dbconnect();
             $sql = "SELECT id, nazev, adresa, mesto FROM jidelna WHERE stav = 1";
             $jidelny = $db->query($sql);
             if($jidelny->num_rows>0){
     			while($row = $jidelny->fetch_assoc()){
-                    echo "<a href='./jidlo/jidelnicek.php?jidelna=".$row['id']."' style='text-decoration : none; color: black;'><div style='border : 1px solid black;'>";
+                    echo "<article class='card p-2 mb-2 border-dark bg-light shadow'>";
+                    echo "<a class='text-decoration-none text-dark' href='./jidlo/jidelnicek.php?jidelna=".$row['id']."' '>";
                     echo "<b>".$row['nazev']."</b>";
                     echo "<p>Města dovozu - ".getMestaDovozu($row['id'])."</p>";
                     echo "<p>Adresa - ".$row['mesto']." ".$row['adresa']."</p>";
-                    echo "</div></a>";
+                    echo "</a></article>";
                 }               
             }else{
-                echo "<div class='alert alert-danger text-center' role='alert'>Nepodařilo se načíst žádné jídelny!</div>";
+                echo "<div class='alert alert-danger text-center m-4' role='alert'>Nepodařilo se načíst žádné jídelny!</div>";
             }
             echo "</section>";
 
         ?>
     </main>
-    <footer class="container">
-    <table class="table table-striped table-dark">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Účet</th>
-                <th scope="col">Email</th>
-                <th scope="col">Heslo</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-            <th scope="row">1</th>
-                <td>Admin</td>
-                <td>admin@jidelna.cz</td>
-                <td>admin</td>
-            </tr>
-            <tr>
-            <th scope="row">2</th>
-                <td>Operátor</td>
-                <td>LadNov@jidelna.cz</td>
-                <td>heslo</td>
-            </tr>
-            <tr>
-            <th scope="row">3</th>
-                <td>Řidič</td>
-                <td>novak@jidelna.cz</td>
-                <td>heslo</td>
-            </tr>
-            <tr>
-            <th scope="row">4</th>
-                <td>Konzument</td>
-                <td>novy@jidelna.cz</td>
-                <td>heslo</td>
-            </tr>
-        </tbody>
-    </table>
-</footer>
+    <footer class="mt-4 bg-light">
+        <section class="container">
+            <div class="row justify-content-md-center mt-4">
+                <div class="col col-md-6">
+                    <table class="table table-striped table-dark mt-4">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Účet</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Heslo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            <th scope="row">1</th>
+                                <td>Admin</td>
+                                <td>admin@jidelna.cz</td>
+                                <td>admin</td>
+                            </tr>
+                            <tr>
+                            <th scope="row">2</th>
+                                <td>Operátor</td>
+                                <td>LadNov@jidelna.cz</td>
+                                <td>heslo</td>
+                            </tr>
+                            <tr>
+                            <th scope="row">3</th>
+                                <td>Řidič</td>
+                                <td>novak@jidelna.cz</td>
+                                <td>heslo</td>
+                            </tr>
+                            <tr>
+                            <th scope="row">4</th>
+                                <td>Konzument</td>
+                                <td>novy@jidelna.cz</td>
+                                <td>heslo</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <div class="bg-dark p-2 text-center text-white footer">
+            Zer.to IIS Projekt | 2019 
+        </div>
+    </footer>
     
 
     <!-- Optional JavaScript -->
