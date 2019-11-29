@@ -91,27 +91,61 @@ function emailExists($email){
 
 function strankovani($number, $offset, $stranka){
     if(ceil($number/10) > 1){
+        echo "<nav aria-label='pages' class='mx-4 mb-4'>
+                <ul class='pagination'>
+                    ";
         if($offset == 0){
             $podm = ceil($number/10) < 3 ? ceil($number/10) : 3;
-            echo "<a href=\"".$stranka."page=1\"><b>1</b></a>";
+            echo "
+            <li class='page-item'>
+                <a class='page-link' href=\"".$stranka."page=1\"><b>1</b></a>
+            </li>";
             for ($i=2; $i <= $podm; $i++)
-                echo "<a href=\"".$stranka."page=$i\">$i</a>";
+                echo "
+                <li class='page-item'>
+                    <a class='page-link' href=\"".$stranka."page=$i\">$i</a>
+                </li>";
             if(1 < $podm)
-                echo "<a href=\"".$stranka."page=2\">&gt</a>";
+                echo "
+                <li class='page-item'>
+                    <a class='page-link' aria-label='Next' href=\"".$stranka."page=2\">
+                        <span aria-hidden='true'>&raquo;</span>
+                    </a>
+                </li>";
         }else{
             $cur_page = $offset/10;
-            echo "<a href=\"".$stranka."page=$cur_page\">&lt</a>";               
+            echo "
+            <li class='page-item'>
+                <a class='page-link' aria-label='Previous' href=\"".$stranka."page=$cur_page\">
+                    <span aria-hidden='true'>&laquo;</span>
+                </a>
+            </li>";               
             $podm = $cur_page > 3 ? $cur_page-2 : 1;
             for ($i=$podm; $i < $cur_page+1; $i++)
-                echo "<a href=\"".$stranka."page=$i\">$i</a>";
-            echo "<a href=\"".$stranka."page=".($cur_page+1)."\"><b>".($cur_page+1)."</b></a>";
+                echo "   
+                <li class='page-item'>
+                    <a class='page-link' href=\"".$stranka."page=$i\">$i</a>
+                </li>";
+                echo "
+                <li class='page-item'>
+                    <a class='page-link' href=\"".$stranka."page=".($cur_page+1)."\"><b>".($cur_page+1)."</b></a>
+                </li>";
             $podm = ceil($number/10) < $cur_page+3 ? ceil($number/10) : $cur_page+4;
             for ($i=$cur_page+2; $i <= $podm; $i++)
-                echo "<a href=\"".$stranka."page=$i\">$i</a>";
+                echo "       
+                <li class='page-item'>
+                    <a class='page-link' href=\"".$stranka."page=$i\">$i</a>
+                </li>";
             if($cur_page+1 < $podm)
-                echo "<a href=\"".$stranka."page=".($cur_page+2)."\">&gt</a>";
+                echo "               
+                <li class='page-item'>
+                    <a class='page-link' aria-label='Next' href=\"".$stranka."page=".($cur_page+2)."\">
+                        <span aria-hidden='true'>&raquo;</span>
+                    </a>
+                </li>";
         }
     }
+    echo "</ul></nav>";
 }
 
 ?>

@@ -10,16 +10,18 @@ $podm = true;
     <head>
         <!-- META TAGS -->
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	    <meta name="Jidelna" content="IIS Project Jidelna">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	    <meta name="Jidelna" content="IIS Project Jidelna" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
 		<!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
-        <link rel="stylesheet" href="../styles/styles.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous" />
+
+        <!-- REGULAR CSS -->
+        <link rel="stylesheet" href="../styles/styles.css" />
 
         <!-- FAVICON -->
-		<link rel="icon" href="./pic/ico.ico" type="image/x-icon">
+		<link rel="icon" href="./pic/ico.ico" type="image/x-icon" />
         
         <!-- TITLE -->
         <title>Objednat | Jidelna IS</title>
@@ -177,7 +179,7 @@ $podm = true;
                         echo "<input type='text' name='email' required placeholder='email'>";
                         echo "<input type='text' name='telefon' required placeholder='telefon' value='$telefon'>";
                         echo "<select name='mesto'>";
-                        echo "<option value=''>";
+                        echo "<option selected>Vyberte</option>";
                             $sql = "SELECT mesto FROM mesta_dovozu WHERE jidelna = $jidelna";
                             $mesta = $db->query($sql);
                             if($mesta->num_rows>0){
@@ -187,6 +189,7 @@ $podm = true;
                                     else 
                                         echo "<option value=\"".$row["mesto"]."\">".$row["mesto"];
                                 }
+                                echo "</option>";
                             }
                             $mesta->close();
                         echo "</select>";

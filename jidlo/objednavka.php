@@ -23,21 +23,41 @@ if(isset($_POST['subridic'])){
 	<head>
 		<!-- META TAGS -->
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	    <meta name="Jidelna" content="IIS Project Jidelna">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	    <meta name="Jidelna" content="IIS Project Jidelna" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
 		<!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
-        <link rel="stylesheet" href="../styles/styles.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous" />
+
+        <!-- REGULAR CSS -->
+        <link rel="stylesheet" href="../styles/styles.css" />
 
         <!-- FAVICON -->
-		<link rel="icon" href="./pic/ico.ico" type="image/x-icon">
+		<link rel="icon" href="./pic/ico.ico" type="image/x-icon" />
         
         <!-- TITLE -->
         <title>Objednávka | Jidelna IS</title>
-	</head>
-	<body class="container">
+    </head>
+        <nav class='mb-4 navbar navbar-expand-lg navbar-dark bg-dark'>
+            <div class='container'>
+                <a class='navbar-brand' href='../index.php'><img src='../pic/logo/logo.png' /></a>
+                    <button class='navbar-toggler' type='button' data-togle='collapse' data-target='#navbarSupportedContent-4' aria-controls='navbarSupportedContent-4' aria-expanded='false' aria-label='Toggle navigation'>
+                        <span class='navbar-toggler-icon'></span>
+                    </button>
+                <div class='collapse navbar-collapse' id='navbarSupportedContent-4'>
+                        <ul class='navbar-nav ml-auto'>
+                            <li class='nav-item'>
+                                <a class='nav-link' href='../account/register.php'><button class='btn btn-outline-info'>Registrace</button></a>
+                            </li>
+                            <li class='nav-item'>
+                                <a class='nav-link' href='../account/login.php'><button class='btn btn-outline-warning'>Login</button></a>
+                            </li>
+                        </ul>
+                </div>
+            <div>
+        </nav>
+	<body>
     <main class="row justify-content-md-center">
       <section class="col col-md-6 mt-sm-3">
         <div class="card">
@@ -232,6 +252,11 @@ if(isset($_POST['subridic'])){
         </div>       
       </section>
     </main>
+    <footer class="mt-4 bg-info">
+        <div class="bg-dark p-2 text-center text-white footer">
+            Zer.to IIS Projekt | 2019 
+        </div>
+    </footer>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
