@@ -21,7 +21,7 @@ include '../functions.php';
 		<link rel="icon" href="./pic/ico.ico" type="image/x-icon" />
         
         <!-- TITLE -->
-        <title>Pridať jídlo | Jidelna IS</title>
+        <title>Přidať jídlo | Jidelna IS</title>
 	</head>
 	<body>
 		<nav class='mb-4 navbar navbar-expand-lg navbar-dark bg-dark'>
@@ -93,7 +93,7 @@ include '../functions.php';
 						</div>
 						<div class="custom-file">
   							<input type="file" class="custom-file-input" id="ob" name="ob" />
-  							<label class="custom-file-label" for="ob" data-browse="Vybrat súbor">Vyberte obrázek</label>
+  							<label class="custom-file-label" for="ob" data-browse="Vybrat soubor">Vyberte obrázek</label>
 						</div>
 						<div class="form-group mt-3">
 							<input class="custom-select" list="type" name="typ" required="required" />

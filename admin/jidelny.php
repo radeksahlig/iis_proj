@@ -85,11 +85,11 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava'])){
         <section class="row justify-content-md-center">
             <div class="col col-md-10">
                 <div class="card shadow-lg border-dark">
-                <h5 class="card-header">Správa provozen</h5>
+                <h5 class="card-header">Správa provozoven</h5>
                     <div class="col col-md-6 mt-4">
                         <form method="get" action="" enctype="multipart/form-data">
                             <div class="input-group">
-                                <input class="form-control" type="text" name="search" required="required" id="srch" placeholder="Zadejte hledanú provoznu" />
+                                <input class="form-control" type="text" name="search" required="required" id="srch" placeholder="Zadejte hledanú provozovnu" />
                                 <div class="input-group-append">
                                     <input type="submit" value="Hledat" class="btn btn-primary float-right" id="srch" />
                                 </div>  

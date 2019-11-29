@@ -128,7 +128,7 @@ include './functions.php';
             $jidelny = $db->query($sql);
             if($jidelny->num_rows>0){
     			while($row = $jidelny->fetch_assoc()){
-                    echo "<article class='card p-2 mb-2 border-dark bg-light shadow'>";
+                    echo "<article class='card p-4 mb-2 border-dark bg-light shadow-lg'>";
                     echo "<a class='text-decoration-none text-dark' href='./jidlo/jidelnicek.php?jidelna=".$row['id']."' '>";
                     echo "<b>".$row['nazev']."</b>";
                     echo "<p>Města dovozu - ".getMestaDovozu($row['id'])."</p>";
@@ -185,6 +185,7 @@ include './functions.php';
                 </div>
             </div>
         </section>
+    
         <div class="bg-dark p-2 text-center text-white footer">
             Zer.to IIS Projekt | 2019 FIT VUT
         </div>

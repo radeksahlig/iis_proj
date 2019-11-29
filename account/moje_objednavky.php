@@ -80,33 +80,39 @@ if(!(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_SESSION['
         ?>
     <main class="container">
         <section class="row justify-content-md-center">
-            <div class="col col-md-8">
+            <div class="col col-md-9">
                 <div class="card shadow-lg border-dark">
                     <h5 class="card-header">Výpis objednávek</h5>
+                    <div class="col col-md-6 mt-4">
+                        <a class="float-left badge badge-light" href="./moje_objednavky.php">Všechny objednávky</a>
+                        <br>
+                        <form method="get" class="mb-5" action="./moje_objednavky.php" enctype="multipart/form-data">
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="search" id="srch" placeholder="Zadejte objednávku" />
+                                <div class="input-group-append">
+                                    <input type="submit" value="Hledat" class="btn btn-primary float-right" id="srch" />
+                                </div>
+                            </div>
+                            <div class="custom-control custom-checkbox mt-2">
+                                <input class="custom-control-input" type="checkbox" name="f_akt" value="akt" id="check1" />
+                                <label class="custom-control-label" for="check1">Pouze aktuální objednávky</label>
+                            </div>
+                        </form>
+                        <?php
+                            $stranka = "./moje_objednavky.php?";
+                            $offset = 0;
+                            if(isset($_GET['page'])){
+                                if($page = filter_input(INPUT_GET, "page", FILTER_VALIDATE_INT))
+                                    $offset = ($page * 10) - 10;
+                                if($offset < 0)
+                                    $offset = 0;
+                            }
+                            echo "<span>Výpis objednávek $offset - ".($offset+10) . "</span><br>";
+                            ?>
+                    </div>
                     <div class="card-body">
-                    <a class="float-right badge badge-light" href="./moje_objednavky.php">Všechny objednávky</a>
-                    <br>
-                    <form method="get" class="mb-5" action="./moje_objednavky.php" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label for="srch">Objednávka</label>
-                            <input type="text" class="form-control" placeholder="Zadejte objednávku" name="search" id="srch" />
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox" name="f_akt" value="akt" id="check1" />
-                            <label class="custom-control-label" for="check1">Pouze aktuální objednávky</label>
-                        </div>
-                        <input class="btn btn-primary float-right" type="submit" value="Hledat" />
-                    </form>
-        <?php
-            $stranka = "./moje_objednavky.php?";
-            $offset = 0;
-            if(isset($_GET['page'])){
-                if($page = filter_input(INPUT_GET, "page", FILTER_VALIDATE_INT))
-                    $offset = ($page * 10) - 10;
-                if($offset < 0)
-                    $offset = 0;
-            }
-            echo "<span>Výpis objednávek $offset - ".($offset+10) . "</span><br>";
+                    
+            <?php
             $moje_id = $_SESSION['id'];            
             if(isset($_GET['search'])){
                 $search = filter_input(INPUT_GET, "search", FILTER_SANITIZE_STRING);
@@ -163,7 +169,7 @@ if(!(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_SESSION['
                         echo "<td>".$row['cena']." Kč</td>";
                         echo "<td>".$row['mesto']."</td>";
                         echo "<td>".$row['adresa']."</td>";
-                        echo "<td><a href='../jidlo/objednavka?obj=".$row['id']."'>Podrobnosti</a></td>";
+                        echo "<td><a class='badge badge-light' href='../jidlo/objednavka?obj=".$row['id']."'>Podrobnosti</a></td>";
                         echo "</tr>";
                         echo "</tbody>";
                     }
