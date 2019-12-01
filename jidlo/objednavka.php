@@ -82,7 +82,7 @@ if(isset($_POST['subridic'])){
                                     <a class='nav-link' href='../account/register.php'><button class='btn btn-outline-info'>Registrace</button></a>
                                 </li>
                                 <li class='nav-item'>
-                                    <a class='nav-link' href='../account/login.php'><button class='btn btn-outline-warning'>Login</button></a>
+                                    <a class='nav-link' href='../account/login.php'><button class='btn btn-outline-warning'>Přihlášení</button></a>
                                 </li>
                             </ul>
                         </div>
@@ -221,7 +221,7 @@ if(isset($_POST['subridic'])){
                         }
                         $db->close();
                     }
-
+		if(isset($_SESSION['prava']))
                     if($_SESSION['prava'] <= 2 && isset($_GET['obj'])){
                         $db = dbconnect();
                         $sql = "SELECT id FROM user WHERE prava = 3";                
