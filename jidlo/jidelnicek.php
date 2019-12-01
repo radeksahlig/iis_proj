@@ -1,4 +1,5 @@
 <?php 
+header('Content-type: text/html; charset=utf-8');
 session_start();
 include '../functions.php';
 if(isset($_GET['jidelna']))
@@ -79,7 +80,7 @@ $kontrola = true;
                                     <a class='nav-link' href='../account/register.php'><button class='btn btn-outline-info'>Registrace</button></a>
                                 </li>
                                 <li class='nav-item'>
-                                    <a class='nav-link' href='../account/login.php'><button class='btn btn-outline-warning'>Přihlášení</button></a>
+                                    <a class='nav-link' href='../account/login.php'><button class='btn btn-outline-warning'>Login</button></a>
                                 </li>
                             </ul>
                         </div>
@@ -150,18 +151,20 @@ $kontrola = true;
                     $jidla_v_nabidce = $db->query($sql_jidla_v_nabidce);
                     if($jidla_v_nabidce->num_rows > 0){
                         while($row = $jidla_v_nabidce->fetch_assoc()){
-                            $sql_info_jidlo = "SELECT nazev, popis, typ, ob, cena FROM jidlo WHERE id = ".$row['jidlo'];
+                            $sql_info_jidlo = "SELECT id, nazev, popis, typ, ob, cena FROM jidlo WHERE id = ".$row['jidlo'];
                             if($jidlo_info = $db->prepare($sql_info_jidlo)){
                                 $jidlo_info->execute();
-                                $jidlo_info->bind_result($nazev, $popis, $typ, $ob, $cena);
+                                $jidlo_info->bind_result($id_jidla, $nazev, $popis, $typ, $ob, $cena);
                                 if($jidlo_info->fetch()){
                                     echo "<article class='card p-2 mb-2 border-dark bg-light shadow'>";
                                         echo "<div class='row no-gutters'>";
                                             echo "<div class='col-md-4'>";
-						if(file_exists("../pic/$id/$ob"))
-                                                	echo "<img src='../pic/$id/$ob' class='card-img' alt='jidlo' />";
-						else
+						$filename='../pic/'.$id_jidla.'/'.$ob;
+						if(file_exists('../pic/1/temp.png')){
+                                                	echo "<img src='" .$filename. "' class='card-img' alt='jidlo' />";
+						}else{
 							echo "<img src='../pic/generic.png' class='card-img' alt='jidlo' />";
+						}
                                             echo "</div>";
                                             echo "<div class='col-md-8'>";
                                             echo "<div class='card-body'>";
@@ -170,6 +173,8 @@ $kontrola = true;
                                                 echo "<div class='cart-text'><i>$typ</i></div></div>";
                                                 echo "<div class='card-text'>$popis</div>";
                                                 echo "<div class='card-text float-right'><strong>$cena ,-Kč</strong></div><br>";
+                                                echo "<div class='card-text'><small class='text-muted'>$ob</small></div>";
+
                                             echo "</div></div></div></article>";
 
                                 }else{
