@@ -242,23 +242,20 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
                                 <input class='form-control' id='telefon' type=\"text\" value=\"$telefon\" name=\"telefon\" placeholder='Formát - 666555444'>
                             </div>
                         </div>
-                    </div>
-
-                    <div class='form-row'>
-                        <div class='col col-md-2 mb-3'>
-                            <div class='input-group'>
-                                <div class='input-group-prepend'>
-                                    <label class='input-group-text' id='prava'>Práva</label>
-                                </div>
-                            ";
+                    </div> ";
                             if($_SESSION['prava'] == 1)
-                            echo "<input class='form-control' id='prava' type=\"number\" min='1' max='4' value=\"$prava\" name=\"prava\" required=\"required\">
-                            </div>
-                        </div>
-                    </div>
+                            echo "<div class='form-row'>
+					<div class='col col-md-2 mb-3'>
+					    <div class='input-group'>
+						<div class='input-group-prepend'>
+						    <label class='input-group-text' id='prava'>Práva</label>
+						</div><input class='form-control' id='prava' type=\"number\" min='1' max='4' value=\"$prava\" name=\"prava\" required=\"required\">
+					    </div>
+					</div>
+				    </div>";
                     
 
-                    <input class='btn btn-primary float-right' type=\"submit\" name=\"submit\" value=\"Upravit uživatele\">
+                   echo "<input class='btn btn-primary float-right' type=\"submit\" name=\"submit\" value=\"Upravit uživatele\">
                 </form>
                 
 
