@@ -158,7 +158,10 @@ $kontrola = true;
                                     echo "<article class='card p-2 mb-2 border-dark bg-light shadow'>";
                                         echo "<div class='row no-gutters'>";
                                             echo "<div class='col-md-4'>";
-                                                echo "<img src='temp.png' class='card-img' alt='jidlo' />";
+						if(file_exists("../pic/$id/$ob"))
+                                                	echo "<img src='../pic/$id/$ob' class='card-img' alt='jidlo' />";
+						else
+							echo "<img src='../pic/generic.png' class='card-img' alt='jidlo' />";
                                             echo "</div>";
                                             echo "<div class='col-md-8'>";
                                             echo "<div class='card-body'>";
