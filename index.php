@@ -136,13 +136,13 @@ include './functions.php';
                     echo "</a></article>";
                 }               
             }else{
-                echo "<div class='alert alert-danger text-center m-4' role='alert'>Nepodařilo se načíst žádné jídelny!</div>";
+                echo "<div class='alert alert-danger text-center m-4 border-danger' role='alert'>Nepodařilo se načíst žádné jídelny!</div>";
             }
             echo "</section>";
 
         ?>
     </main>
-    <footer class="mt-4 bg-light">
+    <footer class="mt-4">
         <section class="container">
             <div class="row justify-content-md-center mt-4">
                 <div class="col col-md-6">
