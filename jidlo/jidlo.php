@@ -149,7 +149,6 @@ else
                                     <div class='cart-text'><i>$typ</i></div></div>";
                                     echo "<div class='card-text'>$popis</div>";
                                     echo "<div class='card-text float-right'><strong>$cena ,-Kč</strong></div><br>";
-                                    echo "<div class='card-text'><small class='text-muted'>$ob</small></div>";
                                     echo "<div class='form-inline'>";
                                     echo "<input class='form-control' type=\"hidden\" name=\"jidlo$num\" value=\"".$row['jidlo']."\">";
                                     echo "<input class='form-control mr-2 mt-2' type=\"number\" name=\"num$num\" min=\"0\" max=\"4\" value=\"0\">0-4ks";
