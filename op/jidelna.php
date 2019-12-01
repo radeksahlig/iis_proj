@@ -151,17 +151,15 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['jideln
                             </div>
                         </div>
                     </div>
-                        <div class='form-row'>
-                            <div class='col-md-4'>
-                                <div class='input-group'>
-                                    <div class='input-group-prepend'>
-                                        <label class='input-group-text' id='prava'>Práva</label>
-                                    </div>
-                                
-                            ";
+		    ";
                             if($_SESSION['prava'] == 1){
                                 echo "
-                                
+                                <div class='form-row'>
+				    <div class='col-md-4'>
+					<div class='input-group'>
+					    <div class='input-group-prepend'>
+						<label class='input-group-text' id='prava'>Operátor</label>
+					    </div>
                                 <select class='custom-select' id='prava' name=\"operator\">";
                                 echo "<option selected disabled value=''>Vyberte ...</option>";
                                 $sql_op = "SELECT id, jmeno, prijmeni FROM user WHERE prava = 2";
