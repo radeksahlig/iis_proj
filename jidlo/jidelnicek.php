@@ -170,7 +170,6 @@ $kontrola = true;
                                                 echo "<div class='cart-text'><i>$typ</i></div></div>";
                                                 echo "<div class='card-text'>$popis</div>";
                                                 echo "<div class='card-text float-right'><strong>$cena ,-Kč</strong></div><br>";
-                                                echo "<div class='card-text'><small class='text-muted'>$ob</small></div>";
                                             echo "</div></div></div></article>";
 
                                 }else{
