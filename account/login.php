@@ -87,14 +87,16 @@ if(isset($_SESSION['jmeno']))
                     $_SESSION['jmeno'] = $jmeno;
                     $_SESSION['id'] = $id;
                     $_SESSION['prava'] = $prava;
+		    $db->close();
                     return true;
                 }else{
+            	    $db->close();
                     return false;
                 }
             }else{
+            	$db->close();
                 return false;
             }
-            $db->close();
         }
         if(isset($_POST['submit'])){
             $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_STRING);
