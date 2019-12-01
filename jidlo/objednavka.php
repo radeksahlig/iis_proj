@@ -203,8 +203,8 @@ if(isset($_POST['subridic'])){
                                     if($ridic->fetch()){
                                         echo "<td>$jmeno $prijmeni</td>";
                                     }
-                                }
-                                echo "<td>$ridic</td>";
+                                }else
+					echo "<td>-</td>";
                                 echo "<td>$cas_objednani</td>";
                                 echo "<td>" . dateDTH($den_dodani)."</td>";
                                 echo "<td>$mestoobj $adresaobj</td>";
