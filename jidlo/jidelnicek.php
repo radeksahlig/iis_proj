@@ -101,13 +101,13 @@ $kontrola = true;
                 $jidelny->execute();
                 $jidelny->bind_result($nazev, $adresa, $mesto);
                 if($jidelny->fetch()){
-                    echo "<div class='card p-2 mb-2 border-dark bg-secondary shadow'>";
-                    echo "<a class='text-light text-decoration-none' href='./jidelnicek.php?jidelna=$jidelna'>";
+                    echo "<article class='card p-2 mb-2 border-dark bg-light shadow'>";
+                    echo "<a class='text-dark text-decoration-none' href='./jidelnicek.php?jidelna=$jidelna'>";
                     echo "<b>$nazev</b>";
                     echo "<p>Města dovozu - ".getMestaDovozu($jidelna)."</p>";
                     echo "<p>Adresa - $mesto $adresa</p>";
                     echo "</a>";
-                    echo "</div>";
+                    echo "</article>";
                 }else{
                     echo "<p class='alert alert-danger border-danger text-center my-4'>Nepodařilo se načíst jídelníček jídelny s daným id!</p>";
                     $kontrola = false;

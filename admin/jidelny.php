@@ -27,7 +27,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava'])){
 		<link rel="icon" href="./pic/ico.ico" type="image/x-icon" />
         
         <!-- TITLE -->
-        <title>Jídelny | Jidelna IS</title>
+        <title>Provozovny | Jidelna IS</title>
 	</head>
 	<body>
         <nav class='mb-4 navbar navbar-expand-lg navbar-dark bg-dark'>
@@ -83,7 +83,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava'])){
         ?>
     <main class="container">
         <section class="row justify-content-md-center">
-            <div class="col col-md-10">
+            <div class="col col-md-12">
                 <div class="card shadow-lg border-dark">
                 <h5 class="card-header">Správa provozoven</h5>
                     <div class="col col-md-6 mt-4">
@@ -152,7 +152,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava'])){
                     echo "<tr>";
                     echo "<th scope='row'>".$porad++."</th>";
                     echo "<td>".$row['nazev']."</td>";
-                    echo "<td><a href=\"./account.php?user=".$row['operator']."\">".(getOpName($row['operator']))."</a></td>";
+                    echo "<td><a class='badge badge-light' href=\"../account/user.php?user=".$row['operator']."\">".(getOpName($row['operator']))."</a></td>";
                     echo "<td>".getMestaDovozu($row['id'])."</td>";
                     echo "<td>".$row['mesto']."</td>";
                     echo "<td>".$row['adresa']."</td>";
@@ -160,7 +160,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava'])){
                         echo "<td>Ne</td>";
                     else
                         echo "<td>Ano</td>";
-                    echo "<td><a href='../op/jidelna.php?jidelna=".$row['id']."'>Upravit</a></td>";
+                    echo "<td><a class='badge badge-light' href='../op/jidelna.php?jidelna=".$row['id']."'>Upravit</a></td>";
                     echo "</tr>";
                 }
                 echo "</tbody></table><br>";

@@ -169,7 +169,7 @@ if(!(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_SESSION['
                         echo "<td>".$row['cena']." Kč</td>";
                         echo "<td>".$row['mesto']."</td>";
                         echo "<td>".$row['adresa']."</td>";
-                        echo "<td><a class='badge badge-light' href='../jidlo/objednavka?obj=".$row['id']."'>Podrobnosti</a></td>";
+                        echo "<td><a class='badge badge-light' href='../jidlo/objednavka.php?obj=".$row['id']."'>Podrobnosti</a></td>";
                         echo "</tr>";
                         echo "</tbody>";
                     }

@@ -162,8 +162,8 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_SESSION['id
                         echo "<td>Ne</td>";
                     else
                         echo "<td>Ano</td>";
-                    echo "<td><a class='badge badge-light' href='./jidelna?jidelna=".$row['id']."'>Upravit</a></td>";
-                    echo "<td><a class='badge badge-light' href='./manage_jidelnicek?jidelna=".$row['id']."'>Upravit jídelníček</a></td>";
+                    echo "<td><a class='badge badge-light' href='./jidelna.php?jidelna=".$row['id']."'>Upravit</a></td>";
+                    echo "<td><a class='badge badge-light' href='./manage_jidelnicek.php?jidelna=".$row['id']."'>Upravit jídelníček</a></td>";
                     echo "</tr>";
                 }
                 echo "</tbody></table>";                

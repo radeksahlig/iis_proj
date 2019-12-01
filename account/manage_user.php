@@ -86,14 +86,12 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
         <section class="row justify-content-md-center">
             <div class="col col-md-12">
                 <div class="card shadow-lg border-dark">
-                    <h5 class="card-header">Správa účtov</h5>
+                    <h5 class="card-header">Správa účtu</h5>
                     <div class="card-body">
                     
-                    </div>
-        <a href="../index.php">Home</a><br>
         <?php 
             if($_SESSION['prava'] == 1)
-                echo "<a href=\"../admin/accounts.php\">Všechny uživatelé</a><br>";
+                echo "<a class='mb-2 badge badge-light' href=\"../admin/accounts.php\">Všechny uživatelé</a><br>";
             $db = dbconnect();
             $user_id = filter_input(INPUT_GET, "user", FILTER_SANITIZE_NUMBER_INT);           
             
@@ -126,10 +124,10 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
                         $updt->execute();
                         $updt->close();
                         if($_SESSION['prava'] == 1){
-                            echo "Úprava uživatele byla úspěšná";
+                            echo "<p class='alert alert-success border-success text-center my-2'>Úprava uživatele byla úspěšná!</p>";
                             ?>
                             <script>
-                                var refresh = setTimeout(Home, 1000, "../admin/accounts.php", refresh);
+                                var refresh = setTimeout(Home, 3000, "../admin/accounts.php", refresh);
                             </script>
                             <?php
                         }else{
@@ -142,7 +140,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
                     }
 
                 }else{
-                    echo "Špatný formát emailu";
+                    echo "<p class='my-2 alert alert-danger text-center border-danger'>Špatný formát emailu!</p>";
                 }
             }
             if(isset($_POST['subdel'])){
@@ -151,7 +149,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
                     $try_del->execute();
                     if($try_del->affected_rows > 0){
                         ?><script>
-                        var refresh = setTimeout(Home, 0, "../account/login.php?action=odhlasit", refresh);
+                        var refresh = setTimeout(Home, 3000, "../admin/accounts.php", refresh); /*../account/login.php?action=odhlasit*/ 
                         </script><?php
                     }
                     $try_del->close();
@@ -161,7 +159,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
                     $set_pleb->execute();
                     if($set_pleb->affected_rows > 0){
                         ?><script>
-                        var refresh = setTimeout(Home, 0, "../account/login.php?action=odhlasit", refresh);
+                        var refresh = setTimeout(Home, 3000, "../admin/accounts.php", refresh);
                         </script><?php
                     }
                     $set_pleb->close();
@@ -176,36 +174,100 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
                 $user->close();
             }
             if($jmeno != NULL){
-                echo "<form method=\"post\" action=\"\" enctype=\"multipart/form-data\" name=\"userform\" onsubmit=\"return checkInput()\">";
-                echo "<input type=\"text\" value=\"$jmeno\" name=\"jmeno\" required=\"required\">";
-                echo "<input type=\"text\" value=\"$prijmeni\" name=\"prijmeni\" required=\"required\">";
-                echo "<input type=\"text\" value=\"$email\" name=\"email\" required=\"required\">";
-                echo "<select name=\"mesto\">";
-                echo "<option value=''>";
-                    $sql_mesta = "SELECT nazev FROM mesta";
-                    $mesta = $db->query($sql_mesta);
-                    if ($mesta->num_rows > 0) {
-                        while ($row = $mesta->fetch_assoc()) {
-                            if($row['nazev'] == $mesto)
-                                echo "<option value=\"".$row["nazev"]."\" selected>".$row["nazev"];
-                            else
-                                echo "<option value=\"".$row["nazev"]."\">".$row["nazev"];
-                        }
-                    }
-                    $mesta->close();
-                echo "</select>";
-                echo "<input type=\"text\" value=\"$adresa\" name=\"adresa\">";
-                echo "<input type=\"text\" value=\"$telefon\" name=\"telefon\" placeholder='Formát - 666555444'>";
-                if($_SESSION['prava'] == 1)
-                    echo "<input type=\"number\" min='1' max='4' value=\"$prava\" name=\"prava\" required=\"required\">";
-                echo "<input type=\"submit\" name=\"submit\" value=\"Upravit uživatele\">";
-                echo "</form>";
+                echo"
+                <form class='clearfix' method=\"post\" action=\"\" enctype=\"multipart/form-data\" name=\"userform\" onsubmit=\"return checkInput()\">
+                    <div class='form-row'>
+                        <div class='col-md-4 mb-3'>
+                            <div class='input-group'>
+                                <div class='input-group-prepend'>
+                                    <label class='input-group-text' id='jmeno'>Jméno</label>
+                                </div>
+                                <input class='form-control' id='jmeno' type=\"text\" value=\"$jmeno\" name=\"jmeno\" required=\"required\">
+                            </div>
+                        </div>        
+                        <div class='col-md-4 mb-3'>
+                            <div class='input-group'>
+                                <div class='input-group-prepend'>
+                                    <label class='input-group-text' id='prijmeni'>Příjmení</label>
+                                </div>
+                                <input class='form-control' id='prijmeni' type=\"text\" value=\"$prijmeni\" name=\"prijmeni\" required=\"required\">
+                            </div>
+                        </div>
+                        <div class='col-md-4 mb-3'>
+                            <div class='input-group'>
+                                <div class='input-group-prepend'>
+                                    <label class='input-group-text' id='email'>Email</label>
+                                </div>
+                                <input class='form-control' id='email' type=\"text\" value=\"$email\" name=\"email\" required=\"required\">
+                            </div>
+                        </div>
+                    </div>
 
-                echo "<form onsubmit='return confirm(\"Opravdu chcete smazat účet?\")' action='manage_user.php?user=$user_id' method='post'>";
-                echo "<input type=\"submit\" name=\"subdel\" value=\"Odstranit účet\">";
-                echo "</form>";
+                    <div class='form-row'>
+                        <div class='col-md-4 mb-3'>
+                            <div class='input-group'>
+                                <div class='input-group-prepend'>
+                                    <label class='input-group-text' id='mesto'>Mesto</label>
+                                </div>
+                                <select class='custom-select' id='mesto' name=\"mesto\">
+                                    <option selected disabled value=''>Vyberte ...</option>";
+                                        $sql_mesta = "SELECT nazev FROM mesta";
+                                        $mesta = $db->query($sql_mesta);
+                                        if ($mesta->num_rows > 0) {
+                                            while ($row = $mesta->fetch_assoc()) {
+                                                if($row['nazev'] == $mesto)
+                                                    echo "<option value=\"".$row["nazev"]."\" selected>".$row["nazev"] . "</option>";
+                                                else
+                                                    echo "<option value=\"".$row["nazev"]."\">".$row["nazev"] . "</option>";
+                                            }
+                                        }
+                                        $mesta->close();
+                        echo "
+                                </select>
+                            </div>
+                        </div>        
+                        <div class='col-md-4 mb-3'>
+                            <div class='input-group'>
+                                <div class='input-group-prepend'>
+                                    <label class='input-group-text' id='adresa'>Adresa</label>
+                                </div>
+                                <input class='form-control' id='adresa' placeholder='Ulica a číslo' type=\"text\" value=\"$adresa\" name=\"adresa\">
+                            </div>
+                        </div>
+                        <div class='col-md-4 mb-3'>
+                            <div class='input-group'>
+                                <div class='input-group-prepend'>
+                                    <label class='input-group-text' id='telefon'>Telefón</label>
+                                </div>
+                                <input class='form-control' id='telefon' type=\"text\" value=\"$telefon\" name=\"telefon\" placeholder='Formát - 666555444'>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class='form-row'>
+                        <div class='col col-md-2 mb-3'>
+                            <div class='input-group'>
+                                <div class='input-group-prepend'>
+                                    <label class='input-group-text' id='prava'>Práva</label>
+                                </div>
+                            ";
+                            if($_SESSION['prava'] == 1)
+                            echo "<input class='form-control' id='prava' type=\"number\" min='1' max='4' value=\"$prava\" name=\"prava\" required=\"required\">
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                    <input class='btn btn-primary float-right' type=\"submit\" name=\"submit\" value=\"Upravit uživatele\">
+                </form>
+                
+
+                <form class='' onsubmit='return confirm(\"Opravdu chcete smazat účet?\")' action='manage_user.php?user=$user_id' method='post'>
+                    <input class='btn btn-danger float-right' type=\"submit\" name=\"subdel\" value=\"Odstranit účet\">
+                </form>";
+
             }else{
-                echo "Uživatel s tímto id neexistuje";
+                echo "<p class='alert alert-danger text-center border-danger my-2'>Uživatel s tímto id neexistuje!</p>";
             }
             
             $db->close();
@@ -217,7 +279,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
     <section>
         <?php
             if(isset($_GET['message'])){
-                echo "Upravení uživatele bylo úspěšné";
+                echo "<p class='alert alert-success text-center border-success my-2'>Upravení uživatele bylo úspěšné!</p>";
             }
         ?>
         <script>
@@ -227,7 +289,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
                     return true;
                 var telefon = Number(document.forms["userform"]["telefon"].value);
                 if(telefon < 100000000 || telefon > 999999999){
-                    alert("Špatný formát telefonu, korektní - 777586996");
+                    alert("<p class='alert alert-danger text-center border-danger my-2'>Špatný formát telefonu, korektní - 777586996</p>");
                     return false;
                 }
                 return true;

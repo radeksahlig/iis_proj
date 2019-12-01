@@ -38,43 +38,76 @@ if(isset($_POST['subridic'])){
         
         <!-- TITLE -->
         <title>Objednávka | Jidelna IS</title>
-    </head>
+    </head>         
+	<body>
         <nav class='mb-4 navbar navbar-expand-lg navbar-dark bg-dark'>
             <div class='container'>
                 <a class='navbar-brand' href='../index.php'><img src='../pic/logo/logo.png' /></a>
                     <button class='navbar-toggler' type='button' data-togle='collapse' data-target='#navbarSupportedContent-4' aria-controls='navbarSupportedContent-4' aria-expanded='false' aria-label='Toggle navigation'>
                         <span class='navbar-toggler-icon'></span>
                     </button>
-                <div class='collapse navbar-collapse' id='navbarSupportedContent-4'>
+                    <div class='collapse navbar-collapse' id='navbarSupportedContent-4'>
                         <ul class='navbar-nav ml-auto'>
-                            <li class='nav-item'>
-                                <a class='nav-link' href='../account/register.php'><button class='btn btn-outline-info'>Registrace</button></a>
-                            </li>
-                            <li class='nav-item'>
-                                <a class='nav-link' href='../account/login.php'><button class='btn btn-outline-warning'>Login</button></a>
-                            </li>
-                        </ul>
-                </div>
-            <div>
-        </nav>
-	<body>
-    <main class="row justify-content-md-center">
-      <section class="col col-md-6 mt-sm-3">
-        <div class="card">
-          <h5 class="card-header">Hledat objednávku</h5>
-            <div class="card-body">
-                <a href="../index.php">Home</a>
+                        <?php
+                            if(isset($_SESSION['jmeno'])){
+                                echo "
+                                <li class='nav-link dropdown'>       
+                                    <span class='nav-link dropdown-toggle' id='navbarDropdownMenuLink-4' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Přihlášen jako: 
+                                    <a href=\"../account/user?user=".$_SESSION['id']."\"><b>".$_SESSION['jmeno']."</b></a>
+                                    </span>    
+                                    <div class='dropdown-menu dropdown-menu-right' aria-labelledby='navbarDropdownMenuLink-4'>
+                                    ";
+                                echo "<a class='dropdown-item' href='../account/moje_objednavky.php'>Moje objednávky</a>";
+                            if($_SESSION['prava'] == 2){
+                                echo "<a class='dropdown-item' href='../op/moje_jidelny.php'>Moje jídelny</a>";
+                                echo "<a class='dropdown-item' href='../op/dat_zakazky.php'>Nové zakázky</a>";
+                            }
+                            if($_SESSION['prava'] <= 2){
+                                echo "<a class='dropdown-item' href='../op/add_jidlo.php'>Vložení jídla do DB</a>";
+                                if($_SESSION['prava'] == 1){
+                                    echo "<a class='dropdown-item' href='../admin/accounts.php'>Účty</a>";
+                                    echo "<a class='dropdown-item' href='../admin/add_jidelna.php'>Vložení jídelny do DB</a>";
+                                    echo "<a class='dropdown-item' href='../admin/jidelny.php'>Jídelny</a>";
+                                }
+                            }
+                            if($_SESSION['prava'] == 3) {
+                                echo "<a class='dropdown-item' href='../ridic/zakazky.php?search=&f_akt=akt'>Zakázky</a>";
+                            }
+                            echo "<div class='dropdown-divider'></div>";
+                            echo "<a class='dropdown-item' href='../account/login.php?action=off'>Odhlásit se</a>";
+                            echo "</div></nav>";
+                            }else{
+                            echo "
+                                <li class='nav-item'>
+                                    <a class='nav-link' href='../account/register.php'><button class='btn btn-outline-info'>Registrace</button></a>
+                                </li>
+                                <li class='nav-item'>
+                                    <a class='nav-link' href='../account/login.php'><button class='btn btn-outline-warning'>Login</button></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                ";
+            }
+        ?>
+    <main class="container">    
+        <section class="row justify-content-md-center">
+            <div class="col col-md-10">
+                <div class="card shadow-lg border-dark">
+                <h5 class="card-header">Objednávka</h5>
+                    <div class="card-body">
                 <?php 
                     if(isset($_GET['obj'])){
                         if(filter_input(INPUT_GET, "obj", FILTER_VALIDATE_INT))
                             $obj = filter_input(INPUT_GET, "obj", FILTER_SANITIZE_NUMBER_INT);
                         else
-                            echo "Špatné číslo objednávky";
+                            echo "<p class='alert alert-danger border-danger text-center my-2'>Špatné číslo objednávky!</p>";
                     }else if(isset($_GET['kod'])){
                         if(filter_input(INPUT_GET, "kod", FILTER_VALIDATE_INT))
                             $kod = filter_input(INPUT_GET, "kod", FILTER_SANITIZE_NUMBER_INT);
                         else
-                            echo "Špatný kód objednávky";
+                            echo "<p class='alert alert-danger border-danger text-center my-2'>Špatný kód objednávky!</p>";
                     }else{
                         echo "<form class='form-inline' method='post' name='fkod' onsubmit=\"return checkKod()\">";
                         echo "<div class='mx-auto'>";
@@ -98,7 +131,7 @@ if(isset($_POST['subridic'])){
                             $db->close();             
                             loadObj($obj, 0);
                         }else{
-                            echo "Nemáte právo zobrazovat tuto objednávku";
+                            echo "<p class='alert alert-danger border-danger text-center my-2'>Nemáte právo zobrazovat tuto objednávku!</p>";
                         }
                     }else if(isset($kod)){
                         loadObj(0, $kod);
@@ -120,51 +153,70 @@ if(isset($_POST['subridic'])){
                                     $jidelny->execute();
                                     $jidelny->bind_result($nazev, $adresa, $mesto);
                                     if($jidelny->fetch()){
-                                        echo "<a href='./jidelnicek.php?jidelna=$jidelna' style='text-decoration : none; color: black;'><div style='border : 1px solid black;'>";
+                                        echo "<article class='card p-4 mb-2 border-dark bg-light shadow-lg'>";
+                                        echo "<a class='text-decoration-none text-dark' href='./jidelnicek.php?jidelna=$jidelna'>";
                                         echo "<b>$nazev</b>";
                                         echo "<p>Města dovozu - ".getMestaDovozu($jidelna)."</p>";
                                         echo "<p>Adresa - $mesto $adresa</p>";
-                                        echo "</div></a>";
+                                        echo "</a></article>";
                                     }else{
-                                        echo "Nepodařilo se načíst jídelnu";
+                                        echo "<p class='alert alert-danger border-danger text-center my-2'>Nepodařilo se načíst jídelnu!</p>";
                                     }     
                                     $jidelny->close();   
                                 }else{
-                                    echo "Nepodařilo se načíst jídelnu";
+                                    echo "<p class='alert alert-danger border-danger text-center my-2'>Nepodařilo se načíst jídelnu!</p>";
                                 }
-                                echo "Objednaná jídla : celkem za $cena Kč";
+                                echo "<p>Objednaná jídla : celkem za <strong>$cena</strong> Kč</p>";
                                 $sql_obj_jidl = "SELECT jidlo, pocet FROM objednana_jidla WHERE objednavka = $obj";
                                 $obj_jidla = $db->query($sql_obj_jidl);
                                 if($obj_jidla->num_rows>0){
+                                    echo "<ol>";
                                     while($row = $obj_jidla->fetch_assoc()){
                                         $sql_jidlo_info = "SELECT nazev FROM jidlo WHERE id = ".$row['jidlo'];
                                         $jidlo_info = $db->prepare($sql_jidlo_info);
                                         $jidlo_info->execute();
                                         $jidlo_info->bind_result($nazev);
                                         if($jidlo_info->fetch()){
-                                            echo "<p>$nazev -- ".$row['pocet']." Ks</p>";
+                                            echo "<li>$nazev -- ".$row['pocet']." Ks</li>";
                                         }
                                         $jidlo_info->close();
                                     }
+                                    echo "</ol>";
                                 }
                                 $obj_jidla->close();
-                                echo "Stav - $stav";
+                                echo "<table class='table table-responsive table-hover mt-4'>
+                                <thead>
+                                    <tr>
+                                        <th scope='col'>Stav</th>
+                                        <th scope='col'>Rozvoz</th>
+                                        <th scope='col'>Čas objednání</th>
+                                        <th scope='col'>Den dodání</th>
+                                        <th scope='col'>Adresa</th>
+                                    </tr>
+                                </thead><tr>
+                                <tbody>";
+                                echo "<td>$stav</td>";
                                 $sql_ridic = "SELECT jmeno, prijmeni FROM user WHERE id = $ridic";
                                 if($ridic = $db->prepare($sql_ridic)){
                                     $ridic->execute();
                                     $ridic->bind_result($jmeno, $prijmeni);
                                     if($ridic->fetch()){
-                                        echo "Rozvoz : $jmeno $prijmeni";
+                                        echo "<td>$jmeno $prijmeni</td>";
                                     }
                                 }
-                                echo "Čas objednání $cas_objednani";
-                                echo "Den dodání ".dateDTH($den_dodani)."";
-                                echo "Adresa : $mestoobj $adresaobj";
+                                echo "<td>$ridic</td>";
+                                echo "<td>$cas_objednani</td>";
+                                echo "<td>" . dateDTH($den_dodani)."</td>";
+                                echo "<td>$mestoobj $adresaobj</td>";
+                                echo" </tr></tbody></table>
+                                
+                                
+                                ";
                             }else{
                                 if($kod == 0)
-                                    echo "Objednávka s tímto číslem neexistuje";
+                                    echo "<p class='alert alert-danger border-danger text-center my-2'>Objednávka s tímto číslem neexistuje!</p>";
                                 else
-                                    echo "Objednávka s tímto kódem neexistuje";                    
+                                    echo "<p class='alert alert-danger border-danger text-center my-2'>Objednávka s tímto kódem neexistuje!</p>";                    
                             }
                         }
                         $db->close();
@@ -173,9 +225,10 @@ if(isset($_POST['subridic'])){
                     if($_SESSION['prava'] <= 2){
                         $db = dbconnect();
                         $sql = "SELECT id FROM user WHERE prava = 3";                
-                        echo "<form method='post' name='fridic' action='./objednavka.php' onsubmit='return checkRidic()'>";
-                        echo "<input type='hidden' name='obj' value='$obj'>";
-                        echo "<select name='ridic'>";
+                        echo "<form class='form-inline mt-3' method='post' name='fridic' action='./objednavka.php' onsubmit='return checkRidic()'>";
+                        echo "<input class='form-control' type='hidden' name='obj' value='$obj'>";
+                        echo "<div class='input-group'><div class='input-group-prepend'><label class='input-group-text' id='ridic'>Řidič</label></div>";
+                        echo "<select class='custom-select' id='ridic' name='ridic'><option disabled selected value=''>Vyberte ...</option>";
                         if($ridici = $db->query($sql)){
                             if($ridici->num_rows > 0){
                                 $ridic = 0;
@@ -193,7 +246,7 @@ if(isset($_POST['subridic'])){
                                                         $ridicdb->execute();
                                                         $ridicdb->bind_result($jmeno, $prijmeni);
                                                         if($ridicdb->fetch()){
-                                                            echo "<option value='$ridic'>$jmeno $prijmeni - ".$grp['mesto'];
+                                                            echo "<option value='$ridic'>$jmeno $prijmeni - ".$grp['mesto'] . "</option>";
                                                         }
                                                         $ridicdb->close();
                                                     }
@@ -207,7 +260,7 @@ if(isset($_POST['subridic'])){
                                                 $ridicdb->execute();
                                                 $ridicdb->bind_result($jmeno, $prijmeni);
                                                 if($ridicdb->fetch()){
-                                                    echo "<option value='$ridic'>$jmeno $prijmeni";
+                                                    echo "<option value='$ridic'>$jmeno $prijmeni" . "</option>";
                                                 }
                                                 $ridicdb->close();
                                             }
@@ -219,8 +272,8 @@ if(isset($_POST['subridic'])){
                             }
                             $ridici->close();
                         }
-                        echo "</select>";
-                        echo "<input type='submit' name='subridic' value='Určit řidiče'>";
+                        echo "</select></div>";
+                        echo "<input class='btn btn-primary float-right ml-2' type='submit' name='subridic' value='Určit řidiče'>";
                         echo "</form>";
                     }
                 
@@ -248,21 +301,24 @@ if(isset($_POST['subridic'])){
                             return true;
                         }
                     </script>
-          </div>
-        </div>       
-      </section>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
-    <footer class="mt-4 bg-info">
+    <footer class="mt-4">
         <div class="bg-dark p-2 text-center text-white footer">
-            Zer.to IIS Projekt | 2019 
+            Zer.to IIS Projekt | 2019 FIT VUT
         </div>
-    </footer>
-
-    <!-- Optional JavaScript -->
+	</footer>
+	
+	<!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/js/bootstrap.min.js" integrity="sha384-3qaqj0lc6sV/qpzrc1N5DC6i1VRn/HyX4qdPaiEFbn54VjQBEU341pvjz7Dv3n6P" crossorigin="anonymous"></script>
-
-	</body>
+        
+    <!-- FONT AWESOME -->
+        <script src="https://kit.fontawesome.com/9e04c8ca52.js" crossorigin="anonymous"></script>
+    </body>
 </html>

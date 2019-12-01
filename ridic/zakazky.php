@@ -195,7 +195,7 @@ if(isset($_GET['obj']) && isset($_GET['stav'])){
                         echo "<td>".$row['cena']." Kč</td>";
                         echo "<td>".$row['mesto']."</td>";
                         echo "<td>".$row['adresa']."</td>";
-                        echo "<td><a class='badge badge-light' href='../jidlo/objednavka?obj=".$row['id']."'>Podrobnosti</a></td>";
+                        echo "<td><a class='badge badge-light' href='../jidlo/objednavka.php?obj=".$row['id']."'>Podrobnosti</a></td>";
                         echo "<td>".$row['stav']."</td>";
                         echo "<td><a class='badge badge-light' href='./zakazky.php?obj=".$row['id']."&stav=nc'>Stav - 'Na Cestě'</a></td>";
                         echo "<td><a class='badge badge-light' href='./zakazky.php?obj=".$row['id']."&stav=dd'>Stav - 'Dodáno'</a></td>";

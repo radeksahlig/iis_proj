@@ -83,10 +83,14 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
             }
         ?>
     <main class="container">
-        <a href="../index.php">Home</a><br>
+        <section class="row justify-content-md-center">
+            <div class="col col-md-8">
+                <div class="card shadow-lg border-dark">
+                <h5 class="card-header">Užívateľ</h5>
+                    <div class="card-body">
         <?php 
             if($_SESSION['prava'] == 1)
-                echo "<a href=\"../admin/accounts.php\">Všechny uživatelé</a><br>";
+                echo "<a class='badge badge-light mb-2' href=\"../admin/accounts.php\">Všechny uživatelé</a><br>";
             $db = dbconnect();
             if($user_id = filter_input(INPUT_GET, "user", FILTER_VALIDATE_INT)){
                 $sql = "SELECT jmeno, prijmeni, email, mesto, adresa, telefon, prava FROM user WHERE id = $user_id";
@@ -99,15 +103,16 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
                     $user->close();
                 }
                 if($jmeno != NULL){
-                    echo "<p>$jmeno</p>";
-                    echo "<p>$prijmeni</p>";
-                    echo "<p>$email</p>";
-                    echo "<p>$mesto</p>";
-                    echo "<p>$adresa</p>";
-                    echo "<p>$telefon</p>";
+                    echo "<article class='card mb-2 border-dark bg-light shadow'><div class='card-body'>";
+                    echo "<p><strong>Jméno :</strong><i> $jmeno </i><strong></p>
+                    <p>Příjmení : </strong><i>$prijmeni</i></p>";
+                    echo "<p><strong>Email :</strong><i> $email</i></p>";
+                    echo "<p><strong>Mesto :</strong><i> $mesto</i></p>";
+                    echo "<p><strong>  Adresa : </strong><i>$adresa</i></p>";
+                    echo "<p><strong>Telefon :</strong><i> $telefon</i></p>";
                     if($_SESSION['id'] == 1)
-                        echo "<p>$prava</p>";
-                    echo "<a href=\"./manage_user.php?user=$user_id\">Upravit</a>";
+                        echo "<p><strong>Práva :</strong> $prava</i></p></article>";
+                    echo "<a class='btn btn-primary float-right my-2' href=\"./manage_user.php?user=$user_id\">Upravit</a>";
                 }else{
                     echo "<p class='alert alert-success border-success text-center'>Uživatel s tímto id neexistuje!</p>";
                 }
@@ -117,7 +122,7 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
             
             $db->close();
         ?>
-    </main>
+
     <section>
         <?php
             if(isset($_GET['message'])){
@@ -125,6 +130,10 @@ if(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_GET['user']
             }
         ?>
     </section>
+    </div></div></div>
+    </section>
+    </main>
+    
     <footer class="mt-4">
         <div class="bg-dark p-2 text-center text-white footer">
             Zer.to IIS Projekt | 2019 FIT VUT
