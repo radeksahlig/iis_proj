@@ -15,7 +15,7 @@ include './functions.php';
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous" />
 
         <!-- REGULAR CSS -->
-        <link rel="stylesheet" href="../styles/styles.css" />
+        <link rel="stylesheet" href="./styles/styles.css" />
 
         <!-- FAVICON -->
 		<link rel="icon" href="./pic/ico.ico" type="image/x-icon" />
@@ -24,68 +24,29 @@ include './functions.php';
         <title>Jidelna</title>
 	</head>
 	<body>
-	    <!---
-        TODO :
-            Admin - 
-            *_* Vyhledávání na accounts.php pro admina (jménem nebo emailem)                                                       
-            *_* Udělat stránkování na accounts.php                                                                              
-            *_* Tvorba nových jídelen -> přidělení operátora                                                                                
+        <nav class='mb-4 navbar navbar-expand-lg navbar-dark bg-dark'>
+            <div class='container'>
+                <a class='navbar-brand' href='index.php'><img src='./pic/logo/logo.png' /></a>
+                <button class='navbar-toggler' type='button' data-togle='collapse' data-target='#navbarSupportedContent-4' aria-controls='navbarSupportedContent-4' aria-expanded='false' aria-label='Toggle navigation'>
+                    <span class='navbar-toggler-icon'></span>
+                </button>
+                <div class='collapse navbar-collapse' id='navbarSupportedContent-4'>
+                    <ul class='navbar-nav ml-auto'>
+                <?php
+                    if(isset($_SESSION['jmeno'])){
+                        echo "
+                        <li class='nav-link dropdown'>
+                            
+                            <span class='nav-link dropdown-toggle' id='navbarDropdownMenuLink-4' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Přihlášen jako: 
+                            <b>".$_SESSION['jmeno']."</b>
+                            </span>
+                            
+                            <div class='dropdown-menu dropdown-menu-right' aria-labelledby='navbarDropdownMenuLink-4'>
+                            
+                            ";
 
-            Operátor -
-            *_* Měnit nazev své jídelny, přidávat města dovozu ke své jídelně
-            *_* Přidávat nová jídla
-            *_* Měnit jídelníček své jídelny
-            *_* Přidělovat zakázky řidičům
-
-            Řidič -
-            *_* Procházet své zakázky
-            *_* Měnit stav zakázek
-
-            Konzument -
-            *_* Procházet jídelny a jejich jídelníčky
-            *_* Objednávat si jídla - z db se předvyplní adresa
-            *_* Sledovat objednávku
-            *_* Změnit svůj účet
-            *_* Smazat svůj účet
-
-            Uživatel bez účtu -
-            *_* Procházet jídelny a jejich jídelníčky
-            *_* Objednat si jídlo - bude muset zadat adresu, email (v db se vytvoří provizorní účet bez hesla)
-            *_* Nějak aby mohl sledovat objednávku ?? asi kód do db kterej musí zadat
-            *_* Předělat registraci, aby se kontroloval email -> jestli pass prázdný jen doplnit informace jinak vytvořit nový účet
-
-                Projít isset($_POST['submity']) a dát je nad html pokud to pujde
-                Nepsát headry na index ale chybový hlášky (jen někde)
-
-
-            Stavy
-                - 1. Čekání
-                - 2. Potvrzeno
-                - 3. Na cestě
-                - 4. Dodáno
-		-->
-                <nav class='mb-4 navbar navbar-expand-lg navbar-dark bg-dark'>
-                    <div class='container'>
-                        <a class='navbar-brand' href='index.php'><img src='./pic/logo/logo.png' /></a>
-                        <button class='navbar-toggler' type='button' data-togle='collapse' data-target='#navbarSupportedContent-4' aria-controls='navbarSupportedContent-4' aria-expanded='false' aria-label='Toggle navigation'>
-                            <span class='navbar-toggler-icon'></span>
-                        </button>
-                        <div class='collapse navbar-collapse' id='navbarSupportedContent-4'>
-                            <ul class='navbar-nav ml-auto'>
-                        <?php
-                            if(isset($_SESSION['jmeno'])){
-                                echo "
-                                <li class='nav-link dropdown'>
-                                    
-                                    <span class='nav-link dropdown-toggle' id='navbarDropdownMenuLink-4' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Přihlášen jako: 
-                                    <a href=\"./account/user?user=".$_SESSION['id']."\"><b>".$_SESSION['jmeno']."</b></a>
-                                    </span>
-                                    
-                                    <div class='dropdown-menu dropdown-menu-right' aria-labelledby='navbarDropdownMenuLink-4'>
-                                    
-                                    ";
-    
-                echo "<a class='dropdown-item' href='./account/moje_objednavky.php'>Moje objednávky</a>";
+                        echo "<a class='dropdown-item' href=\"./account/user.php?user=".$_SESSION['id']."\">Můj účet</a>";
+                        echo "<a class='dropdown-item' href='./account/moje_objednavky.php'>Moje objednávky</a>";
                 if($_SESSION['prava'] == 2){
                     echo "<a class='dropdown-item' href='./op/moje_jidelny.php'>Moje jídelny</a>";
                     echo "<a class='dropdown-item' href='./op/dat_zakazky.php'>Nové zakázky</a>";

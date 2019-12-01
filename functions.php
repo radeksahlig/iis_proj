@@ -1,11 +1,11 @@
 <?php
 function dbconnect(){
-	$db = new mysqli("localhost","methack","heslo","iis_jidelna");
+	$db = new mysqli("","","","");
     $db->set_charset("UTF8");
     return $db;
 }
 
-function getOpName(int $id){
+function getOpName($id){
     $sql = "SELECT jmeno, prijmeni FROM user WHERE id = $id";
     $db = dbconnect();
     $celejmeno = "";
@@ -20,7 +20,7 @@ function getOpName(int $id){
     return $celejmeno;
 }
 
-function getMestaDovozu(int $id){
+function getMestaDovozu($id){
     $sql = "SELECT mesto FROM mesta_dovozu WHERE jidelna = $id";
     $db = dbconnect();
     $mesta_dovozu = "";

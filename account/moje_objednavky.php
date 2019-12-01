@@ -2,7 +2,9 @@
 session_start();
 include '../functions.php';
 if(!(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_SESSION['id']))){
-    header("Location:../index.php"); 
+    ?><script>
+        window.location = "../index.php";
+    </script><?php
 }
 ?>
 <!DOCTYPE html>
@@ -21,7 +23,7 @@ if(!(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_SESSION['
         <link rel="stylesheet" href="../styles/styles.css" />
 
         <!-- FAVICON -->
-		<link rel="icon" href="./pic/ico.ico" type="image/x-icon" />
+		<link rel="icon" href="../pic/ico.ico" type="image/x-icon" />
         
         <!-- TITLE -->
         <title>Moje objednávky | Jidelna IS</title>
@@ -40,10 +42,11 @@ if(!(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_SESSION['
                                 echo "
                                 <li class='nav-link dropdown'>       
                                     <span class='nav-link dropdown-toggle' id='navbarDropdownMenuLink-4' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Přihlášen jako: 
-                                    <a href=\"../account/user?user=".$_SESSION['id']."\"><b>".$_SESSION['jmeno']."</b></a>
+                                    <b>".$_SESSION['jmeno']."</b>
                                     </span>    
                                     <div class='dropdown-menu dropdown-menu-right' aria-labelledby='navbarDropdownMenuLink-4'>
                                     ";
+                                echo "<a class='dropdown-item' href=\"../account/user.php?user=".$_SESSION['id']."\">Můj účet</a>";
                                 echo "<a class='dropdown-item' href='../account/moje_objednavky.php'>Moje objednávky</a>";
                             if($_SESSION['prava'] == 2){
                                 echo "<a class='dropdown-item' href='../op/moje_jidelny.php'>Moje jídelny</a>";
@@ -69,7 +72,7 @@ if(!(isset($_SESSION['jmeno']) && isset($_SESSION['prava']) && isset($_SESSION['
                                     <a class='nav-link' href='../account/register.php'><button class='btn btn-outline-info'>Registrace</button></a>
                                 </li>
                                 <li class='nav-item'>
-                                    <a class='nav-link' href='../account/login.php'><button class='btn btn-outline-warning'>Login</button></a>
+                                    <a class='nav-link' href='../account/login.php'><button class='btn btn-outline-warning'>Přihlášení</button></a>
                                 </li>
                             </ul>
                         </div>

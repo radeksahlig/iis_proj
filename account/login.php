@@ -3,10 +3,15 @@ session_start();
 include '../functions.php';
 if(isset($_GET['action'])){
     session_destroy();
-    header("Location:../index.php");
+    ?><script>
+        window.location = "../index.php";
+    </script><?php
 }
-if(isset($_SESSION['jmeno']))
-    header("Location:../index.php");
+if(isset($_SESSION['jmeno'])){
+    ?><script>
+        window.location = "../index.php";
+    </script><?php
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -24,7 +29,7 @@ if(isset($_SESSION['jmeno']))
         <link rel="stylesheet" href="../styles/styles.css" />
 
         <!-- FAVICON -->
-		<link rel="icon" href="./pic/ico.ico" type="image/x-icon" />
+		<link rel="icon" href="../pic/ico.ico" type="image/x-icon" />
         
         <!-- TITLE -->
         <title>Přihlášení | Jidelna IS</title>
@@ -87,7 +92,7 @@ if(isset($_SESSION['jmeno']))
                     $_SESSION['jmeno'] = $jmeno;
                     $_SESSION['id'] = $id;
                     $_SESSION['prava'] = $prava;
-		    $db->close();
+		            $db->close();
                     return true;
                 }else{
             	    $db->close();
@@ -103,7 +108,9 @@ if(isset($_SESSION['jmeno']))
             $pass = filter_input(INPUT_POST, "pass");
             if($email && $pass){
                 if(login($email, $pass)){
-                    header("Location:../index.php");
+                    ?><script>
+                        window.location = "../index.php";
+                    </script><?php
                 }else{
                     echo "
                     <section class='row justify-content-md-center my-2'>

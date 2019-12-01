@@ -4,10 +4,16 @@ include '../functions.php';
 if(isset($_POST['jidelna']))
     if(filter_input(INPUT_POST, "jidelna", FILTER_VALIDATE_INT))
         $jidelna = filter_input(INPUT_POST, "jidelna");
-    else
-        header("Location:../index.php");
-else
-    header("Location:../index.php");
+    else{
+        ?><script>
+            window.location = "../index.php";
+        </script><?php
+    }
+else{
+    ?><script>
+        window.location = "../index.php";
+    </script><?php
+}
 if(isset($_POST['den']))
     $den = filter_input(INPUT_POST, "den", FILTER_SANITIZE_STRING);
 else
@@ -29,7 +35,7 @@ else
         <link rel="stylesheet" href="../styles/styles.css" />
 
         <!-- FAVICON -->
-		<link rel="icon" href="./pic/ico.ico" type="image/x-icon" />
+		<link rel="icon" href="../pic/ico.ico" type="image/x-icon" />
         
         <!-- TITLE -->
         <title>Jídlo | Jidelna IS</title>
@@ -48,10 +54,11 @@ else
                                 echo "
                                 <li class='nav-link dropdown'>       
                                     <span class='nav-link dropdown-toggle' id='navbarDropdownMenuLink-4' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Přihlášen jako: 
-                                    <a href=\"../account/user?user=".$_SESSION['id']."\"><b>".$_SESSION['jmeno']."</b></a>
+                                    <b>".$_SESSION['jmeno']."</b>
                                     </span>    
                                     <div class='dropdown-menu dropdown-menu-right' aria-labelledby='navbarDropdownMenuLink-4'>
                                     ";
+                                echo "<a class='dropdown-item' href=\"../account/user.php?user=".$_SESSION['id']."\">Můj účet</a>";
                                 echo "<a class='dropdown-item' href='../account/moje_objednavky.php'>Moje objednávky</a>";
                             if($_SESSION['prava'] == 2){
                                 echo "<a class='dropdown-item' href='../op/moje_jidelny.php'>Moje jídelny</a>";
@@ -77,7 +84,7 @@ else
                                     <a class='nav-link' href='../account/register.php'><button class='btn btn-outline-info'>Registrace</button></a>
                                 </li>
                                 <li class='nav-item'>
-                                    <a class='nav-link' href='../account/login.php'><button class='btn btn-outline-warning'>Login</button></a>
+                                    <a class='nav-link' href='../account/login.php'><button class='btn btn-outline-warning'>Přihlášení</button></a>
                                 </li>
                             </ul>
                         </div>
@@ -136,12 +143,12 @@ else
                                     echo "<fieldset>";
                                     echo "<article class='card p-2 mb-2 border-dark bg-light shadow'>
                                     <div class='row no-gutters'>
-                                    <div class='col-md-4'>
-                                    if(file_exists("../pic/$id/$ob"))
-                                    	echo "<img src='../pic/$id/$ob' class='card-img' alt='jidlo' />";
-				    else
-					echo "<img src='../pic/generic.png' class='card-img' alt='jidlo' />";
-                                    </div>
+                                    <div class='col-md-4'>";
+                                    if(file_exists("../pic/".$row['jidlo']."/$ob"))
+                                    	echo "<img src='../pic/".$row['jidlo']."/$ob' class='card-img' alt='jidlo' />";
+                                    else
+                                        echo "<img src='../pic/generic.png' class='card-img' alt='jidlo' />";
+                                    echo "</div>
                                     <div class='col-md-8'>
                                     <div class='card-body'>
                                     ";

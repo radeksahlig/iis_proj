@@ -4,10 +4,16 @@ include '../functions.php';
 if(isset($_GET['jidelna']))
     if(filter_input(INPUT_GET, "jidelna", FILTER_VALIDATE_INT))
         $jidelna = filter_input(INPUT_GET, "jidelna");
-    else
-        header("Location:../index.php");
-else
-    header("Location:../index.php");
+    else{
+        ?><script>
+            window.location = "../index.php";
+        </script><?php
+    }
+else{
+    ?><script>
+        window.location = "../index.php";
+    </script><?php
+}
 if(isset($_GET['den']))
     $den = filter_input(INPUT_GET, "den", FILTER_SANITIZE_STRING);
 else
@@ -37,7 +43,9 @@ if(isset($_POST['submitjidlo'])){
         }
     }
     $db->close();
-    header("Location:./manage_jidelnicek.php?jidelna=$jidelna&den=$den&message=succ");
+    ?><script>
+        window.location = "<?php echo "./manage_jidelnicek.php?jidelna=$jidelna&den=$den&message=succ"?>";
+    </script><?php
 }
 ?>
 <!DOCTYPE html>
@@ -56,7 +64,7 @@ if(isset($_POST['submitjidlo'])){
         <link rel="stylesheet" href="../styles/styles.css" />
 
         <!-- FAVICON -->
-		<link rel="icon" href="./pic/ico.ico" type="image/x-icon" />
+		<link rel="icon" href="../pic/ico.ico" type="image/x-icon" />
         
         <!-- TITLE -->
         <title>Upraviť jidelnicek | Jidelna IS</title>
@@ -75,10 +83,11 @@ if(isset($_POST['submitjidlo'])){
                                 echo "
                                 <li class='nav-link dropdown'>       
                                     <span class='nav-link dropdown-toggle' id='navbarDropdownMenuLink-4' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Přihlášen jako: 
-                                    <a href=\"../account/user?user=".$_SESSION['id']."\"><b>".$_SESSION['jmeno']."</b></a>
+                                    <b>".$_SESSION['jmeno']."</b>
                                     </span>    
                                     <div class='dropdown-menu dropdown-menu-right' aria-labelledby='navbarDropdownMenuLink-4'>
                                     ";
+                                echo "<a class='dropdown-item' href=\"../account/user.php?user=".$_SESSION['id']."\">Můj účet</a>";
                                 echo "<a class='dropdown-item' href='../account/moje_objednavky.php'>Moje objednávky</a>";
                             if($_SESSION['prava'] == 2){
                                 echo "<a class='dropdown-item' href='../op/moje_jidelny.php'>Moje jídelny</a>";
@@ -104,7 +113,7 @@ if(isset($_POST['submitjidlo'])){
                                     <a class='nav-link' href='../account/register.php'><button class='btn btn-outline-info'>Registrace</button></a>
                                 </li>
                                 <li class='nav-item'>
-                                    <a class='nav-link' href='../account/login.php'><button class='btn btn-outline-warning'>Login</button></a>
+                                    <a class='nav-link' href='../account/login.php'><button class='btn btn-outline-warning'>Přihlášení</button></a>
                                 </li>
                             </ul>
                         </div>
@@ -222,7 +231,7 @@ if(isset($_POST['submitjidlo'])){
                             $new_nabidka->execute();
                             $new_nabidka->close();
                             ?><script>
-                                var reload = setTimeout(Home, 0, "./manage_jidelnicek.php?jidelna=<?php echo $jidelna; ?>&den=<?php echo $den; ?>", reload);
+                                window.location = "./manage_jidelnicek.php?jidelna=<?php echo $jidelna; ?>&den=<?php echo $den; ?>";
                             </script><?php
                         }
                     }   

@@ -1,9 +1,11 @@
 <?php 
 session_start();
 include '../functions.php';
-if(isset($_SESSION['jmeno']))
-    header("Location:../index.php")
-
+if(isset($_SESSION['jmeno'])){
+    ?><script>
+    window.location = "../index.php";
+    </script><?php
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -21,7 +23,7 @@ if(isset($_SESSION['jmeno']))
         <link rel="stylesheet" href="../styles/styles.css" />
 
         <!-- FAVICON -->
-		<link rel="icon" href="./pic/ico.ico" type="image/x-icon" />
+		<link rel="icon" href="../pic/ico.ico" type="image/x-icon" />
         
         <!-- TITLE -->
         <title>Registrace | Jidelna IS</title>

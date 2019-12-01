@@ -18,7 +18,7 @@ include '../functions.php';
         <link rel="stylesheet" href="../styles/styles.css" />
 
         <!-- FAVICON -->
-		<link rel="icon" href="./pic/ico.ico" type="image/x-icon" />
+		<link rel="icon" href="../pic/ico.ico" type="image/x-icon" />
         
         <!-- TITLE -->
         <title>Přidať jídlo | Jidelna IS</title>
@@ -37,10 +37,11 @@ include '../functions.php';
                                 echo "
                                 <li class='nav-link dropdown'>       
                                     <span class='nav-link dropdown-toggle' id='navbarDropdownMenuLink-4' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Přihlášen jako: 
-                                    <a href=\"../account/user?user=".$_SESSION['id']."\"><b>".$_SESSION['jmeno']."</b></a>
+                                    <b>".$_SESSION['jmeno']."</b>
                                     </span>    
                                     <div class='dropdown-menu dropdown-menu-right' aria-labelledby='navbarDropdownMenuLink-4'>
-                                    ";
+									";
+								echo "<a class='dropdown-item' href=\"../account/user.php?user=".$_SESSION['id']."\">Můj účet</a>";
                                 echo "<a class='dropdown-item' href='../account/moje_objednavky.php'>Moje objednávky</a>";
                             if($_SESSION['prava'] == 2){
                                 echo "<a class='dropdown-item' href='../op/moje_jidelny.php'>Moje jídelny</a>";
@@ -66,7 +67,7 @@ include '../functions.php';
                                     <a class='nav-link' href='../account/register.php'><button class='btn btn-outline-info'>Registrace</button></a>
                                 </li>
                                 <li class='nav-item'>
-                                    <a class='nav-link' href='../account/login.php'><button class='btn btn-outline-warning'>Login</button></a>
+                                    <a class='nav-link' href='../account/login.php'><button class='btn btn-outline-warning'>Přihlášení</button></a>
                                 </li>
                             </ul>
                         </div>
@@ -88,19 +89,22 @@ include '../functions.php';
 							<input class="form-control" type="text" placeholder="Zadajte název jídla" name="nazev" required="required" id="name" />
 						</div>
 						<div class="form-group">
+							<label for="cena">Cena</label>
+							<input class="form-control" type="number" placeholder="Zadajte cenu" name="cena" required="required"/>
+						</div>
+						<div class="form-group">
 							<label for="description">Popis jídla</label>
-							<textarea class="form-control" id="description" rows="3" placeholder="Popište jídlo"></textarea>
+							<textarea class="form-control" id="description" rows="3" placeholder="Popište jídlo" name="popis"></textarea>
 						</div>
 						<div class="custom-file">
   							<input type="file" class="custom-file-input" id="ob" name="ob" />
   							<label class="custom-file-label" for="ob" data-browse="Vybrat soubor">Vyberte obrázek</label>
 						</div>
 						<div class="form-group mt-3">
-							<input class="custom-select" list="type" name="typ" required="required" />
-							<datalist id="type">
-								<option value="hlavní">
-								<option value="polévka">
-							</datalist>
+							<select class="custom-select" name="typ">
+								<option value="hlavni">Hlavni
+								<option value="polevka">Polevka
+							</select>
 						</div>
 						<div class="custom-control custom-checkbox">
 							<input class="custom-control-input" id="num1" type="checkbox" name="al1" value="1" />
@@ -166,14 +170,15 @@ include '../functions.php';
 				$nazev = filter_input(INPUT_POST, "nazev");
           		$popis = filter_input(INPUT_POST, "popis");
 				$typ = filter_input(INPUT_POST, "typ");
+				$cena = filter_input(INPUT_POST, "cena");
 				$db = dbconnect();
-				$sql = "INSERT INTO jidlo (nazev, popis, typ) VALUES (?, ?, ?)";
+				$sql = "INSERT INTO jidlo (nazev, popis, typ, cena) VALUES (?, ?, ?, ?)";
 				if($stat = $db->prepare($sql)){
-					$stat->bind_param("sss", $nazev,$popis,$typ);
+					$stat->bind_param("sssi", $nazev,$popis,$typ, $cena);
 					$stat->execute();
 					$jidlo_id = $stat->insert_id;
 					$stat->close();
-					echo "<p class='alert alert-success text-center border-success'>Jidlo $jidlo_id úspěšné vloženo - Nazev : $nazev |||| Popis : $popis |||| Typ : $typ </p>";					
+					echo "<p class='alert alert-success text-center border-success'>Jidlo úspěšné vloženo</p>";					
 				}else{
 					echo "<p class='alert alert-danger border-danger text-center'>Chyba ve vložení jídla do db!</p>";
 				}	

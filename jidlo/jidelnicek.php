@@ -1,14 +1,19 @@
 <?php 
-header('Content-type: text/html; charset=utf-8');
 session_start();
 include '../functions.php';
 if(isset($_GET['jidelna']))
     if(filter_input(INPUT_GET, "jidelna", FILTER_VALIDATE_INT))
         $jidelna = filter_input(INPUT_GET, "jidelna");
-    else
-        header("Location:../index.php");
-else
-    header("Location:../index.php");
+    else{
+        ?><script>
+            window.location = "../index.php";
+        </script><?php
+    }
+else{
+    ?><script>
+        window.location = "../index.php";
+    </script><?php
+}
 if(isset($_GET['den']))
     $den = filter_input(INPUT_GET, "den", FILTER_SANITIZE_STRING);
 else
@@ -32,7 +37,7 @@ $kontrola = true;
         <link rel="stylesheet" href="../styles/styles.css" />
 
         <!-- FAVICON -->
-		<link rel="icon" href="./pic/ico.ico" type="image/x-icon" />
+		<link rel="icon" href="../pic/ico.ico" type="image/x-icon" />
         
         <!-- TITLE -->
         <title>Jidelnicek | Jidelna IS</title>
@@ -51,10 +56,11 @@ $kontrola = true;
                                 echo "
                                 <li class='nav-link dropdown'>       
                                     <span class='nav-link dropdown-toggle' id='navbarDropdownMenuLink-4' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Přihlášen jako: 
-                                    <a href=\"../account/user?user=".$_SESSION['id']."\"><b>".$_SESSION['jmeno']."</b></a>
+                                    <b>".$_SESSION['jmeno']."</b>
                                     </span>    
                                     <div class='dropdown-menu dropdown-menu-right' aria-labelledby='navbarDropdownMenuLink-4'>
                                     ";
+                                echo "<a class='dropdown-item' href=\"../account/user.php?user=".$_SESSION['id']."\">Můj účet</a>";
                                 echo "<a class='dropdown-item' href='../account/moje_objednavky.php'>Moje objednávky</a>";
                             if($_SESSION['prava'] == 2){
                                 echo "<a class='dropdown-item' href='../op/moje_jidelny.php'>Moje jídelny</a>";
@@ -80,7 +86,7 @@ $kontrola = true;
                                     <a class='nav-link' href='../account/register.php'><button class='btn btn-outline-info'>Registrace</button></a>
                                 </li>
                                 <li class='nav-item'>
-                                    <a class='nav-link' href='../account/login.php'><button class='btn btn-outline-warning'>Login</button></a>
+                                    <a class='nav-link' href='../account/login.php'><button class='btn btn-outline-warning'>Přihlášení</button></a>
                                 </li>
                             </ul>
                         </div>
@@ -151,20 +157,18 @@ $kontrola = true;
                     $jidla_v_nabidce = $db->query($sql_jidla_v_nabidce);
                     if($jidla_v_nabidce->num_rows > 0){
                         while($row = $jidla_v_nabidce->fetch_assoc()){
-                            $sql_info_jidlo = "SELECT id, nazev, popis, typ, ob, cena FROM jidlo WHERE id = ".$row['jidlo'];
+                            $sql_info_jidlo = "SELECT nazev, popis, typ, ob, cena FROM jidlo WHERE id = ".$row['jidlo'];
                             if($jidlo_info = $db->prepare($sql_info_jidlo)){
                                 $jidlo_info->execute();
-                                $jidlo_info->bind_result($id_jidla, $nazev, $popis, $typ, $ob, $cena);
+                                $jidlo_info->bind_result($nazev, $popis, $typ, $ob, $cena);
                                 if($jidlo_info->fetch()){
                                     echo "<article class='card p-2 mb-2 border-dark bg-light shadow'>";
                                         echo "<div class='row no-gutters'>";
                                             echo "<div class='col-md-4'>";
-						$filename='../pic/'.$id_jidla.'/'.$ob;
-						if(file_exists('../pic/1/temp.png')){
-                                                	echo "<img src='" .$filename. "' class='card-img' alt='jidlo' />";
-						}else{
-							echo "<img src='../pic/generic.png' class='card-img' alt='jidlo' />";
-						}
+						                    if(file_exists("../pic/".$row['jidlo']."/$ob"))
+                                                echo "<img src='../pic/".$row['jidlo']."/$ob' class='card-img' alt='jidlo' />";
+						                    else    
+							                    echo "<img src='../pic/generic.png' class='card-img' alt='jidlo' />";
                                             echo "</div>";
                                             echo "<div class='col-md-8'>";
                                             echo "<div class='card-body'>";
@@ -173,8 +177,6 @@ $kontrola = true;
                                                 echo "<div class='cart-text'><i>$typ</i></div></div>";
                                                 echo "<div class='card-text'>$popis</div>";
                                                 echo "<div class='card-text float-right'><strong>$cena ,-Kč</strong></div><br>";
-                                                echo "<div class='card-text'><small class='text-muted'>$ob</small></div>";
-
                                             echo "</div></div></div></article>";
 
                                 }else{

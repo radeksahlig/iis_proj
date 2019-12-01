@@ -1,8 +1,11 @@
 <?php 
 session_start();
 include '../functions.php';
-if(!isset($_SESSION['id']) && isset($_GET['obj']))
-    header("Location:../index.php");
+if(!isset($_SESSION['id']) && isset($_GET['obj'])){
+    ?><script>
+        window.location = "../index.php";
+    </script><?php
+}
 if(isset($_POST['subridic'])){
     $db = dbconnect();
     $ridic = filter_input(INPUT_POST, "ridic", FILTER_SANITIZE_NUMBER_INT);
@@ -15,7 +18,9 @@ if(isset($_POST['subridic'])){
         $updt->close();
     }
     $db->close();
-    header("Location:../op/dat_zakazky.php");
+    ?><script>
+        window.location = "../index.php";
+    </script><?php
 }
 ?>
 <!DOCTYPE html>
@@ -34,7 +39,7 @@ if(isset($_POST['subridic'])){
         <link rel="stylesheet" href="../styles/styles.css" />
 
         <!-- FAVICON -->
-		<link rel="icon" href="./pic/ico.ico" type="image/x-icon" />
+		<link rel="icon" href="../pic/ico.ico" type="image/x-icon" />
         
         <!-- TITLE -->
         <title>Objednávka | Jidelna IS</title>
@@ -53,10 +58,11 @@ if(isset($_POST['subridic'])){
                                 echo "
                                 <li class='nav-link dropdown'>       
                                     <span class='nav-link dropdown-toggle' id='navbarDropdownMenuLink-4' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Přihlášen jako: 
-                                    <a href=\"../account/user?user=".$_SESSION['id']."\"><b>".$_SESSION['jmeno']."</b></a>
+                                    <b>".$_SESSION['jmeno']."</b>
                                     </span>    
                                     <div class='dropdown-menu dropdown-menu-right' aria-labelledby='navbarDropdownMenuLink-4'>
                                     ";
+                                echo "<a class='dropdown-item' href=\"../account/user.php?user=".$_SESSION['id']."\">Můj účet</a>";
                                 echo "<a class='dropdown-item' href='../account/moje_objednavky.php'>Moje objednávky</a>";
                             if($_SESSION['prava'] == 2){
                                 echo "<a class='dropdown-item' href='../op/moje_jidelny.php'>Moje jídelny</a>";
@@ -118,8 +124,11 @@ if(isset($_POST['subridic'])){
                         echo "</form>";
                     }
                         
-                    if(isset($_POST['submitkod']))
-                        header("Location:./objednavka.php?kod=".$_POST['kod']);
+                    if(isset($_POST['submitkod'])){
+                        ?><script>
+                            window.location = "<?php echo "./objednavka.php?kod=".$_POST['kod'];?>";
+                        </script><?php
+                    }
 
                     if(isset($obj)){
                         $db = dbconnect();            
@@ -213,15 +222,22 @@ if(isset($_POST['subridic'])){
                                 
                                 ";
                             }else{
-                                if($kod == 0)
+                                if($kod == 0){
                                     echo "<p class='alert alert-danger border-danger text-center my-2'>Objednávka s tímto číslem neexistuje!</p>";
-                                else
-                                    echo "<p class='alert alert-danger border-danger text-center my-2'>Objednávka s tímto kódem neexistuje!</p>";                    
+                                    ?><script>
+                                        var home = setTimeout(Home, 3000, "..account/moje_objednavky.php", home);
+                                    </script><?php
+                                }else{
+                                    echo "<p class='alert alert-danger border-danger text-center my-2'>Objednávka s tímto kódem neexistuje!</p>";
+                                    ?><script>
+                                        var home = setTimeout(Home, 3000, "./objednavka.php", home);
+                                    </script><?php   
+                                }                 
                             }
                         }
                         $db->close();
                     }
-		if(isset($_SESSION['prava']))
+		        if(isset($_SESSION['prava']))
                     if($_SESSION['prava'] <= 2 && isset($_GET['obj'])){
                         $db = dbconnect();
                         $sql = "SELECT id FROM user WHERE prava = 3";                
