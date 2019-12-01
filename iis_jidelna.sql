@@ -607,8 +607,7 @@ INSERT INTO `jidlo` (`id`, `nazev`, `popis`, `typ`, `ob`, `cena`) VALUES
 (7, 'Fazolová polévka s uzeninou', 'Fazole, párky, mouka hladká, olej, mrkev, cibule, česneková pasta, celer, petržel, sůl, šunka, polévkové koření, vývar zeleninový, gothaj salám, majoránka, pepř mletý', 'polevka', 'temp.png', 90),
 (8, 'Kapustová polévka', 'Mr. kapusta, brambory, mouka hladká, cibule tuk, česneková pasta, polévkové koření, sůl, vývar zeleninový', 'polevka', 'temp.png', 85),
 (19, 'Hovězí steak s americkým kořením a hranolky ', 'Hovězí roštěná, olej, sůl, country koření, grilovací koření, hranolky', 'hlavni', 'temp.png', 200),
-(20, 'Koláč mřížkový jablkový', 'Kompot jablečné řezy, mouka hladká, mléko, smetol tuk, cukr moučka, vejce, cukr vanilkový, prášek do pečiva', 'hlavni', 'temp.png', 100),
-(22, 'Jablečný koláč 2', 'First class pie', 'hlavni', 'temp.png', 1200);
+(20, 'Koláč mřížkový jablkový', 'Kompot jablečné řezy, mouka hladká, mléko, smetol tuk, cukr moučka, vejce, cukr vanilkový, prášek do pečiva', 'hlavni', 'temp.png', 100);
 
 -- --------------------------------------------------------
 
