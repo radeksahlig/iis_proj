@@ -7,7 +7,7 @@ html {
 }
 
 body {
-    background: linear-gradient(rgba(185, 193, 214, 0.9), rgba(185, 193, 214, 0.9)), url("../pic/logo/bgd.jpg") #FFF; */
+    background: linear-gradient(rgba(185, 193, 214, 0.9), rgba(185, 193, 214, 0.9)), url("../pic/logo/bgd.jpg") #FFF; 
     background-size: cover;/*
     min-height: 100%;
     display: grid;
