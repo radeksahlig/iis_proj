@@ -222,7 +222,7 @@ if(isset($_POST['subridic'])){
                         $db->close();
                     }
 
-                    if($_SESSION['prava'] <= 2){
+                    if($_SESSION['prava'] <= 2 && isset($_GET['obj'])){
                         $db = dbconnect();
                         $sql = "SELECT id FROM user WHERE prava = 3";                
                         echo "<form class='form-inline mt-3' method='post' name='fridic' action='./objednavka.php' onsubmit='return checkRidic()'>";
